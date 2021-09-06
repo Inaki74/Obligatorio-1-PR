@@ -1,5 +1,5 @@
 ﻿using System;
-
+using Common;
 namespace ServerApplication
 {
     class Program
@@ -7,6 +7,8 @@ namespace ServerApplication
         static void Main(string[] args)
         {
             Console.WriteLine("Hello mati!");
+
+            MyClass a = new MyClass();
         }
     }
 }
