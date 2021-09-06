@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,visualstudiocode,jetbrains
-# Edit at https://www.toptal.com/developers/gitignore?templates=csharp,dotnetcore,visualstudiocode,jetbrains
+# Created by https://www.toptal.com/developers/gitignore/api/dotnetcore,visualstudiocode,jetbrains,csharp,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=dotnetcore,visualstudiocode,jetbrains,csharp,macos
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -507,6 +507,35 @@ fabric.properties
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 ### VisualStudioCode ###
 
 # Local History for Visual Studio Code
@@ -516,4 +545,4 @@ fabric.properties
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,visualstudiocode,jetbrains
+# End of https://www.toptal.com/developers/gitignore/api/dotnetcore,visualstudiocode,jetbrains,csharp,macos
