@@ -20,10 +20,8 @@ namespace ClientApplication
             tcpClient.Connect(serverIpEndPoint);
 
             Console.WriteLine("Found server!");
-
-            tcpClient.Close();
-
-            //SendMessage(tcpClient);
+            
+            SendMessage(tcpClient);
         }
 
         static void SendMessage(TcpClient tcpClient)
