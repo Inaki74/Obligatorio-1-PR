@@ -11,8 +11,8 @@ namespace ClientApplication
         {
             Console.WriteLine("Client starting...");
            
-            var clientIpEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.77"), 0); // Puerto 0 -> usa el primer puerto disponible
-            var serverIpEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.77"), 6000);
+            var clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0); // Puerto 0 -> usa el primer puerto disponible
+            var serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             
             var tcpClient = new TcpClient(clientIpEndPoint);
             

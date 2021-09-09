@@ -13,10 +13,10 @@ namespace ServerApplication
         {
             Console.WriteLine("Server starting...");
 
-            var serverIpEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.175"), 6000);
+            var serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
            
-            var tcpServer = new TcpClient(serverIpEndPoint);
-
+            var tcpServer = new TcpListener(serverIpEndPoint);
+            
             tcpServer.Start(100);
 
             Console.WriteLine("Listening for clients...");
@@ -25,9 +25,9 @@ namespace ServerApplication
             {
                 var clientFound = tcpServer.AcceptTcpClient();
                 Console.WriteLine("Client found!");
-
-                var clientThread = new Thread(() => HandleClient(clientFound));
-                clientThread.Start();
+                return;
+                //var clientThread = new Thread(() => HandleClient(clientFound));
+                //clientThread.Start();
             }
         }
 
@@ -37,7 +37,7 @@ namespace ServerApplication
             {
                 NetworkStream stream = acceptedTcpClient.GetStream();
 
-                stream.Read();
+                //stream.Read();
             }
             catch(SocketException e)
             {
