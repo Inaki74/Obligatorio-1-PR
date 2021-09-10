@@ -1,20 +1,17 @@
-﻿using Common.Protocol.Interfaces;
-
+﻿
 namespace Common.Protocol
 {
-    public class VaporProtocol : IProtocol
+    public class VaporProtocol
     {
-        
         public VaporProtocol()
         {
-            Specification = new VaporProtocolSpecification();
         }
 
-        public IProtocolSpecification Specification { get; }
-
-        public byte[] CreateHeader(string[] input)
+        public VaporHeader CreateHeader(string header, int command, int payloadType, int payloadLength)
         {
-            throw new System.NotImplementedException();
+            VaporHeader header = new VaporHeader(header, command, payloadType, payloadLength);
+
+            return header;
         }
 
         public void Process(byte[] input)

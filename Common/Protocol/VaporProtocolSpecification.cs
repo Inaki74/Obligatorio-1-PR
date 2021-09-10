@@ -1,9 +1,8 @@
-﻿using Common.Protocol.Interfaces;
-
+﻿
 namespace Common.Protocol
 {
-    public class VaporProtocolSpecification : IProtocolSpecification
+    public class VaporProtocolSpecification
     {
-        public int MaxPacketSize => 16382;
+        public const int MAX_PACKET_SIZE = 16382;
     }
 }
