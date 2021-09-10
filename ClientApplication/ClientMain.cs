@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClientApplication
 {
-    class Client
+    class ClientMain
     {
         static void Main(string[] args)
         {
