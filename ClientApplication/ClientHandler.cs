@@ -2,7 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-
+using Common.ConsoleMenus.Interfaces;
+using Common.ConsoleMenus.Factory;
 namespace ClientApplication
 {
     public class ClientHandler
@@ -32,6 +33,10 @@ namespace ClientApplication
 
         public void Loop()
         {
+            
+
+            
+
             SendMessage();
         }
         

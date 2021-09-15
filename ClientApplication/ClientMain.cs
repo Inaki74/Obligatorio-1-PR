@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common.ConsoleMenus.Factory;
+using Common.ConsoleMenus.Interfaces;
 
 namespace ClientApplication
 {
@@ -10,11 +12,13 @@ namespace ClientApplication
         static void Main(string[] args)
         {
 
-            ClientHandler clientHandler = new ClientHandler();
-            
-            clientHandler.StartClient();
-            
-            clientHandler.Loop();
+            ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
+            IConsoleMenuManager consoleManager = consoleFactory.Create();
+
+            while(!consoleManager.Exit)
+            {
+                consoleManager.ExecuteMenu();
+            }
 
         }
         
