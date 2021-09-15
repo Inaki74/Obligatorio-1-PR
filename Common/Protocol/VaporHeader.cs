@@ -12,7 +12,7 @@ namespace Common.Protocol
         {
         }
 
-        public VaporHeader(string requestType, int command, int payloadType, int payloadLength)
+        public VaporHeader(string requestType, int command, int payloadLength)
         {
 
         }

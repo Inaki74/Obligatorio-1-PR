@@ -1,4 +1,5 @@
 ﻿using Common.Commands.Interfaces;
+using Common.Protocol;
 
 namespace Common.Commands
 {
@@ -6,12 +7,16 @@ namespace Common.Commands
     {
         public int command {get;}
 
+        //Build header, send to server
         public void ActionReq(IPayload payload)
         {
+            VaporHeader header = new VaporHeader(HeaderConstants.Request, CommandConstants.COMMAND_LOGIN_CODE, payload.length);
+            
             
         }
 
-        public void ActionRes()
+        //build the payload for the response
+        public void ActionRes(IPayload reqPayload)
         {
             
         }
