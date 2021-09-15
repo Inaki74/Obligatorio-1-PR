@@ -1,7 +1,7 @@
-using Common.ConsoleMenus.Interfaces;
-using Common.ConsoleMenus.Factory;
+using ConsoleMenus.Interfaces;
+using ConsoleMenus.Factory;
 
-namespace Common.ConsoleMenus
+namespace ConsoleMenus
 {
     public abstract class ConsoleMenusBase
     {

@@ -1,9 +1,9 @@
 
-using Common.ConsoleMenus.Interfaces;
-using Common.ConsoleMenus.Factory;
+using ConsoleMenus.Interfaces;
+using ConsoleMenus.Factory;
 using System;
 
-namespace Common.ConsoleMenus.Client
+namespace ConsoleMenus.Client
 {
     public class ConsoleWelcomeMenu : ConsoleMenusBase, IConsoleMenu
     {

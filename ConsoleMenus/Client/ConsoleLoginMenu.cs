@@ -1,8 +1,8 @@
 
-using Common.ConsoleMenus;
-using Common.ConsoleMenus.Interfaces;
+using ConsoleMenus;
+using ConsoleMenus.Interfaces;
 
-namespace Common.Common.ConsoleMenus.Client
+namespace ConsoleMenus.Client
 {
     public class ConsoleLoginMenu : ConsoleMenusBase, IConsoleMenu
     {

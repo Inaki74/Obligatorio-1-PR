@@ -1,5 +1,5 @@
 
-namespace Common.ConsoleMenus.Interfaces
+namespace ConsoleMenus.Interfaces
 {
     public interface IConsoleMenu
     {

@@ -1,7 +1,7 @@
 using System;
-using Common.ConsoleMenus.Interfaces;
+using ConsoleMenus.Interfaces;
 
-namespace Common.ConsoleMenus
+namespace ConsoleMenus
 {
     public class ConsoleMessageMenu : ConsoleMenusBase, IConsoleMenu
     {
