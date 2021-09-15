@@ -2,7 +2,7 @@
 using Common.ConsoleMenus.Interfaces;
 using System;
 
-namespace Common.ConsoleMenus
+namespace Common.ConsoleMenus.Client
 {
     public class ConsoleConnectMenu : ConsoleMenusBase, IConsoleMenu
     {
@@ -22,7 +22,7 @@ namespace Common.ConsoleMenus
 
         public void PrintMenu()
         {
-            Console.WriteLine("Connecting...");
+            Console.WriteLine("Trying to connect to server...");
         }
     }
 }

@@ -11,7 +11,6 @@ namespace ClientApplication
     {
         static void Main(string[] args)
         {
-
             ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
             IConsoleMenuManager consoleManager = consoleFactory.Create();
 

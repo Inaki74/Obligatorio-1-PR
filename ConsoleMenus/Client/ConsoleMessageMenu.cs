@@ -3,9 +3,11 @@ using Common.ConsoleMenus.Interfaces;
 
 namespace Common.ConsoleMenus
 {
-    public class ConsoleMessageMenu : IConsoleMenu
+    public class ConsoleMessageMenu : ConsoleMenusBase, IConsoleMenu
     {
         public bool RequiresAnswer => true;
+
+        public IConsoleMenu NextMenu => throw new NotImplementedException();
 
         public void Action()
         {
@@ -17,9 +19,19 @@ namespace Common.ConsoleMenus
             //Enviar el mensaje
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         public void PrintMenu()
         {
             Console.WriteLine("Write a message.");
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

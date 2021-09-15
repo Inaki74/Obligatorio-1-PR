@@ -8,6 +8,16 @@ namespace ClientApplication
 {
     public class ClientHandler
     {
+        private readonly static ClientHandler _instance = new ClientHandler();
+ 
+        public static ClientHandler Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
+
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
@@ -20,15 +30,19 @@ namespace ClientApplication
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 
-        public void StartClient()
+        public bool StartClient()
         {
-            Console.WriteLine("Client starting...");
+            try
+            {
+                _tcpClient.Connect(_serverIpEndPoint);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"An unexpected error ocurred {e.Message}");
+                return false;
+            }
             
-            Console.WriteLine("Trying to connect to server");
-            
-            _tcpClient.Connect(_serverIpEndPoint);
-            
-            Console.WriteLine("Found server!");
+            return true;
         }
 
         public void Loop()

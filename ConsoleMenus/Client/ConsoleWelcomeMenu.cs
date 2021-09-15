@@ -3,7 +3,7 @@ using Common.ConsoleMenus.Interfaces;
 using Common.ConsoleMenus.Factory;
 using System;
 
-namespace Common.ConsoleMenus
+namespace Common.ConsoleMenus.Client
 {
     public class ConsoleWelcomeMenu : ConsoleMenusBase, IConsoleMenu
     {
