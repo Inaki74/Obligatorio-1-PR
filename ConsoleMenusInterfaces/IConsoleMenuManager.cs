@@ -1,4 +1,4 @@
-namespace ConsoleMenus.Interfaces
+namespace ConsoleMenusInterfaces
 {
     public interface IConsoleMenuManager
     {

@@ -2,8 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Common.ConsoleMenus.Factory;
-using Common.ConsoleMenus.Interfaces;
+using ConsoleMenusInterfaces;
+using ConsoleMenusFactory;
 
 namespace ClientApplication
 {

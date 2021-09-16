@@ -2,15 +2,15 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using Common.ConsoleMenus.Interfaces;
-using Common.ConsoleMenus.Factory;
+using ClientApplicationInterfaces;
+
 namespace ClientApplication
 {
-    public class ClientHandler
+    public class ClientHandler : IClientHandler
     {
-        private readonly static ClientHandler _instance = new ClientHandler();
+        private readonly static IClientHandler _instance = new ClientHandler();
  
-        public static ClientHandler Instance
+        public static IClientHandler Instance
         {
             get
             {

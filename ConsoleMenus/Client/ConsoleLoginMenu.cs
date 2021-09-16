@@ -1,6 +1,6 @@
 
 using ConsoleMenus;
-using ConsoleMenus.Interfaces;
+using ConsoleMenusInterfaces;
 
 namespace ConsoleMenus.Client
 {

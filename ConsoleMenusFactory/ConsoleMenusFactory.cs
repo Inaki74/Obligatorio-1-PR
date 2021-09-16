@@ -1,7 +1,7 @@
-using ConsoleMenus.Interfaces;
-using ConsoleMenus;
+using ConsoleMenusInterfaces;
 
-namespace ConsoleMenus.Factory
+
+namespace ConsoleMenusFactory
 {
     public class ConsoleMenusFactory
     {

@@ -1,6 +1,5 @@
 
-using ConsoleMenus.Interfaces;
-using ConsoleMenus.Factory;
+using ConsoleMenusInterfaces;
 using System;
 
 namespace ConsoleMenus.Client
@@ -14,7 +13,7 @@ namespace ConsoleMenus.Client
         public void Action(string answer)
         {
             // Delegar a ConnectMenu
-            _nextMenu = _factory.Create<ConsoleConnectMenu>();
+            _nextMenu = new ConsoleConnectMenu();
         }
 
         public void PrintMenu()

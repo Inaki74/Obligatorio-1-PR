@@ -1,5 +1,5 @@
 
-using ConsoleMenus.Interfaces;
+using ConsoleMenusInterfaces;
 using System;
 
 namespace ConsoleMenus.Client
