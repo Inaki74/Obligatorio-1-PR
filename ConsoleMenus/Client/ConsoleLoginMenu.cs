@@ -1,6 +1,7 @@
 
 using ConsoleMenus;
 using ConsoleMenusInterfaces;
+using System;
 
 namespace ConsoleMenus.Client
 {
@@ -10,19 +11,16 @@ namespace ConsoleMenus.Client
 
         public IConsoleMenu NextMenu => throw new System.NotImplementedException();
 
-        public void Action()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public void Action(string answer)
         {
             // Intentar login
+            Console.WriteLine($"You are trying to login right now duh: {answer}");
         }
 
         public void PrintMenu()
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Please enter your username:");
         }
     }
 }

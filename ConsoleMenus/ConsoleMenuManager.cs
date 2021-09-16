@@ -1,5 +1,6 @@
 using ConsoleMenusInterfaces;
 using System;
+using ConsoleMenus.Client;
 
 namespace ConsoleMenus
 {
@@ -10,6 +11,11 @@ namespace ConsoleMenus
         public bool Exit => _exit;
 
         private bool _exit;
+
+        public ConsoleMenuManager()
+        {
+            _currentMenu = new ConsoleWelcomeMenu();
+        }
 
         public void ExecuteMenu()
         {

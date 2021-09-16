@@ -8,7 +8,7 @@ namespace ClientApplication
 {
     public class ClientHandler : IClientHandler
     {
-        private readonly static IClientHandler _instance = new ClientHandler();
+        private readonly static IClientHandler _instance;
  
         public static IClientHandler Instance
         {
@@ -24,13 +24,15 @@ namespace ClientApplication
         
         public ClientHandler()
         {
+            IClientHandler.Instance = this;
+
             //TODO: Create config file with IP and Port
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 
-        public bool StartClient()
+        public bool ConnectToServer()
         {
             try
             {

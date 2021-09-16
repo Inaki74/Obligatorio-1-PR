@@ -1,5 +1,6 @@
 
 using ConsoleMenusInterfaces;
+using ClientApplicationInterfaces;
 using System;
 
 namespace ConsoleMenus.Client
@@ -17,7 +18,16 @@ namespace ConsoleMenus.Client
                 // Decir que fue buena y delegar a Login
             // Si no
                 // Decir que fue mala e intentar de nuevo
-            
+            bool connectedSuccess = IClientHandler.Instance.ConnectToServer();
+
+            if(connectedSuccess){
+                Console.WriteLine("Connection to server successful!");
+                _nextMenu = new ConsoleLoginMenu();
+                return;
+            }
+
+            Console.WriteLine("Couldn't connect to server, trying again...");
+            _nextMenu = this;
         }
 
         public void PrintMenu()
