@@ -24,8 +24,15 @@ namespace ClientApplication
         
         public ClientHandler()
         {
-            IClientHandler.Instance = this;
-
+            if(IClientHandler.Instance == null)
+            {
+                IClientHandler.Instance = this;
+            }
+            else
+            {
+                throw new Exception("Singleton already instanced. Do not instance singleton twice!");
+            }
+            
             //TODO: Create config file with IP and Port
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
