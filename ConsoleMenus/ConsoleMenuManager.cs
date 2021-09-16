@@ -28,8 +28,18 @@ namespace ConsoleMenus
                 answer = Console.ReadLine();
             }
 
-            _currentMenu.Action(answer);
-            _currentMenu = _currentMenu.NextMenu;
+            try
+            {
+                _currentMenu.Action(answer);
+                _currentMenu = _currentMenu.NextMenu;
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"An error ocurred: {e}");
+                _currentMenu = new ConsoleExitMenu();
+                _currentMenu.PrintMenu();
+                _exit = true;
+            }
         }
     }
 }

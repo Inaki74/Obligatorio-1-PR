@@ -1,11 +1,11 @@
 using System;
 using ConsoleMenusInterfaces;
 
-namespace ConsoleMenus
+namespace ConsoleMenus.Client
 {
-    public class ConsoleMessageMenu : ConsoleMenusBase, IConsoleMenu
+    public class ConsoleExitMenu : ConsoleMenusBase, IConsoleMenu
     {
-        public bool RequiresAnswer => true;
+        public bool RequiresAnswer => false;
 
         public IConsoleMenu NextMenu => throw new NotImplementedException();
 
@@ -16,7 +16,7 @@ namespace ConsoleMenus
 
         public void PrintMenu()
         {
-            Console.WriteLine("Write a message.");
+            Console.WriteLine("Exiting application...");
         }
     }
 }

@@ -19,7 +19,6 @@ namespace ClientApplication
             {
                 consoleManager.ExecuteMenu();
             }
-
         }
         
     }
