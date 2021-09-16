@@ -8,13 +8,11 @@ namespace ClientApplication
 {
     public class ClientHandler : IClientHandler
     {
-        private readonly static IClientHandler _instance;
- 
         public static IClientHandler Instance
         {
             get
             {
-                return _instance;
+                return IClientHandler.Instance;
             }
         }
 
