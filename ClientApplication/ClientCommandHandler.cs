@@ -1,6 +1,6 @@
 ﻿using System;
 using Common.Commands;
-using Common.Commands.Interfaces;
+using Common.Interfaces;
 
 namespace ClientApplication
 {

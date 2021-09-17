@@ -1,4 +1,4 @@
-﻿namespace Common.Commands.Interfaces
+﻿namespace Common.Interfaces
 {
     public interface IPayload
     {
