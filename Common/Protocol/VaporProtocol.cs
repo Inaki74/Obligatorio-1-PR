@@ -14,8 +14,23 @@ namespace Common.Protocol
             return header;
         }
 
-        public void Process(byte[] input)
+        // Devolver lo que recibio procesado.
+        public VaporProcessedPacket Receive()
         {
+            // Cuando server recibe mensaje:
+                // Server sabe que:
+                //  primero viene REQ/RES
+                //  luego viene CMD
+                //  luego viene LARGO
+                //  finalmente PAYLOAD
+
+            return null;
+        }
+
+        public void Send<T>(ReqResHeader request, int command, T data)
+        {
+            // Arma el paquete
+
             throw new System.NotImplementedException();
         }
     }

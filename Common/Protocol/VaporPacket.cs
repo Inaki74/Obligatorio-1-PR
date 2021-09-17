@@ -1,15 +1,15 @@
 ﻿using System;
 using Common.Interfaces;
-using Common.Protocol;
 
-namespace Common
+namespace Common.Protocol
 {
+    // Es el de byte[] que mandamos por la red.
     public class VaporPacket
     {
         private VaporHeader _header;
-        private IPayload _payload;
+        private byte[] _payload;
 
-        public VaporPacket(VaporHeader header, IPayload payload)
+        public VaporPacket(VaporHeader header, byte[] payload)
         {
             this._header = header;
             this._payload = payload;
@@ -22,7 +22,7 @@ namespace Common
             byte[] requestType = _header.RequestType;
             byte[] command = _header.Command;
             byte[] payloadLength = BitConverter.GetBytes(_payload.Length);
-            byte[] payload = _payload.Payload;
+            byte[] payload = _payload;
 
             int indexAcum = 0;
 
@@ -39,7 +39,7 @@ namespace Common
 
         private int PacketLength()
         {
-            return _header.RequestType.Length + _header.Command.Length + BitConverter.GetBytes(_payload.Length).Length + _payload.Payload.Length;
+            return _header.RequestType.Length + _header.Command.Length + BitConverter.GetBytes(_payload.Length).Length + _payload.Length;
         }
     }
 }

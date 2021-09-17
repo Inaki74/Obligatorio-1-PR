@@ -60,6 +60,14 @@ namespace ServerApplication
         {
             try
             {
+                // Server espera un mensaje del cliente
+                // Server recibe mensaje
+                // Delega a ServerCommandHandler
+                    // Server command handler desarme el paquete
+                    // Identifica que comando es
+                    // Hace accionRes
+
+
                 NetworkStream stream = acceptedTcpClient.GetStream();
 
                 byte[] messageBuffer = new byte[1024];

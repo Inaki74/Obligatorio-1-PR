@@ -85,9 +85,11 @@ namespace ClientApplication
         {
             IPayload payload = new StringPayload(username);
             _commandHandler.ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, payload);
-            // devuelve un codigo
-            // si fue bueno return true
-            // si no return false
+            //Arma paquete con formato del protocolo -> VaporProtocol.Send()
+	        //envia
+	        //espera respuesta -> VaporProtocol.Receive()
+            //ClientCommandHandler.Handle(VaporPacket);
+						                // Se corre command.ActionReq()
         }
     }
 }
