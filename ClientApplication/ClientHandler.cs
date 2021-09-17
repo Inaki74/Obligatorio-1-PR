@@ -2,36 +2,62 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using ClientApplicationInterfaces;
 
 namespace ClientApplication
 {
-    public class ClientHandler
+    public class ClientHandler : IClientHandler
     {
+        public static IClientHandler Instance
+        {
+            get
+            {
+                return IClientHandler.Instance;
+            }
+        }
+
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
         
         public ClientHandler()
         {
+            if(IClientHandler.Instance == null)
+            {
+                IClientHandler.Instance = this;
+            }
+            else
+            {
+                throw new Exception("Singleton already instanced. Do not instance singleton twice!");
+            }
+            
             //TODO: Create config file with IP and Port
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 
-        public void StartClient()
+        public bool ConnectToServer()
         {
-            Console.WriteLine("Client starting...");
+            try
+            {
+                _tcpClient.Connect(_serverIpEndPoint);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"An unexpected error ocurred {e.Message}");
+                return false;
+            }
             
-            Console.WriteLine("Trying to connect to server");
-            
-            _tcpClient.Connect(_serverIpEndPoint);
-            
-            Console.WriteLine("Found server!");
+            return true;
         }
 
         public void Loop()
         {
+            
+
+            
+
             SendMessage();
         }
         
