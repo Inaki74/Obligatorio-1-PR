@@ -2,6 +2,6 @@
 {
     public class CommandConstants
     {
-        public const int COMMAND_LOGIN_CODE =  1;
+        public const string COMMAND_LOGIN_CODE =  "01";
     }
 }

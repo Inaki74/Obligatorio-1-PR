@@ -33,7 +33,7 @@ namespace Common.Protocol
             return processedPacket;
         }
 
-        public void Send(ReqResHeader request, int command, int length, string data)
+        public void Send(ReqResHeader request, string command, int length, string data)
         {
             VaporHeader header = CreateHeader(request, command, length);
             VaporPacket packet = new VaporPacket(header, Encoding.UTF8.GetBytes(data));
@@ -41,7 +41,7 @@ namespace Common.Protocol
             _streamHandler.Write(packet.Create());
         }
 
-         private VaporHeader CreateHeader(ReqResHeader requestType, int command, int length)
+         private VaporHeader CreateHeader(ReqResHeader requestType, string command, int length)
         {
             VaporHeader header = new VaporHeader(requestType, command, length);
 

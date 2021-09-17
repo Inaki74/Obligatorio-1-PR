@@ -5,7 +5,7 @@ namespace DataAccess
 {
     public class Database
     {
-        private static readonly Database _instance = null;
+        private static readonly Database _instance = new Database();
 
         static Database(){}
         

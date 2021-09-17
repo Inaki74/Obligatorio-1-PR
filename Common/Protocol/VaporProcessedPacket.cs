@@ -6,7 +6,7 @@ namespace Common.Protocol
     public class VaporProcessedPacket
     {
         public ReqResHeader ReqResHeader {get; set;}
-        public int Command {get; set;}
+        public string Command {get; set;}
         public int Length{get;set;}
         public byte[] Payload {get;set;}
 
@@ -23,7 +23,7 @@ namespace Common.Protocol
                 ReqResHeader = ReqResHeader.RES;
             }
 
-            Command = BitConverter.ToInt32(cmd);
+            Command = Encoding.UTF8.GetString(cmd);
             Length = BitConverter.ToInt32(length);
             Payload = payload;
         }

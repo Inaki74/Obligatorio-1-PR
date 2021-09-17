@@ -10,7 +10,7 @@ namespace ConsoleMenus.Client
     {
         public bool RequiresAnswer => true;
 
-        public IConsoleMenu NextMenu => throw new System.NotImplementedException();
+        public IConsoleMenu NextMenu => _nextMenu;
 
 
         public void Action(string answer)
@@ -18,6 +18,7 @@ namespace ConsoleMenus.Client
             // Intentar login
             Console.WriteLine($"You are trying to login right now duh: {answer}");
             IClientHandler.Instance.Login(answer);
+            _nextMenu = new ConsoleLoginMenu();
             // REQ 1
         }
 
