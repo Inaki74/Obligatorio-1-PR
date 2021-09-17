@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Common;
+using ConsoleMenusFactory;
+using ConsoleMenusInterfaces;
 
 namespace ServerApplication
 {
@@ -11,13 +13,17 @@ namespace ServerApplication
     {
         private static void Main(string[] args)
         {
-            
-            
-            ServerHandler serverHandler = new ServerHandler();
-            serverHandler.StartServer();
-            serverHandler.Loop();
-            
-            
+            new ServerHandler();
+            ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
+            IConsoleMenuManager consoleManager = consoleFactory.Create(false);
+
+            // 2 threads
+            // 1. El que hace listen de clientes y los acepta.
+            // 2. El menu del server (que tiene el exit en esta iteracion)
+            while(!consoleManager.Exit)
+            {
+                consoleManager.ExecuteMenu();
+            }
         }
 
         

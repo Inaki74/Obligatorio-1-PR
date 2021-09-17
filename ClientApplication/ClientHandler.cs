@@ -24,7 +24,7 @@ namespace ClientApplication
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
-        private readonly ClientCommandHandler _commandHandler;
+        private ClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -41,7 +41,6 @@ namespace ClientApplication
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             _tcpClient = new TcpClient(_clientIpEndPoint);
-            _commandHandler = new ClientCommandHandler(new NetworkStreamHandler(_tcpClient.GetStream()));
         }
 
         public bool ConnectToServer()
@@ -49,6 +48,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
+                _commandHandler = new ClientCommandHandler(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
             catch(Exception e)
             {

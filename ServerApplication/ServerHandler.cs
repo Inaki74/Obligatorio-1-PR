@@ -3,39 +3,57 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using ServerApplicationInterfaces;
 
 namespace ServerApplication
 {
-    public class ServerHandler
+    public class ServerHandler : IServerHandler
     {
+        public static IServerHandler Instance   
+        {
+            get
+            {
+                return IServerHandler.Instance;
+            }
+        }
+
+        private TcpClient _currentFoundClient;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpListener _tcpServerListener;
         //private tcpClient[] _tcpCLients;
 
         public ServerHandler()
         {
+            if(IServerHandler.Instance == null)
+            {
+                IServerHandler.Instance = this;
+            }
+            else
+            {
+                throw new Exception("Singleton already instanced. Do not instance singleton twice!");
+            }
+
             //TODO: Create config file with IP and Port 
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             _tcpServerListener = new TcpListener(_serverIpEndPoint);
         }
 
-        public void StartServer()
+        public bool StartServer()
         {
-            Console.WriteLine("Server starting...");
             _tcpServerListener.Start(100);
+
+            return true; 
         }
 
-        public void Loop()
+        public void ListenForClients()
         {
-            Console.WriteLine("Listening for clients...");
-            while(true)
-            {
-                
-                var clientFound = _tcpServerListener.AcceptTcpClient();
-                Console.WriteLine("Client found!");
-                var clientThread = new Thread(() => HandleClient(clientFound));
-                clientThread.Start();
-            }
+            _currentFoundClient = _tcpServerListener.AcceptTcpClient();
+        }
+
+        public void StartClientThread()
+        {
+            var clientThread = new Thread(() => HandleClient(_currentFoundClient));
+            clientThread.Start();
         }
         
         private void HandleClient(TcpClient acceptedTcpClient)

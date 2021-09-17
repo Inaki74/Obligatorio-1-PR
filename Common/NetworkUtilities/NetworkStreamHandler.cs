@@ -14,7 +14,7 @@ namespace Common.NetworkUtilities
 
         public byte[] Read()
         {
-
+            return null;
         }
 
         public void Write(byte[] packet)
