@@ -7,9 +7,9 @@ namespace Common.Protocol
         {
         }
 
-        public VaporHeader CreateHeader(string requestType, int command, int payloadType, int payloadLength)
+        public VaporHeader CreateHeader(string requestType, int command, int payloadLength)
         {
-            VaporHeader header = new VaporHeader(requestType, command, payloadType, payloadLength);
+            VaporHeader header = new VaporHeader(requestType, command, payloadLength);
 
             return header;
         }
