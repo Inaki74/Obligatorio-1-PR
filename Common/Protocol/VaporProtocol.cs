@@ -1,17 +1,16 @@
-﻿
+﻿using System;
+using System.Text;
+using Common.NetworkUtilities;
+using Common.NetworkUtilities.Interfaces;
+
 namespace Common.Protocol
 {
     public class VaporProtocol
     {
-        public VaporProtocol()
+        private INetworkStreamHandler _streamHandler;
+        public VaporProtocol(INetworkStreamHandler streamHandler)
         {
-        }
-
-        public VaporHeader CreateHeader(string requestType, int command)
-        {
-            VaporHeader header = new VaporHeader(requestType, command);
-
-            return header;
+            _streamHandler = streamHandler;
         }
 
         // Devolver lo que recibio procesado.
@@ -24,14 +23,29 @@ namespace Common.Protocol
                 //  luego viene LARGO
                 //  finalmente PAYLOAD
 
-            return null;
+            byte[] req = _streamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
+            byte[] cmd = _streamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
+            byte[] length = _streamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
+            byte[] payload = _streamHandler.Read(BitConverter.ToInt32(length));
+
+            VaporProcessedPacket processedPacket = new VaporProcessedPacket(req, cmd, length, payload);
+
+            return processedPacket;
         }
 
-        public void Send<T>(ReqResHeader request, int command, T data)
+        public void Send(ReqResHeader request, int command, int length, string data)
         {
-            // Arma el paquete
+            VaporHeader header = CreateHeader(request, command, length);
+            VaporPacket packet = new VaporPacket(header, Encoding.UTF8.GetBytes(data));
 
-            throw new System.NotImplementedException();
+            _streamHandler.Write(packet.Create());
+        }
+
+         private VaporHeader CreateHeader(ReqResHeader requestType, int command, int length)
+        {
+            VaporHeader header = new VaporHeader(requestType, command, length);
+
+            return header;
         }
     }
 }

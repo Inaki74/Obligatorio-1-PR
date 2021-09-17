@@ -12,52 +12,65 @@ namespace Common.Commands
     {
         //client -> server
         //server -> client
-        private readonly INetworkStreamHandler _networkStreamHandler;
-
-        public LoginCommand(INetworkStreamHandler streamHandler)
-        {
-            _networkStreamHandler = streamHandler;
-        }
 
         public int command {get;} // al pedo?
 
         //Build header, send to server
-        public void ActionReq(IPayload payload)
+        public string ActionReq(byte[] payload)
         {
-            VaporHeader header = new VaporHeader(HeaderConstants.Request, CommandConstants.COMMAND_LOGIN_CODE);
-            VaporPacket packet = new VaporPacket(header, payload);
-
-            SendReqLoginPacket(packet);
-        }
-
-        //build the payload for the response
-        public void ActionRes(IPayload reqPayload)
-        {
-            // XXXX XXX...XXX Largo Usuario
             //Tomas el nombre de usuario y buscan en db
+            int statusCode = 0;
+            string response = "";
+
             UserLogic userLogic = new UserLogic();
             try
             {
-                userLogic.Login(Encoding.UTF8.GetString(reqPayload.Payload));
-                IPayload payload = new StringPayload("");
-                VaporHeader header = new VaporHeader(HeaderConstants.Response, CommandConstants.COMMAND_LOGIN_CODE);
-                //VaporHeader = hacer el header
-                //IPayload con el codigo de respuesta
-                //VaporPacket con los dos anteriores
+                bool userExisted = userLogic.Login(Encoding.UTF8.GetString(payload));
+
+                if(userExisted)
+                {
+                    statusCode = StatusCodeConstants.OK;
+                }
+                else
+                {
+                    statusCode = StatusCodeConstants.INFO;
+                }
             }
             catch(Exception e)
             {
                 //Devolver Codigo de Error del sistema
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                response = $"User already logged in, exception from server: {e.Message}";
             }
-            
+
+            return statusCode.ToString() + response;
         }
 
-        private void SendReqLoginPacket(VaporPacket packet)
+        //build the payload for the response
+        public void ActionRes(byte[] payload)
         {
-            // XX XX XXXX XXXX
-            // req command largo username
-            byte[] packetArray = packet.Create();
-            _networkStreamHandler.Write(packetArray);
+            // XX#XXXX...
+            // statusCode#Mensaje
+            string payloadString = Encoding.UTF8.GetString(payload);
+            int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE - 1));
+            string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length - 1);
+
+            string response = "";
+
+            switch(statusCode)
+            {
+                case StatusCodeConstants.OK:
+                    response = "Logged in!";
+                    break;
+                case StatusCodeConstants.INFO:
+                    response = "User didn't exist, created new user.";
+                    break;
+                case StatusCodeConstants.ERROR_CLIENT:
+                    response = message;
+                    break;
+            }
+
+            Console.WriteLine(response);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using Common.Commands;
 using ClientApplicationInterfaces;
 using Common.Interfaces;
-using Common;
+using Common.Protocol;
 using Common.NetworkUtilities;
 
 namespace ClientApplication
@@ -48,7 +48,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
-                _commandHandler = new ClientCommandHandler(new NetworkStreamHandler(_tcpClient.GetStream()));
+                //_commandHandler = new ClientCommandHandler();
             }
             catch(Exception e)
             {
@@ -59,37 +59,13 @@ namespace ClientApplication
             return true;
         }
 
-        public void Loop()
-        {
-            
-
-            
-
-            SendMessage();
-        }
-        
-        private void SendMessage()
-        {
-            using (var networkStream = _tcpClient.GetStream())
-            {
-                var word = Console.ReadLine();
-                byte[] data = Encoding.UTF8.GetBytes(word);
-
-                networkStream.Write(data, 0, data.Length);
-            }
-
-            _tcpClient.Close();
-        }
-
         public void Login(string username)
         {
-            IPayload payload = new StringPayload(username);
-            _commandHandler.ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, payload);
-            //Arma paquete con formato del protocolo -> VaporProtocol.Send()
-	        //envia
-	        //espera respuesta -> VaporProtocol.Receive()
-            //ClientCommandHandler.Handle(VaporPacket);
-						                // Se corre command.ActionReq()
+            VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
+            vp.Send(ReqResHeader.REQ, CommandConstants.COMMAND_LOGIN_CODE, username.Length, username);
+            VaporProcessedPacket vaporProcessedPacket = vp.Receive();
+            ClientCommandHandler clientCommandHandler = new ClientCommandHandler();
+            clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }
     }
 }

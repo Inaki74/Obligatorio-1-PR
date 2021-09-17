@@ -3,29 +3,22 @@ using Common;
 using Common.Commands;
 using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
+using Common.Protocol;
 
 namespace ServerApplication
 {
     public class ServerCommandHandler
     {
         //Get command type and payload from menus input
-        //Call ActionReq for desired command with payload as parameter
-
-        private readonly INetworkStreamHandler _networkStreamHandler;
-        
-        public ServerCommandHandler(INetworkStreamHandler streamHandler)
+        //Call ActionReq for desired command with payload as parameterxw
+        public string ExecuteCommand(VaporProcessedPacket packet)
         {
-            _networkStreamHandler = streamHandler;
-        }
-        
-        public void ExecuteCommand(int command, IPayload payload)
-        {
-            ICommand finalCommand = new LoginCommand(_networkStreamHandler);
+            ICommand finalCommand = new LoginCommand();
 
-            switch (command)
+            switch (packet.Command)
             {
                 case CommandConstants.COMMAND_LOGIN_CODE:
-                    finalCommand = new LoginCommand(_networkStreamHandler);
+                    finalCommand = new LoginCommand();
                     break;
                 default:
                     Console.WriteLine("Command doesnt exist");
@@ -33,6 +26,10 @@ namespace ServerApplication
                     break;
                 
             }
+
+            string response = finalCommand.ActionReq(packet.Payload);
+
+            return response;
         }
     }
 }

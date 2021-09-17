@@ -4,8 +4,8 @@
     {
         public int command {get;}
 
-        public void ActionReq(IPayload payload);
+        public string ActionReq(byte[] payload);
 
-        public void ActionRes(IPayload reqPayload);
+        public void ActionRes(byte[] reqPayload);
     }
 }

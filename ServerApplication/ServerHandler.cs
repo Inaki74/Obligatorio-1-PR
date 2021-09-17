@@ -3,6 +3,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Common.Commands;
+using Common.NetworkUtilities;
+using Common.Protocol;
 using ServerApplicationInterfaces;
 
 namespace ServerApplication
@@ -60,21 +63,12 @@ namespace ServerApplication
         {
             try
             {
-                // Server espera un mensaje del cliente
-                // Server recibe mensaje
-                // Delega a ServerCommandHandler
-                    // Server command handler desarme el paquete
-                    // Identifica que comando es
-                    // Hace accionRes
-
-
-                NetworkStream stream = acceptedTcpClient.GetStream();
-
-                byte[] messageBuffer = new byte[1024];
-                stream.Read(messageBuffer, 0, 1024);
-                string message = Encoding.UTF8.GetString(messageBuffer);
-
-                Console.WriteLine($"Client says: {message}");
+                NetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
+                VaporProtocol vp = new VaporProtocol(streamHandler);
+                VaporProcessedPacket processedPacket = vp.Receive();
+                ServerCommandHandler serverCommandHandler = new ServerCommandHandler();
+                string response = serverCommandHandler.ExecuteCommand(processedPacket);
+                vp.Send(ReqResHeader.RES, CommandConstants.COMMAND_LOGIN_CODE, response.Length, response);
             }
             catch(SocketException e)
             {
