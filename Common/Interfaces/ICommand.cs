@@ -4,8 +4,8 @@
     {
         public int command {get;}
 
-        public VaporPacket ActionReq(IPayload payload);
+        public void ActionReq(IPayload payload);
 
-        public VaporPacket ActionRes(IPayload reqPayload);
+        public void ActionRes(IPayload reqPayload);
     }
 }

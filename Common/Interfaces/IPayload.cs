@@ -2,7 +2,7 @@
 {
     public interface IPayload
     {
-        public string payload {get;}
-        public int length {get;}
+        public byte[] Payload {get;}
+        public int Length {get;}
     }
 }

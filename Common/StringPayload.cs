@@ -1,16 +1,17 @@
-﻿using Common.Interfaces;
+﻿using System.Text;
+using Common.Interfaces;
 
 namespace Common
 {
     public class StringPayload : IPayload
     {
-        public string payload { get; }
-        public int length { get; }
+        public byte[] Payload { get; }
+        public int Length { get; }
 
         public StringPayload(string payloadString)
         {
-            payload = payloadString;
-            length = payloadString.Length;
+            Payload = Encoding.UTF8.GetBytes(payloadString);
+            Length = payloadString.Length;
         }
         
         

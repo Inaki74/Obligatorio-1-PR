@@ -2,7 +2,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common.Commands;
 using ClientApplicationInterfaces;
+using Common.Interfaces;
+using Common;
+using Common.NetworkUtilities;
 
 namespace ClientApplication
 {
@@ -19,6 +23,8 @@ namespace ClientApplication
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
+
+        private readonly ClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -35,6 +41,7 @@ namespace ClientApplication
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
             _tcpClient = new TcpClient(_clientIpEndPoint);
+            _commandHandler = new ClientCommandHandler(new NetworkStreamHandler(_tcpClient.GetStream()));
         }
 
         public bool ConnectToServer()
@@ -72,6 +79,15 @@ namespace ClientApplication
             }
 
             _tcpClient.Close();
+        }
+
+        public void Login(string username)
+        {
+            IPayload payload = new StringPayload(username);
+            _commandHandler.ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, payload);
+            // devuelve un codigo
+            // si fue bueno return true
+            // si no return false
         }
     }
 }

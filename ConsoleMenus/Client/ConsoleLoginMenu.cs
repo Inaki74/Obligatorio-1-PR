@@ -2,6 +2,7 @@
 using ConsoleMenus;
 using ConsoleMenusInterfaces;
 using System;
+using ClientApplicationInterfaces;
 
 namespace ConsoleMenus.Client
 {
@@ -16,6 +17,8 @@ namespace ConsoleMenus.Client
         {
             // Intentar login
             Console.WriteLine($"You are trying to login right now duh: {answer}");
+            IClientHandler.Instance.Login(answer);
+            // REQ 1
         }
 
         public void PrintMenu()
