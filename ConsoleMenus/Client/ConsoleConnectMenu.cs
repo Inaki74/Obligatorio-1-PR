@@ -20,7 +20,8 @@ namespace ConsoleMenus.Client
                 // Decir que fue mala e intentar de nuevo
             bool connectedSuccess = IClientHandler.Instance.ConnectToServer();
 
-            if(connectedSuccess){
+            if(connectedSuccess)
+            {
                 Console.WriteLine("Connection to server successful!");
                 _nextMenu = new ConsoleLoginMenu();
                 return;
