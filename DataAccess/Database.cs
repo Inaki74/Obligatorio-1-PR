@@ -22,5 +22,6 @@ namespace DataAccess
 
         public List<User> Users = new List<User>();
         
+        public List<Game> Games = new List<Game>();
     }
 }

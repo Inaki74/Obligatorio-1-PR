@@ -39,25 +39,38 @@ namespace ConsoleMenus.Client
 
             Console.WriteLine("Game Title: ");
             string title = Console.ReadLine();
-            input += title.Length.ToString() + title;
+            input += FillNumber(title.Length) + title;
 
             Console.WriteLine("Genre: ");
             string genre = Console.ReadLine();
-            input += genre.Length.ToString() + genre;
+            input += FillNumber(genre.Length) + genre;
 
             Console.WriteLine("Public ESRB rating: ");
             string esrb = Console.ReadLine();
-            input += esrb.Length.ToString() + esrb;
+            input += FillNumber(esrb.Length) + esrb;
 
             Console.WriteLine("Enter the game's synopsis");
             string sinopsis = Console.ReadLine();
-            input += sinopsis.Length.ToString() + sinopsis;
+            input += FillNumber(sinopsis.Length) + sinopsis;
 
             Console.WriteLine("Caratula: (MAS TARDE)");
             //string title = Console.ReadLine();
             //input += title.Length.ToString() + title;
 
             return input;
+        }
+
+        private string FillNumber(int number)
+        {
+            int maxLength = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+            string numberString = number.ToString();
+
+            while(numberString.Length < maxLength)
+            {
+                numberString = "0" + numberString;
+            }
+
+            return numberString;
         }
     }
 }
