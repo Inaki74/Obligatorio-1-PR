@@ -34,7 +34,6 @@ namespace ConsoleMenus
             var answer = "";
             if(_currentMenu.RequiresAnswer)
             {
-                Console.WriteLine("Answer: ");
                 answer = Console.ReadLine();
                 Console.WriteLine("");
             }

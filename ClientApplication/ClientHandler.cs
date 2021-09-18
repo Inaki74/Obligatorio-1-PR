@@ -8,6 +8,7 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
 using Common;
+using Domain;
 
 namespace ClientApplication
 {
@@ -59,6 +60,13 @@ namespace ClientApplication
             }
             
             return true;
+        }
+
+        public VaporStatusResponse PublishGame(string game)
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, game);
+
+            return response;
         }
 
         public VaporStatusResponse Login(string username)
