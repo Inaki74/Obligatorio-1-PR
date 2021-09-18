@@ -47,7 +47,7 @@ namespace Common.Commands
         }
 
         //build the payload for the response
-        public void ActionRes(byte[] payload)
+        public VaporStatusResponse ActionRes(byte[] payload)
         {
             // XX#XXXX...
             // statusCode#Mensaje
@@ -69,7 +69,7 @@ namespace Common.Commands
                     break;
             }
 
-            Console.WriteLine(response);
+            return new VaporStatusResponse(statusCode, response);
         }
     }
 }

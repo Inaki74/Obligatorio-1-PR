@@ -11,7 +11,7 @@ namespace ConsoleMenus.Client
 
         public IConsoleMenu NextMenu => _nextMenu;
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
             // Conectar
             // Si la conexion es buena
@@ -24,11 +24,12 @@ namespace ConsoleMenus.Client
             {
                 Console.WriteLine("Connection to server successful!");
                 _nextMenu = new ConsoleLoginMenu();
-                return;
+                return false;
             }
 
             Console.WriteLine("Couldn't connect to server, trying again...");
             _nextMenu = this;
+            return false;
         }
 
         public void PrintMenu()

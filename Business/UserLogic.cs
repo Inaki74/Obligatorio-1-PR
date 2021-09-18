@@ -32,6 +32,13 @@ namespace Business
             return true;
         }
 
+        public void Logout(string username)
+        {
+            User loggedUser = _userDataAccess.Get(username);
+            loggedUser.LoggedIn = false;
+            _userDataAccess.Update(loggedUser);
+        }
+
         private void AddUser(string username)
         {
             User newUser = new User(username, LocalUserDataAccess.CurrentId);

@@ -10,11 +10,13 @@ namespace ConsoleMenus.Server
 
         public IConsoleMenu NextMenu => _nextMenu;
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
             IServerHandler.Instance.StartServer();
 
             _nextMenu = new ConsoleListeningForClientsMenu();
+
+            return false;
         }
 
         public void PrintMenu()

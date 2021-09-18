@@ -1,4 +1,5 @@
 ﻿using System;
+using Common.Protocol;
 
 namespace ClientApplicationInterfaces
 {
@@ -8,6 +9,8 @@ namespace ClientApplicationInterfaces
 
         bool ConnectToServer();
 
-        void Login(string username);
+        VaporStatusResponse Login(string username);
+
+        VaporStatusResponse Exit();
     }
 }

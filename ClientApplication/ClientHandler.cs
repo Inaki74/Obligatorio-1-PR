@@ -7,6 +7,7 @@ using ClientApplicationInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
+using Common;
 
 namespace ClientApplication
 {
@@ -24,7 +25,8 @@ namespace ClientApplication
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
-        private ClientCommandHandler _commandHandler;
+        private IClientSession _clientSession;
+        private IClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -59,13 +61,32 @@ namespace ClientApplication
             return true;
         }
 
-        public void Login(string username)
+        public VaporStatusResponse Login(string username)
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+
+            if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
+            {
+                _clientSession = new ClientSession(username);
+            }
+
+            return response;
+        }
+
+        public VaporStatusResponse Exit()
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
+            _tcpClient.Close();
+            return response;
+        }
+
+        private VaporStatusResponse ExecuteCommand(string command, string payload)
         {
             VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-            vp.Send(ReqResHeader.REQ, CommandConstants.COMMAND_LOGIN_CODE, username.Length, username);
+            vp.Send(ReqResHeader.REQ, command, payload.Length, payload);
             VaporProcessedPacket vaporProcessedPacket = vp.Receive();
-            ClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+            IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }
     }
 }

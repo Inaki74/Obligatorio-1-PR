@@ -13,7 +13,7 @@ namespace ClientApplication
         //Get command type and payload from menus input
         //Call ActionReq for desired command with payload as parameter
         
-        public void ExecuteCommand(VaporProcessedPacket processedPacket)
+        public VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket)
         {
             ICommand finalCommand = new LoginCommand();
 
@@ -22,6 +22,9 @@ namespace ClientApplication
                 case CommandConstants.COMMAND_LOGIN_CODE:
                     finalCommand = new LoginCommand();
                     break;
+                case CommandConstants.COMMAND_EXIT_CODE:
+                    finalCommand = new ExitCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion
@@ -29,7 +32,7 @@ namespace ClientApplication
                 
             }
             
-            finalCommand.ActionRes(processedPacket.Payload);
+            return finalCommand.ActionRes(processedPacket.Payload);
         }
         
         

@@ -9,9 +9,9 @@ namespace ConsoleMenus.Client
 
         public IConsoleMenu NextMenu => throw new NotImplementedException();
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
-            //Enviar el mensaje
+            return false;
         }
 
         public void PrintMenu()

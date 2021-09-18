@@ -68,11 +68,18 @@ namespace ServerApplication
                 VaporProtocol vp = new VaporProtocol(streamHandler);
                 IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
 
-                while(true)
+                bool connected = true;
+
+                while(connected)
                 {
                     VaporProcessedPacket processedPacket = vp.Receive();
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
                     vp.Send(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+
+                    if(response.Command == CommandConstants.COMMAND_EXIT_CODE)
+                    {
+                        connected = false;
+                    }
                 }
             }
             catch(SocketException e)
