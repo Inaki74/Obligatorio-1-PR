@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using Common.Commands;
 using Common.NetworkUtilities;
+using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using ServerApplicationInterfaces;
 
@@ -63,9 +64,9 @@ namespace ServerApplication
         {
             try
             {
-                NetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
+                INetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
                 VaporProtocol vp = new VaporProtocol(streamHandler);
-                ServerCommandHandler serverCommandHandler = new ServerCommandHandler();
+                IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
 
                 while(true)
                 {
