@@ -8,6 +8,6 @@ namespace Common.Interfaces
 
         public string ActionReq(byte[] payload);
 
-        public VaporStatusMessage ActionRes(byte[] reqPayload);
+        public VaporStatusResponse ActionRes(byte[] reqPayload);
     }
 }

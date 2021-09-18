@@ -13,7 +13,7 @@ namespace ClientApplication
         //Get command type and payload from menus input
         //Call ActionReq for desired command with payload as parameter
         
-        public VaporStatusMessage ExecuteCommand(VaporProcessedPacket processedPacket)
+        public VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket)
         {
             ICommand finalCommand = new LoginCommand();
 

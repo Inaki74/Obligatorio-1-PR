@@ -19,9 +19,9 @@ namespace ConsoleMenus.Client
         {
             // Intentar login
             Console.WriteLine($"Attempting to login with {answer}");
-            VaporStatusMessage message = IClientHandler.Instance.Login(answer);
+            VaporStatusResponse response = IClientHandler.Instance.Login(answer);
 
-            switch(message.Code)
+            switch(response.Code)
             {
                 case StatusCodeConstants.OK:
                     _nextMenu = new ConsoleMainMenu();
@@ -29,13 +29,13 @@ namespace ConsoleMenus.Client
                     break;
                 case StatusCodeConstants.INFO:
                     _nextMenu = new ConsoleMainMenu();
-                    Console.WriteLine($"INFO: {message.Message}");
+                    Console.WriteLine($"INFO: {response.Message}");
                     Console.WriteLine($"Welcome {answer}!");
                     break;
                 case StatusCodeConstants.ERROR_CLIENT:
                     _nextMenu = new ConsoleLoginMenu();
                     Console.WriteLine("Couldn't login...");
-                    Console.WriteLine($"{message.Message}");
+                    Console.WriteLine($"{response.Message}");
                     break;
             }
 

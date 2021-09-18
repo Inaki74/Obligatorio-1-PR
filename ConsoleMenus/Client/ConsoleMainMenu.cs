@@ -3,6 +3,7 @@ using ConsoleMenus;
 using ConsoleMenusInterfaces;
 using System;
 using ClientApplicationInterfaces;
+using Common.Protocol;
 
 namespace ConsoleMenus.Client
 {
@@ -20,7 +21,8 @@ namespace ConsoleMenus.Client
             switch(answer)
             {
                 case EXIT_OPTION:
-                    IClientHandler.Instance.Exit();
+                    VaporStatusResponse response = IClientHandler.Instance.Exit();
+                    Console.WriteLine(response.Message);
                     return true;
                 default:
                     Console.WriteLine("Not a valid option.");

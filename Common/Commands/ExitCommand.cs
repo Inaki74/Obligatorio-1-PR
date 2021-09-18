@@ -32,7 +32,7 @@ namespace Common.Commands
         }
 
         // Lo que hace el cliente.
-        public VaporStatusMessage ActionRes(byte[] payload)
+        public VaporStatusResponse ActionRes(byte[] payload)
         {
             string payloadString = Encoding.UTF8.GetString(payload);
             int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
@@ -49,7 +49,7 @@ namespace Common.Commands
                     break;
             }
 
-            return new VaporStatusMessage(statusCode, response);
+            return new VaporStatusResponse(statusCode, response);
         }
     }
 }

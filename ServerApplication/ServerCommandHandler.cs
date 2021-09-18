@@ -21,6 +21,9 @@ namespace ServerApplication
                 case CommandConstants.COMMAND_LOGIN_CODE:
                     finalCommand = new LoginCommand();
                     break;
+                case CommandConstants.COMMAND_EXIT_CODE:
+                    finalCommand = new ExitCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion

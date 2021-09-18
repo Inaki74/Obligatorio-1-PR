@@ -9,8 +9,8 @@ namespace ClientApplicationInterfaces
 
         bool ConnectToServer();
 
-        VaporStatusMessage Login(string username);
+        VaporStatusResponse Login(string username);
 
-        void Exit();
+        VaporStatusResponse Exit();
     }
 }

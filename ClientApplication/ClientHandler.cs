@@ -61,11 +61,11 @@ namespace ClientApplication
             return true;
         }
 
-        public VaporStatusMessage Login(string username)
+        public VaporStatusResponse Login(string username)
         {
-            VaporStatusMessage response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
 
-            if(response.Code == StatusCodeConstants.OK)
+            if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
                 _clientSession = new ClientSession(username);
             }
@@ -73,13 +73,14 @@ namespace ClientApplication
             return response;
         }
 
-        public void Exit()
+        public VaporStatusResponse Exit()
         {
-            VaporStatusMessage response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
             _tcpClient.Close();
+            return response;
         }
 
-        private VaporStatusMessage ExecuteCommand(string command, string payload)
+        private VaporStatusResponse ExecuteCommand(string command, string payload)
         {
             VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             vp.Send(ReqResHeader.REQ, command, payload.Length, payload);
