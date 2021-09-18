@@ -2,6 +2,6 @@
 {
     public interface IUserLogic
     {
-        public void Login(string username);
+        public bool Login(string username);
     }
 }

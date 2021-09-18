@@ -35,7 +35,7 @@ namespace DataAccess
 
         public User Get(string id)
         {
-            User user = Database.Instance.Users.First(u => u.Username == id);
+            User user = Database.Instance.Users.FirstOrDefault(u => u.Username == id);
             return user;
         }
 

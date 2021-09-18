@@ -21,11 +21,21 @@ namespace Common.Protocol
         {
         }
 
-        public VaporHeader(string requestType, int command, int length)
+        public VaporHeader(ReqResHeader requestType, string command, int length)
         {
-            _requestType = Encoding.UTF8.GetBytes(requestType);
-            _command = BitConverter.GetBytes(command);
-            _length = length;
+            string req = "";
+            if(requestType == ReqResHeader.REQ)
+            {
+                req = HeaderConstants.Request;
+            }
+            else
+            {
+                req = HeaderConstants.Response;
+            }
+
+            _requestType = Encoding.UTF8.GetBytes(req);
+            _command = Encoding.UTF8.GetBytes(command);
+            _length = Encoding.UTF8.GetBytes(length.ToString());
         }
 
     }

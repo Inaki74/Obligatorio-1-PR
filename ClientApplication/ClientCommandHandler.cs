@@ -3,6 +3,7 @@ using Common;
 using Common.Commands;
 using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
+using Common.Protocol;
 
 namespace ClientApplication
 {
@@ -10,22 +11,15 @@ namespace ClientApplication
     {
         //Get command type and payload from menus input
         //Call ActionReq for desired command with payload as parameter
-
-        private readonly INetworkStreamHandler _networkStreamHandler;
         
-        public ClientCommandHandler(INetworkStreamHandler streamHandler)
+        public void ExecuteCommand(VaporProcessedPacket processedPacket)
         {
-            _networkStreamHandler = streamHandler;
-        }
-        
-        public void ExecuteCommand(int command, IPayload payload)
-        {
-            ICommand finalCommand = new LoginCommand(_networkStreamHandler);
+            ICommand finalCommand = new LoginCommand();
 
-            switch (command)
+            switch (processedPacket.Command)
             {
                 case CommandConstants.COMMAND_LOGIN_CODE:
-                    finalCommand = new LoginCommand(_networkStreamHandler);
+                    finalCommand = new LoginCommand();
                     break;
                 default:
                     Console.WriteLine("Command doesnt exist");
@@ -33,13 +27,8 @@ namespace ClientApplication
                     break;
                 
             }
-
-            // send to server
-            finalCommand.ActionReq(payload);
             
-            // await response
-            var response = _networkStreamHandler.Read();
-            
+            finalCommand.ActionRes(processedPacket.Payload);
         }
         
         
