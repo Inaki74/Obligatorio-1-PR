@@ -2,6 +2,7 @@
 {
     public interface IUserLogic
     {
-        public bool Login(string username);
+        bool Login(string username);
+        void Logout(string username);
     }
 }

@@ -15,18 +15,20 @@ namespace ConsoleMenus.Client
         public IConsoleMenu NextMenu => _nextMenu;
 
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
             switch(answer)
             {
                 case EXIT_OPTION:
                     IClientHandler.Instance.Exit();
-                    break;
+                    return true;
                 default:
                     Console.WriteLine("Not a valid option.");
                     _nextMenu = this;
                     break;
             }
+
+            return false;
         }
 
         public void PrintMenu()

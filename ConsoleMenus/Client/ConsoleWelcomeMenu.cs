@@ -10,10 +10,11 @@ namespace ConsoleMenus.Client
 
         public IConsoleMenu NextMenu => _nextMenu;
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
             // Delegar a ConnectMenu
             _nextMenu = new ConsoleConnectMenu();
+            return false;
         }
 
         public void PrintMenu()

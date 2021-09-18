@@ -15,7 +15,7 @@ namespace ConsoleMenus.Client
         public IConsoleMenu NextMenu => _nextMenu;
 
 
-        public void Action(string answer)
+        public bool Action(string answer)
         {
             // Intentar login
             Console.WriteLine($"Attempting to login with {answer}");
@@ -38,6 +38,8 @@ namespace ConsoleMenus.Client
                     Console.WriteLine($"{message.Message}");
                     break;
             }
+
+            return false;
         }
 
         public void PrintMenu()

@@ -7,6 +7,7 @@ using ClientApplicationInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
+using Common;
 
 namespace ClientApplication
 {
@@ -24,7 +25,8 @@ namespace ClientApplication
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
-        private ClientCommandHandler _commandHandler;
+        private IClientSession _clientSession;
+        private IClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -61,12 +63,20 @@ namespace ClientApplication
 
         public VaporStatusMessage Login(string username)
         {
-            return ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+            VaporStatusMessage response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+
+            if(response.Code == StatusCodeConstants.OK)
+            {
+                _clientSession = new ClientSession(username);
+            }
+
+            return response;
         }
 
         public void Exit()
         {
-            ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, "");
+            VaporStatusMessage response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
+            _tcpClient.Close();
         }
 
         private VaporStatusMessage ExecuteCommand(string command, string payload)

@@ -41,8 +41,9 @@ namespace ConsoleMenus
 
             try
             {
-                _currentMenu.Action(answer);
+                bool exit = _currentMenu.Action(answer);
                 _currentMenu = _currentMenu.NextMenu;
+                _exit = exit;
             }
             catch(Exception e)
             {
