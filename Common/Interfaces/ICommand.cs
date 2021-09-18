@@ -2,7 +2,7 @@
 {
     public interface ICommand
     {
-        public int command {get;}
+        public string Command {get;}
 
         public string ActionReq(byte[] payload);
 

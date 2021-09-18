@@ -65,10 +65,14 @@ namespace ServerApplication
             {
                 NetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
                 VaporProtocol vp = new VaporProtocol(streamHandler);
-                VaporProcessedPacket processedPacket = vp.Receive();
                 ServerCommandHandler serverCommandHandler = new ServerCommandHandler();
-                string response = serverCommandHandler.ExecuteCommand(processedPacket);
-                vp.Send(ReqResHeader.RES, CommandConstants.COMMAND_LOGIN_CODE, response.Length, response);
+
+                while(true)
+                {
+                    VaporProcessedPacket processedPacket = vp.Receive();
+                    CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
+                    vp.Send(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+                }
             }
             catch(SocketException e)
             {

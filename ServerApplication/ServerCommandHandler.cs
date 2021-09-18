@@ -11,7 +11,7 @@ namespace ServerApplication
     {
         //Get command type and payload from menus input
         //Call ActionReq for desired command with payload as parameterxw
-        public string ExecuteCommand(VaporProcessedPacket packet)
+        public CommandResponse ExecuteCommand(VaporProcessedPacket packet)
         {
             ICommand finalCommand = new LoginCommand();
 
@@ -29,7 +29,9 @@ namespace ServerApplication
 
             string response = finalCommand.ActionReq(packet.Payload);
 
-            return response;
+            CommandResponse commandResponse = new CommandResponse(response, finalCommand.Command);
+            
+            return commandResponse;
         }
     }
 }

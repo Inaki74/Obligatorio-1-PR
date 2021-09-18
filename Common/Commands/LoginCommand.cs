@@ -13,7 +13,7 @@ namespace Common.Commands
         //client -> server
         //server -> client
 
-        public int command {get;} // al pedo?
+        public string Command => CommandConstants.COMMAND_LOGIN_CODE;
 
         //Build header, send to server
         public string ActionReq(byte[] payload)
