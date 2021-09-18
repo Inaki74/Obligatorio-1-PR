@@ -29,12 +29,14 @@ namespace ConsoleMenus
         public void ExecuteMenu()
         {
             _currentMenu.PrintMenu();
+            Console.WriteLine("");
 
             var answer = "";
             if(_currentMenu.RequiresAnswer)
             {
                 Console.WriteLine("Answer: ");
                 answer = Console.ReadLine();
+                Console.WriteLine("");
             }
 
             try

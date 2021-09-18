@@ -1,4 +1,6 @@
-﻿namespace Common.Interfaces
+﻿using Common.Protocol;
+
+namespace Common.Interfaces
 {
     public interface ICommand
     {
@@ -6,6 +8,6 @@
 
         public string ActionReq(byte[] payload);
 
-        public void ActionRes(byte[] reqPayload);
+        public VaporStatusMessage ActionRes(byte[] reqPayload);
     }
 }

@@ -59,13 +59,23 @@ namespace ClientApplication
             return true;
         }
 
-        public void Login(string username)
+        public VaporStatusMessage Login(string username)
+        {
+            return ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+        }
+
+        public void Exit()
+        {
+            ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, "");
+        }
+
+        private VaporStatusMessage ExecuteCommand(string command, string payload)
         {
             VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-            vp.Send(ReqResHeader.REQ, CommandConstants.COMMAND_LOGIN_CODE, username.Length, username);
+            vp.Send(ReqResHeader.REQ, command, payload.Length, payload);
             VaporProcessedPacket vaporProcessedPacket = vp.Receive();
-            ClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+            IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }
     }
 }

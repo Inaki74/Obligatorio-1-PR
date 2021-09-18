@@ -3,6 +3,8 @@ using ConsoleMenus;
 using ConsoleMenusInterfaces;
 using System;
 using ClientApplicationInterfaces;
+using Common.Protocol;
+using Common;
 
 namespace ConsoleMenus.Client
 {
@@ -16,10 +18,26 @@ namespace ConsoleMenus.Client
         public void Action(string answer)
         {
             // Intentar login
-            Console.WriteLine($"You are trying to login right now duh: {answer}");
-            IClientHandler.Instance.Login(answer);
-            _nextMenu = new ConsoleLoginMenu();
-            // REQ 1
+            Console.WriteLine($"Attempting to login with {answer}");
+            VaporStatusMessage message = IClientHandler.Instance.Login(answer);
+
+            switch(message.Code)
+            {
+                case StatusCodeConstants.OK:
+                    _nextMenu = new ConsoleMainMenu();
+                    Console.WriteLine($"Welcome {answer}!");
+                    break;
+                case StatusCodeConstants.INFO:
+                    _nextMenu = new ConsoleMainMenu();
+                    Console.WriteLine($"INFO: {message.Message}");
+                    Console.WriteLine($"Welcome {answer}!");
+                    break;
+                case StatusCodeConstants.ERROR_CLIENT:
+                    _nextMenu = new ConsoleLoginMenu();
+                    Console.WriteLine("Couldn't login...");
+                    Console.WriteLine($"{message.Message}");
+                    break;
+            }
         }
 
         public void PrintMenu()
