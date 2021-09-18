@@ -7,5 +7,7 @@ namespace ClientApplicationInterfaces
         static IClientHandler Instance { get; set; }
 
         bool ConnectToServer();
+
+        void Login(string username);
     }
 }

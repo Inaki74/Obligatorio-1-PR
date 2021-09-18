@@ -10,9 +10,9 @@ namespace ConsoleMenusFactory
 
         }
 
-        public IConsoleMenuManager Create()
+        public IConsoleMenuManager Create(bool client)
         {
-            return new ConsoleMenuManager();
+            return new ConsoleMenuManager(client);
         }
     }
 }

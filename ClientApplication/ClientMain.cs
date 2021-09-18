@@ -13,7 +13,7 @@ namespace ClientApplication
         {
             new ClientHandler();
             ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
-            IConsoleMenuManager consoleManager = consoleFactory.Create();
+            IConsoleMenuManager consoleManager = consoleFactory.Create(true);
 
             while(!consoleManager.Exit)
             {

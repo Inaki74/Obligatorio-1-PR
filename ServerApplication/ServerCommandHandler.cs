@@ -1,23 +1,22 @@
-﻿using System;
-using ClientApplicationInterfaces;
+using System;
 using Common;
 using Common.Commands;
 using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
+using ServerApplicationInterfaces;
 
-namespace ClientApplication
+namespace ServerApplication
 {
-    public class ClientCommandHandler : IClientCommandHandler
+    public class ServerCommandHandler : IServerCommandHandler
     {
         //Get command type and payload from menus input
-        //Call ActionReq for desired command with payload as parameter
-        
-        public void ExecuteCommand(VaporProcessedPacket processedPacket)
+        //Call ActionReq for desired command with payload as parameterxw
+        public CommandResponse ExecuteCommand(VaporProcessedPacket packet)
         {
             ICommand finalCommand = new LoginCommand();
 
-            switch (processedPacket.Command)
+            switch (packet.Command)
             {
                 case CommandConstants.COMMAND_LOGIN_CODE:
                     finalCommand = new LoginCommand();
@@ -28,11 +27,13 @@ namespace ClientApplication
                     break;
                 
             }
-            
-            finalCommand.ActionRes(processedPacket.Payload);
-        }
-        
-        
 
+            string response = finalCommand.ActionReq(packet.Payload);
+
+            CommandResponse commandResponse = new CommandResponse(response, finalCommand.Command);
+            
+            return commandResponse;
+        }
     }
 }
+

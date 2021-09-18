@@ -2,7 +2,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Common.Commands;
 using ClientApplicationInterfaces;
+using Common.Interfaces;
+using Common.Protocol;
+using Common.NetworkUtilities;
 
 namespace ClientApplication
 {
@@ -19,6 +23,8 @@ namespace ClientApplication
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
+
+        private ClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -42,6 +48,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
+                //_commandHandler = new ClientCommandHandler();
             }
             catch(Exception e)
             {
@@ -52,26 +59,13 @@ namespace ClientApplication
             return true;
         }
 
-        public void Loop()
+        public void Login(string username)
         {
-            
-
-            
-
-            SendMessage();
-        }
-        
-        private void SendMessage()
-        {
-            using (var networkStream = _tcpClient.GetStream())
-            {
-                var word = Console.ReadLine();
-                byte[] data = Encoding.UTF8.GetBytes(word);
-
-                networkStream.Write(data, 0, data.Length);
-            }
-
-            _tcpClient.Close();
+            VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
+            vp.Send(ReqResHeader.REQ, CommandConstants.COMMAND_LOGIN_CODE, username.Length, username);
+            VaporProcessedPacket vaporProcessedPacket = vp.Receive();
+            ClientCommandHandler clientCommandHandler = new ClientCommandHandler();
+            clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Common.Interfaces
 {
-    public interface IPayload
+    public interface IPayload<T>
     {
-        public string payload {get;}
-        public int length {get;}
+        public T Info {get;}
+        public int Command {get;}
     }
 }

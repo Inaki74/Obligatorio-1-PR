@@ -1,6 +1,7 @@
 using ConsoleMenusInterfaces;
 using System;
 using ConsoleMenus.Client;
+using ConsoleMenus.Server;
 
 namespace ConsoleMenus
 {
@@ -12,9 +13,17 @@ namespace ConsoleMenus
 
         private bool _exit;
 
-        public ConsoleMenuManager()
+        public ConsoleMenuManager(bool client)
         {
-            _currentMenu = new ConsoleWelcomeMenu();
+            if(client)
+            {
+                _currentMenu = new ConsoleWelcomeMenu();
+            }
+            else
+            {
+                _currentMenu = new ConsoleStartServerMenu();
+            }
+            
         }
 
         public void ExecuteMenu()

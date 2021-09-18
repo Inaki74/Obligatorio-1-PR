@@ -2,6 +2,7 @@
 using ConsoleMenus;
 using ConsoleMenusInterfaces;
 using System;
+using ClientApplicationInterfaces;
 
 namespace ConsoleMenus.Client
 {
@@ -9,13 +10,16 @@ namespace ConsoleMenus.Client
     {
         public bool RequiresAnswer => true;
 
-        public IConsoleMenu NextMenu => throw new System.NotImplementedException();
+        public IConsoleMenu NextMenu => _nextMenu;
 
 
         public void Action(string answer)
         {
             // Intentar login
             Console.WriteLine($"You are trying to login right now duh: {answer}");
+            IClientHandler.Instance.Login(answer);
+            _nextMenu = new ConsoleLoginMenu();
+            // REQ 1
         }
 
         public void PrintMenu()

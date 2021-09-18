@@ -2,10 +2,10 @@
 {
     public interface ICommand
     {
-        public int command {get;}
+        public string Command {get;}
 
-        public VaporPacket ActionReq(IPayload payload);
+        public string ActionReq(byte[] payload);
 
-        public VaporPacket ActionRes(IPayload reqPayload);
+        public void ActionRes(byte[] reqPayload);
     }
 }

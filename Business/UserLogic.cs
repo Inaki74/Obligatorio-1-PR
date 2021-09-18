@@ -9,18 +9,27 @@ namespace Business
     {
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
 
-        public void Login(string username)
+        public bool Login(string username)
         {
             User user = _userDataAccess.Get(username);
             if (user == null)
             {
                 AddUser(username);
                 Login(username);
-                return;
+                return false;
             }
 
-            user.LoggedIn = true;
-            _userDataAccess.Update(user);
+            if(!user.LoggedIn)
+            {
+                user.LoggedIn = true;
+                _userDataAccess.Update(user);
+            }
+            else
+            {
+                throw new Exception("User already logged in!");
+            }
+            
+            return true;
         }
 
         private void AddUser(string username)
