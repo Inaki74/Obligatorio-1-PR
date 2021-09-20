@@ -64,8 +64,9 @@ namespace ClientApplication
 
         public VaporStatusResponse PublishGame(string game)
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, game);
-
+            string userAndGame = VaporProtocolHelper.FillNumber(_clientSession.Username.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + _clientSession.Username + game;
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, userAndGame);
+            
             return response;
         }
 

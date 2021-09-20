@@ -11,7 +11,7 @@ namespace Common.Commands
 {
     public class PublishGameCommand : Interfaces.ICommand
     {
-        public string Command => CommandConstants.COMMAND_LOGIN_CODE;
+        public string Command => CommandConstants.COMMAND_PUBLISH_GAME_CODE;
 
         public string ActionReq(byte[] payload)
         {
@@ -41,10 +41,7 @@ namespace Common.Commands
             switch(statusCode)
             {
                 case StatusCodeConstants.OK:
-                    response = "Logged in!";
-                    break;
-                case StatusCodeConstants.INFO:
-                    response = "User didn't exist, created new user.";
+                    response = "Game published!";
                     break;
                 case StatusCodeConstants.ERROR_CLIENT:
                     response = message;
@@ -65,12 +62,14 @@ namespace Common.Commands
             string payloadAsString = Encoding.UTF8.GetString(payload);
 
             int index = 0;
+            string username = ExtractGameField(payloadAsString, ref index);
             string title = ExtractGameField(payloadAsString, ref index);
             string genre = ExtractGameField(payloadAsString, ref index);
             string esrb = ExtractGameField(payloadAsString, ref index);
             string synopsis = ExtractGameField(payloadAsString, ref index);
             //string caratula = ExtractField(payloadAsString, ref index);
 
+            game.Owner = new User(username, -1);
             game.Title = title;
             game.Genre = genre;
             game.ESRB = esrb;

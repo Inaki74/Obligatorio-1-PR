@@ -39,19 +39,19 @@ namespace ConsoleMenus.Client
 
             Console.WriteLine("Game Title: ");
             string title = Console.ReadLine();
-            input += FillNumber(title.Length) + title;
+            input += VaporProtocolHelper.FillNumber(title.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + title;
 
             Console.WriteLine("Genre: ");
             string genre = Console.ReadLine();
-            input += FillNumber(genre.Length) + genre;
+            input += VaporProtocolHelper.FillNumber(genre.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + genre;
 
             Console.WriteLine("Public ESRB rating: ");
             string esrb = Console.ReadLine();
-            input += FillNumber(esrb.Length) + esrb;
+            input += VaporProtocolHelper.FillNumber(esrb.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + esrb;
 
             Console.WriteLine("Enter the game's synopsis");
             string sinopsis = Console.ReadLine();
-            input += FillNumber(sinopsis.Length) + sinopsis;
+            input += VaporProtocolHelper.FillNumber(sinopsis.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + sinopsis;
 
             Console.WriteLine("Caratula: (MAS TARDE)");
             //string title = Console.ReadLine();
@@ -60,17 +60,6 @@ namespace ConsoleMenus.Client
             return input;
         }
 
-        private string FillNumber(int number)
-        {
-            int maxLength = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-            string numberString = number.ToString();
-
-            while(numberString.Length < maxLength)
-            {
-                numberString = "0" + numberString;
-            }
-
-            return numberString;
-        }
+        
     }
 }
