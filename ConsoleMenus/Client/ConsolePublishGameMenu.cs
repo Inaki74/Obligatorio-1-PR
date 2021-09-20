@@ -23,8 +23,11 @@ namespace ConsoleMenus.Client
             // Escribir juego
             string input = GetGame();
 
-            IClientHandler.Instance.PublishGame(input);
+            VaporStatusResponse response = IClientHandler.Instance.PublishGame(input);
 
+            _nextMenu = new ConsoleMainMenu();
+            Console.WriteLine(response.Message);
+            
             return false;
         }
 

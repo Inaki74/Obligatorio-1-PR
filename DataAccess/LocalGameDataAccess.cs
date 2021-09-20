@@ -33,9 +33,10 @@ namespace DataAccess
             throw new NotImplementedException();
         }
 
-        public Game Get(string id)
+        public Game Get(string title)
         {
-            throw new NotImplementedException();
+            Game game = Database.Instance.Games.FirstOrDefault(g => g.Title == title);
+            return game;
         }
 
         public List<Game> GetALl()

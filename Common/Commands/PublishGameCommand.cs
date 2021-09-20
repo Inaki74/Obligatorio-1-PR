@@ -19,11 +19,25 @@ namespace Common.Commands
             Game game = DisassembleGamePayload(payload);
 
             IGameLogic gameLogic = new GameLogic();
-            gameLogic.AddGame(game);
-
+            
             // Response
             int statusCode = 0;
             string response = "";
+            
+            try
+            {
+                gameLogic.AddGame(game);
+                statusCode = StatusCodeConstants.OK;
+                response = "Game published!";
+            }
+            catch (Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                response = "nani";
+            }
+            
+
+            
 
             
 
@@ -36,7 +50,7 @@ namespace Common.Commands
             string payloadString = Encoding.UTF8.GetString(payload);
             int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
             string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length-VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
-            string response = "";
+            string response = message;
 
             switch(statusCode)
             {

@@ -16,7 +16,6 @@ namespace ClientApplication
         public VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket)
         {
             ICommand command = DecideCommand(processedPacket.Command);
-
             
             return command.ActionRes(processedPacket.Payload);
         }
