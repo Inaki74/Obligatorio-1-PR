@@ -74,7 +74,7 @@ namespace ServerApplication
                 {
                     VaporProcessedPacket processedPacket = vp.ReceiveCommand();
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-                    vp.SendCommand(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+                    vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
 
                     if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
                     {

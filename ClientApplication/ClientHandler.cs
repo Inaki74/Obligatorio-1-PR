@@ -101,7 +101,7 @@ namespace ClientApplication
 
         private VaporStatusResponse ExecuteCommand(string command, INetworkTransferObject payload)
         {
-            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.GetLength(), payload.ToCharacters());
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.ToCharacters());
             VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);

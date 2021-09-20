@@ -2,6 +2,7 @@
 using System.Text;
 using Common.NetworkUtilities;
 using Common.NetworkUtilities.Interfaces;
+using Common.Protocol.Interfaces;
 
 namespace Common.Protocol
 {
@@ -33,12 +34,11 @@ namespace Common.Protocol
             return processedPacket;
         }
 
-        public void SendCommand(ReqResHeader request, string command, int length, string data)
+        public void SendCommand(ReqResHeader request, string command, string data)
         {
-            VaporHeader header = CreateHeader(request, command, length);
-            VaporPacket packet = new VaporPacket(header, Encoding.UTF8.GetBytes(data));
+            IVaporHeader header = new VaporCommandHeader(request, command, data);
 
-            _streamHandler.Write(packet.Create());
+            _streamHandler.Write(header.Create());
         }
 
         public void SendCover(string gameTitle, string localPath)
@@ -46,6 +46,7 @@ namespace Common.Protocol
             // largoNombreFile NombreFile tamañoFile
             // Ej: 4 doom 32678
             // Envia header
+            IVaporHeader header = new VaporCoverHeader(localPath, 2);
 
             // Envia imagen
         }
@@ -54,13 +55,6 @@ namespace Common.Protocol
         {
             // Recibe header
             // 
-        }
-
-         private VaporHeader CreateHeader(ReqResHeader requestType, string command, int length)
-        {
-            VaporHeader header = new VaporHeader(requestType, command, length);
-
-            return header;
         }
     }
 }

@@ -12,11 +12,6 @@ namespace Common.Protocol.NTOs
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
 
-        public int GetLength()
-        {
-            return ToCharacters().Length;
-        }
-
         public string ToCharacters()
         {
             string input = "";
