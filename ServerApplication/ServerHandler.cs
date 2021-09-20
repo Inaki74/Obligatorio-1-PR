@@ -72,9 +72,15 @@ namespace ServerApplication
 
                 while(connected)
                 {
-                    VaporProcessedPacket processedPacket = vp.Receive();
+                    VaporProcessedPacket processedPacket = vp.ReceiveCommand();
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-                    vp.Send(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+                    vp.SendCommand(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+
+                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
+                    {
+                        //vp.ReceiveCover(path);
+                        // Images/{nombreJuego}.png
+                    }
 
                     if(response.Command == CommandConstants.COMMAND_EXIT_CODE)
                     {

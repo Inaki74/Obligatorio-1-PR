@@ -14,7 +14,7 @@ namespace Common.Protocol
         }
 
         // Devolver lo que recibio procesado.
-        public VaporProcessedPacket Receive()
+        public VaporProcessedPacket ReceiveCommand()
         {
             // Cuando server recibe mensaje:
                 // Server sabe que:
@@ -33,12 +33,27 @@ namespace Common.Protocol
             return processedPacket;
         }
 
-        public void Send(ReqResHeader request, string command, int length, string data)
+        public void SendCommand(ReqResHeader request, string command, int length, string data)
         {
             VaporHeader header = CreateHeader(request, command, length);
             VaporPacket packet = new VaporPacket(header, Encoding.UTF8.GetBytes(data));
 
             _streamHandler.Write(packet.Create());
+        }
+
+        public void SendCover(string gameTitle, string localPath)
+        {
+            // largoNombreFile NombreFile tamañoFile
+            // Ej: 4 doom 32678
+            // Envia header
+
+            // Envia imagen
+        }
+
+        public void ReceiveCover(string targetDirectoryPath)
+        {
+            // Recibe header
+            // 
         }
 
          private VaporHeader CreateHeader(ReqResHeader requestType, string command, int length)

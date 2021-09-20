@@ -9,6 +9,8 @@ using Common.Protocol;
 using Common.NetworkUtilities;
 using Common;
 using Domain;
+using Common.Protocol.Interfaces;
+using Common.Protocol.NTOs;
 
 namespace ClientApplication
 {
@@ -26,6 +28,7 @@ namespace ClientApplication
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
+        private VaporProtocol _vaporProtocol;
         private IClientSession _clientSession;
         private IClientCommandHandler _commandHandler;
         
@@ -51,6 +54,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
+                _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
                 //_commandHandler = new ClientCommandHandler();
             }
             catch(Exception e)
@@ -62,26 +66,24 @@ namespace ClientApplication
             return true;
         }
 
-        public VaporStatusResponse PublishGame(string game)
+        public VaporStatusResponse PublishGame(GameNetworkTransferObject game)
         {
-            string username = _clientSession.Username;
-            string filledLength = VaporProtocolHelper.FillNumber(username.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string userAndGame = filledLength + username + game;
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, userAndGame);
+            game.OwnerName = _clientSession.Username;
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
 
             // Enviar caratula si corresponde
-            //vp.SendImage(path);
+            _vaporProtocol.SendCover(game.Title, game.CoverPath);
             
             return response;
         }
 
-        public VaporStatusResponse Login(string username)
+        public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, user);
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
-                _clientSession = new ClientSession(username);
+                _clientSession = new ClientSession(user.Username);
             }
 
             return response;
@@ -89,16 +91,18 @@ namespace ClientApplication
 
         public VaporStatusResponse Exit()
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
+            UserNetworkTransferObject user = new UserNetworkTransferObject();
+            user.Username = _clientSession.Username;
+
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, user);
             _tcpClient.Close();
             return response;
         }
 
-        private VaporStatusResponse ExecuteCommand(string command, string payload)
+        private VaporStatusResponse ExecuteCommand(string command, INetworkTransferObject payload)
         {
-            VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-            vp.Send(ReqResHeader.REQ, command, payload.Length, payload);
-            VaporProcessedPacket vaporProcessedPacket = vp.Receive();
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.GetLength(), payload.ToCharacters());
+            VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }
