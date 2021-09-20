@@ -46,7 +46,7 @@ namespace Common.Protocol
             // largoNombreFile NombreFile tamañoFile
             // Ej: 4 doom 32678
             // Envia header
-            IVaporHeader header = new VaporCoverHeader(localPath, 2);
+            IVaporHeader header = new VaporCoverHeader(localPath, 2); //Path llega, fs.GetSize()
 
             // Envia imagen
         }
