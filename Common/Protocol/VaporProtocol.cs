@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Common.NetworkUtilities;
+using Common.FileSystemUtilities.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol.Interfaces;
 
@@ -8,10 +8,12 @@ namespace Common.Protocol
 {
     public class VaporProtocol
     {
-        private INetworkStreamHandler _streamHandler;
+        private INetworkStreamHandler _networkStreamHandler;
+        private IFileStreamHandler _fileStreamHandler;
+        private IFileInformationHandler _fileInformation;
         public VaporProtocol(INetworkStreamHandler streamHandler)
         {
-            _streamHandler = streamHandler;
+            _networkStreamHandler = streamHandler;
         }
 
         // Devolver lo que recibio procesado.
@@ -24,10 +26,10 @@ namespace Common.Protocol
                 //  luego viene LARGO
                 //  finalmente PAYLOAD
 
-            byte[] req = _streamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
-            byte[] cmd = _streamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
-            byte[] length = _streamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
-            byte[] payload = _streamHandler.Read(BitConverter.ToInt32(length));
+            byte[] req = _networkStreamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
+            byte[] cmd = _networkStreamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
+            byte[] length = _networkStreamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
+            byte[] payload = _networkStreamHandler.Read(BitConverter.ToInt32(length));
 
             VaporProcessedPacket processedPacket = new VaporProcessedPacket(req, cmd, length, payload);
 
@@ -38,23 +40,90 @@ namespace Common.Protocol
         {
             IVaporHeader header = new VaporCommandHeader(request, command, data);
 
-            _streamHandler.Write(header.Create());
+            _networkStreamHandler.Write(header.Create());
         }
 
         public void SendCover(string gameTitle, string localPath)
         {
-            // largoNombreFile NombreFile tamañoFile
+            // largoNombreFile tamañoFile NombreFile
             // Ej: 4 doom 32678
             // Envia header
-            IVaporHeader header = new VaporCoverHeader(localPath, 2); //Path llega, fs.GetSize()
+            long fileSize = _fileInformation.GetFileSize(localPath);
+
+            IVaporHeader header = new VaporCoverHeader(gameTitle, fileSize);
 
             // Envia imagen
+            SendImage(fileSize, localPath);
         }
 
         public void ReceiveCover(string targetDirectoryPath)
         {
             // Recibe header
-            // 
+            byte[] fileNameLength = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
+            byte[] fileSize = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
+            byte[] fileName = _networkStreamHandler.Read(BitConverter.ToInt32(fileNameLength));
+
+            long fileSizeDecoded = BitConverter.ToInt64(fileSize);
+            string fileNameDecoded = Encoding.UTF8.GetString(fileName);
+            string path = "../../";
+
+            // Recibir imagen
+            ReceiveImage(fileSizeDecoded, path);
+        }
+
+        private void ReceiveImage(long fileSize, string path)
+        {
+            long parts = VaporProtocolHelper.GetFileParts(fileSize);
+
+            long offset = 0;
+            long currentPart = 1;
+
+            while (fileSize > offset)
+            {
+                byte[] data;
+                if (currentPart == parts)
+                {
+                    var lastPartSize = (int)(fileSize - offset);
+                    Console.WriteLine($"Recibi un segmento de tamaño {lastPartSize}");
+                    data = _networkStreamHandler.Read(lastPartSize);
+                    offset += lastPartSize;
+                }
+                else
+                {
+                    Console.WriteLine($"Recibi un segmento de tamaño {VaporProtocolSpecification.MAX_PACKET_SIZE}");
+                    data = _networkStreamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
+                    offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
+                }
+                _fileStreamHandler.Write(data, path);
+                currentPart++;
+            }
+        }
+
+        private void SendImage(long fileSize, string path)
+        {
+            long parts = VaporProtocolHelper.GetFileParts(fileSize);
+
+            long offset = 0;
+            long currentPart = 1;
+
+            while (fileSize > offset)
+            {
+                byte[] data;
+                if (currentPart == parts)
+                {
+                    var lastPartSize = (int)(fileSize - offset);
+                    data = _fileStreamHandler.Read(path, offset, lastPartSize);
+                    offset += lastPartSize;
+                }
+                else
+                {
+                    data = _fileStreamHandler.Read(path, offset, VaporProtocolSpecification.MAX_PACKET_SIZE);
+                    offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
+                }
+
+                _networkStreamHandler.Write(data);
+                currentPart++;
+            }
         }
     }
 }
