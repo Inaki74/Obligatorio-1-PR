@@ -35,12 +35,7 @@ namespace Common.Commands
                 statusCode = StatusCodeConstants.ERROR_CLIENT;
                 response = "nani";
             }
-            
-
-            
-
-            
-
+        
             return statusCode.ToString() + response;
         }
 

@@ -64,8 +64,13 @@ namespace ClientApplication
 
         public VaporStatusResponse PublishGame(string game)
         {
-            string userAndGame = VaporProtocolHelper.FillNumber(_clientSession.Username.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + _clientSession.Username + game;
+            string username = _clientSession.Username;
+            string filledLength = VaporProtocolHelper.FillNumber(username.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string userAndGame = filledLength + username + game;
             VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, userAndGame);
+
+            // Enviar caratula si corresponde
+            //vp.SendImage(path);
             
             return response;
         }
