@@ -47,7 +47,7 @@ namespace ClientApplication
             }
 
             _configurationHandler = new ConfigurationHandler();
-            
+
             string clientIp = _configurationHandler.GetField(ConfigurationConstants.CLIENT_IP_KEY);
             int clientPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.CLIENT_PORT_KEY));
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
@@ -64,7 +64,6 @@ namespace ClientApplication
             {
                 _tcpClient.Connect(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-                //_commandHandler = new ClientCommandHandler();
             }
             catch(Exception e)
             {

@@ -9,7 +9,7 @@ using Domain;
 
 namespace Common.Commands
 {
-    public class PublishGameCommand : Interfaces.ICommand
+    public class PublishGameCommand : CommandBase, Interfaces.ICommand
     {
         public string Command => CommandConstants.COMMAND_PUBLISH_GAME_CODE;
 
@@ -33,7 +33,7 @@ namespace Common.Commands
             catch (Exception e)
             {
                 statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = "nani";
+                response = $"Something went wrong when publishing your game: {e.Message}";
             }
         
             return statusCode.ToString() + response;
@@ -41,23 +41,7 @@ namespace Common.Commands
 
         public VaporStatusResponse ActionRes(byte[] payload)
         {
-            // Mensaje de si se publico el juego
-            string payloadString = Encoding.UTF8.GetString(payload);
-            int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
-            string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length-VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
-            string response = message;
-
-            switch(statusCode)
-            {
-                case StatusCodeConstants.OK:
-                    response = "Game published!";
-                    break;
-                case StatusCodeConstants.ERROR_CLIENT:
-                    response = message;
-                    break;
-            }
-
-            return new VaporStatusResponse(statusCode, response);
+            return ParseStatusResponse(payload);
         }
 
         private Game DisassembleGamePayload(byte[] payload)
