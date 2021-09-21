@@ -38,7 +38,7 @@ namespace Common.Protocol
 
         public int GetLength()
         {
-            throw new NotImplementedException();
+            return VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE + VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE + _fileName.Length;
         }
     }
 }

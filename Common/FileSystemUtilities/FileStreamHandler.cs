@@ -39,6 +39,8 @@ namespace Common.FileSystemUtilities
             }
             else
             {
+                System.IO.FileInfo file = new System.IO.FileInfo(fileName);
+                file.Directory.Create();
                 using (var fs = new FileStream(fileName, FileMode.Create))
                 {
                     fs.Write(data, 0, data.Length);

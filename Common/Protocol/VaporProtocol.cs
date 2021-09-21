@@ -56,7 +56,7 @@ namespace Common.Protocol
             long fileSize = _fileInformation.GetFileSize(localPath);
 
             IVaporHeader header = new VaporCoverHeader(gameTitle, fileSize);
-
+            _networkStreamHandler.Write(header.Create());
             // Envia imagen
             SendImage(fileSize, localPath);
         }
@@ -70,7 +70,7 @@ namespace Common.Protocol
 
             long fileSizeDecoded = BitConverter.ToInt64(fileSize);
             string fileNameDecoded = Encoding.UTF8.GetString(fileName);
-            string path = _pathHandler.AppendPath(targetDirectoryPath, "/" + fileName + ".jpg");
+            string path = _pathHandler.AppendPath(targetDirectoryPath, fileNameDecoded + ".png");
 
             // Recibir imagen
             ReceiveImage(fileSizeDecoded, path);
