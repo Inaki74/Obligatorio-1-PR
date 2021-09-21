@@ -84,13 +84,11 @@ namespace Common.Protocol
                 if (currentPart == parts)
                 {
                     var lastPartSize = (int)(fileSize - offset);
-                    Console.WriteLine($"Recibi un segmento de tamaño {lastPartSize}");
                     data = _networkStreamHandler.Read(lastPartSize);
                     offset += lastPartSize;
                 }
                 else
                 {
-                    Console.WriteLine($"Recibi un segmento de tamaño {VaporProtocolSpecification.MAX_PACKET_SIZE}");
                     data = _networkStreamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
