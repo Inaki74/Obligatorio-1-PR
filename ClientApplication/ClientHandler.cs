@@ -47,6 +47,7 @@ namespace ClientApplication
             }
 
             _configurationHandler = new ConfigurationHandler();
+            
             string clientIp = _configurationHandler.GetField(ConfigurationConstants.CLIENT_IP_KEY);
             int clientPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.CLIENT_PORT_KEY));
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
