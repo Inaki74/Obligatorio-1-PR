@@ -5,6 +5,7 @@ using System;
 using ClientApplicationInterfaces;
 using Common.Protocol;
 using Common;
+using Common.Protocol.NTOs;
 
 namespace ConsoleMenus.Client
 {
@@ -19,7 +20,11 @@ namespace ConsoleMenus.Client
         {
             // Intentar login
             Console.WriteLine($"Attempting to login with {answer}");
-            VaporStatusResponse response = IClientHandler.Instance.Login(answer);
+
+            UserNetworkTransferObject user = new UserNetworkTransferObject();
+            user.Username = answer;
+
+            VaporStatusResponse response = IClientHandler.Instance.Login(user);
 
             switch(response.Code)
             {

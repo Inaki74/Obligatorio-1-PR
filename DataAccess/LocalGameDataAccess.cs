@@ -35,11 +35,11 @@ namespace DataAccess
 
         public Game Get(string title)
         {
-            Game game = Database.Instance.Games.FirstOrDefault(g => g.Title == title);
+            Game game = Database.Instance.Games.GetInternalList().FirstOrDefault(g => g.Title == title);
             return game;
         }
 
-        public List<Game> GetALl()
+        public List<Game> GetAll()
         {
             throw new NotImplementedException();
         }

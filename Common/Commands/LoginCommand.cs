@@ -8,7 +8,7 @@ using Common.Protocol;
 
 namespace Common.Commands
 {
-    public class LoginCommand : Interfaces.ICommand
+    public class LoginCommand : CommandBase, Interfaces.ICommand
     {
         //client -> server
         //server -> client
@@ -30,10 +30,12 @@ namespace Common.Commands
                 if(userExisted)
                 {
                     statusCode = StatusCodeConstants.OK;
+                    response = "Logged in!";
                 }
                 else
                 {
                     statusCode = StatusCodeConstants.INFO;
+                    response = "User didn't exist, created new user.";
                 }
             }
             catch(Exception e)
@@ -49,27 +51,7 @@ namespace Common.Commands
         //build the payload for the response
         public VaporStatusResponse ActionRes(byte[] payload)
         {
-            // XX#XXXX...
-            // statusCode#Mensaje
-            string payloadString = Encoding.UTF8.GetString(payload);
-            int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
-            string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length-VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
-            string response = "";
-
-            switch(statusCode)
-            {
-                case StatusCodeConstants.OK:
-                    response = "Logged in!";
-                    break;
-                case StatusCodeConstants.INFO:
-                    response = "User didn't exist, created new user.";
-                    break;
-                case StatusCodeConstants.ERROR_CLIENT:
-                    response = message;
-                    break;
-            }
-
-            return new VaporStatusResponse(statusCode, response);
+            return ParseStatusResponse(payload);
         }
     }
 }

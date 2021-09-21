@@ -6,6 +6,7 @@ using ClientApplicationInterfaces;
 using Common.Protocol;
 using Common;
 using Domain;
+using Common.Protocol.NTOs;
 
 namespace ConsoleMenus.Client
 {
@@ -21,7 +22,7 @@ namespace ConsoleMenus.Client
             // DOOM 1994 Mature Shooter Un juego en donde matas bichos.
             // 12007JamesBond
             // Escribir juego
-            string input = GetGame();
+            GameNetworkTransferObject input = GetGame();
 
             VaporStatusResponse response = IClientHandler.Instance.PublishGame(input);
 
@@ -36,33 +37,32 @@ namespace ConsoleMenus.Client
             Console.WriteLine("Please enter the game's details: ");
         }
 
-        private string GetGame()
+        private GameNetworkTransferObject GetGame()
         {
-            string input = "";
+            GameNetworkTransferObject input = new GameNetworkTransferObject();
 
             Console.WriteLine("Game Title: ");
             string title = Console.ReadLine();
-            input += VaporProtocolHelper.FillNumber(title.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + title;
 
             Console.WriteLine("Genre: ");
             string genre = Console.ReadLine();
-            input += VaporProtocolHelper.FillNumber(genre.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + genre;
 
             Console.WriteLine("Public ESRB rating: ");
             string esrb = Console.ReadLine();
-            input += VaporProtocolHelper.FillNumber(esrb.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + esrb;
 
-            Console.WriteLine("Enter the game's synopsis");
-            string sinopsis = Console.ReadLine();
-            input += VaporProtocolHelper.FillNumber(sinopsis.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + sinopsis;
+            Console.WriteLine("Enter the game's synopsis: ");
+            string synopsis = Console.ReadLine();
 
-            Console.WriteLine("Caratula: (MAS TARDE)");
-            //string title = Console.ReadLine();
-            //input += title.Length.ToString() + title;
+            Console.WriteLine("Enter the Cover image Path: ");
+            string coverPath = Console.ReadLine();
+
+            input.Title = title;
+            input.Genre = genre;
+            input.ESRB = esrb;
+            input.Synopsis = synopsis;
+            input.CoverPath = coverPath;
 
             return input;
         }
-
-        
     }
 }

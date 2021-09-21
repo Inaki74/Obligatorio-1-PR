@@ -6,7 +6,7 @@ using Common.Protocol;
 
 namespace Common.Commands
 {
-    public class ExitCommand : ICommand
+    public class ExitCommand : CommandBase, ICommand
     {
         public string Command => CommandConstants.COMMAND_EXIT_CODE;
 
@@ -21,6 +21,7 @@ namespace Common.Commands
             {
                 userLogic.Logout(Encoding.UTF8.GetString(payload));
                 statusCode = StatusCodeConstants.OK;
+                response = "Logged out.";
             }
             catch(Exception e)
             {
@@ -34,22 +35,7 @@ namespace Common.Commands
         // Lo que hace el cliente.
         public VaporStatusResponse ActionRes(byte[] payload)
         {
-            string payloadString = Encoding.UTF8.GetString(payload);
-            int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
-            string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length-VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
-            string response = "";
-
-            switch(statusCode)
-            {
-                case StatusCodeConstants.OK:
-                    response = "Logged out.";
-                    break;
-                case StatusCodeConstants.ERROR_SERVER:
-                    response = message;
-                    break;
-            }
-
-            return new VaporStatusResponse(statusCode, response);
+            return ParseStatusResponse(payload);
         }
     }
 }
