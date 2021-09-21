@@ -8,11 +8,7 @@ namespace DataAccess
         private static Database _instance = null;
         private static readonly object _instanceLock = new object();
 
-        static Database(){}
-        
         private Database(){}
-        
-        
         public static Database Instance
         {
             get
