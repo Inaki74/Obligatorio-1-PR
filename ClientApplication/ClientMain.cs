@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using ConsoleMenusInterfaces;
+﻿using ConsoleMenusInterfaces;
 using ConsoleMenusFactory;
+using Common.Configuration.Interfaces;
+using Common.Configuration;
+using System;
 
 namespace ClientApplication
 {
@@ -14,6 +13,10 @@ namespace ClientApplication
             new ClientHandler();
             ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
             IConsoleMenuManager consoleManager = consoleFactory.Create(true);
+
+            Console.WriteLine((new ConfigurationHandler()).GetField("prueba"));
+
+            return;
 
             while(!consoleManager.Exit)
             {
