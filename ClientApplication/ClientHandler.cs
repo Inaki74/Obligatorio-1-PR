@@ -8,6 +8,11 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
 using Common;
+using Domain;
+using Common.Protocol.Interfaces;
+using Common.Protocol.NTOs;
+using Common.Configuration.Interfaces;
+using Common.Configuration;
 
 namespace ClientApplication
 {
@@ -21,10 +26,12 @@ namespace ClientApplication
             }
         }
 
+        private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
+        private VaporProtocol _vaporProtocol;
         private IClientSession _clientSession;
         private IClientCommandHandler _commandHandler;
         
@@ -38,10 +45,16 @@ namespace ClientApplication
             {
                 throw new Exception("Singleton already instanced. Do not instance singleton twice!");
             }
-            
-            //TODO: Create config file with IP and Port
-            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
-            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
+
+            _configurationHandler = new ConfigurationHandler();
+
+            string clientIp = _configurationHandler.GetField(ConfigurationConstants.CLIENT_IP_KEY);
+            int clientPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.CLIENT_PORT_KEY));
+            string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
+            int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+
+            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse(clientIp), clientPort);
+            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 
@@ -50,7 +63,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
-                //_commandHandler = new ClientCommandHandler();
+                _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
             catch(Exception e)
             {
@@ -61,13 +74,24 @@ namespace ClientApplication
             return true;
         }
 
-        public VaporStatusResponse Login(string username)
+        public VaporStatusResponse PublishGame(GameNetworkTransferObject game)
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, username);
+            game.OwnerName = _clientSession.Username;
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
+
+            // Enviar caratula si corresponde
+            _vaporProtocol.SendCover(game.Title, game.CoverPath);
+            
+            return response;
+        }
+
+        public VaporStatusResponse Login(UserNetworkTransferObject user)
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, user);
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
-                _clientSession = new ClientSession(username);
+                _clientSession = new ClientSession(user.Username);
             }
 
             return response;
@@ -75,16 +99,18 @@ namespace ClientApplication
 
         public VaporStatusResponse Exit()
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, _clientSession.Username);
+            UserNetworkTransferObject user = new UserNetworkTransferObject();
+            user.Username = _clientSession.Username;
+
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, user);
             _tcpClient.Close();
             return response;
         }
 
-        private VaporStatusResponse ExecuteCommand(string command, string payload)
+        private VaporStatusResponse ExecuteCommand(string command, INetworkTransferObject payload)
         {
-            VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-            vp.Send(ReqResHeader.REQ, command, payload.Length, payload);
-            VaporProcessedPacket vaporProcessedPacket = vp.Receive();
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.ToCharacters());
+            VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
         }

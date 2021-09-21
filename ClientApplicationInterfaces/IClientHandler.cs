@@ -1,5 +1,6 @@
 ﻿using System;
 using Common.Protocol;
+using Common.Protocol.NTOs;
 
 namespace ClientApplicationInterfaces
 {
@@ -9,8 +10,8 @@ namespace ClientApplicationInterfaces
 
         bool ConnectToServer();
 
-        VaporStatusResponse Login(string username);
-
+        VaporStatusResponse PublishGame(GameNetworkTransferObject game);
+        VaporStatusResponse Login(UserNetworkTransferObject user);
         VaporStatusResponse Exit();
     }
 }

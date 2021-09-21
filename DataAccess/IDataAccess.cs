@@ -8,7 +8,7 @@ namespace DataAccess
         T Get(int id);
 
         T Get(string id);
-        List<T> GetALl();
+        List<T> GetAll();
         void Add(T elem);
         void Delete(T elem);
         void Update(T elem);
