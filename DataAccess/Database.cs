@@ -27,8 +27,7 @@ namespace DataAccess
             }
         }
 
-        public List<User> Users = new List<User>();
-        
-        public List<Game> Games = new List<Game>();
+        public ThreadSafeList<User> Users = new ThreadSafeList<User>();
+        public ThreadSafeList<Game> Games = new ThreadSafeList<Game>();
     }
 }

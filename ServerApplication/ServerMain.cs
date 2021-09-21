@@ -18,8 +18,6 @@ namespace ServerApplication
             new ServerHandler();
             ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
             IConsoleMenuManager consoleManager = consoleFactory.Create(false);
-
-            Console.WriteLine((new ConfigurationHandler()).GetField("prueba"));
             
             // 2 threads
             // 1. El que hace listen de clientes y los acepta.

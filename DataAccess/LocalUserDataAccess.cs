@@ -22,7 +22,7 @@ namespace DataAccess
         {
             try
             {
-                User user = Database.Instance.Users.First(u => u.ID == id);
+                User user = Database.Instance.Users.GetInternalList().First(u => u.ID == id);
                 return user;
             }
             catch (Exception e)
@@ -35,13 +35,13 @@ namespace DataAccess
 
         public User Get(string id)
         {
-            User user = Database.Instance.Users.FirstOrDefault(u => u.Username == id);
+            User user = Database.Instance.Users.GetInternalList().FirstOrDefault(u => u.Username == id);
             return user;
         }
 
-        public List<User> GetALl()
+        public List<User> GetAll()
         {
-            return Database.Instance.Users;
+            return Database.Instance.Users.GetInternalList();
         }
 
         public void Add(User elem)
@@ -56,7 +56,7 @@ namespace DataAccess
 
         public void Update(User elem)
         {
-            User oldUser = Database.Instance.Users.First(u => u.ID == elem.ID);
+            User oldUser = Database.Instance.Users.GetInternalList().First(u => u.ID == elem.ID);
             Database.Instance.Users.Remove(oldUser);
             Database.Instance.Users.Add(elem);
         }
