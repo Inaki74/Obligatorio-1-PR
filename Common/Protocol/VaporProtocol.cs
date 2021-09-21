@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Common.FileSystemUtilities;
 using Common.FileSystemUtilities.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol.Interfaces;
@@ -8,12 +9,16 @@ namespace Common.Protocol
 {
     public class VaporProtocol
     {
-        private INetworkStreamHandler _networkStreamHandler;
-        private IFileStreamHandler _fileStreamHandler;
-        private IFileInformationHandler _fileInformation;
+        private readonly INetworkStreamHandler _networkStreamHandler;
+        private readonly IPathHandler _pathHandler;
+        private readonly IFileStreamHandler _fileStreamHandler;
+        private readonly IFileInformationHandler _fileInformation;
         public VaporProtocol(INetworkStreamHandler streamHandler)
         {
             _networkStreamHandler = streamHandler;
+            _pathHandler = new PathHandler();
+            _fileStreamHandler = new FileStreamHandler();
+            _fileInformation = new FileInformationHandler();
         }
 
         // Devolver lo que recibio procesado.
@@ -65,7 +70,7 @@ namespace Common.Protocol
 
             long fileSizeDecoded = BitConverter.ToInt64(fileSize);
             string fileNameDecoded = Encoding.UTF8.GetString(fileName);
-            string path = "../../";
+            string path = _pathHandler.AppendPath(targetDirectoryPath, "/" + fileName + ".jpg");
 
             // Recibir imagen
             ReceiveImage(fileSizeDecoded, path);

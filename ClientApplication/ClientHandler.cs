@@ -11,6 +11,8 @@ using Common;
 using Domain;
 using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
+using Common.Configuration.Interfaces;
+using Common.Configuration;
 
 namespace ClientApplication
 {
@@ -24,6 +26,7 @@ namespace ClientApplication
             }
         }
 
+        private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
@@ -43,9 +46,13 @@ namespace ClientApplication
                 throw new Exception("Singleton already instanced. Do not instance singleton twice!");
             }
             
-            //TODO: Create config file with IP and Port
-            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
-            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
+            string clientIp = _configurationHandler.GetField(ConfigurationConstants.CLIENT_IP_KEY);
+            int clientPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.CLIENT_PORT_KEY));
+            string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
+            int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+
+            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse(clientIp), clientPort);
+            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 

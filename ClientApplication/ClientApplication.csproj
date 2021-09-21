@@ -7,10 +7,6 @@
     <ProjectReference Include="..\ClientApplicationInterfaces\ClientApplicationInterfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-  </ItemGroup>
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
