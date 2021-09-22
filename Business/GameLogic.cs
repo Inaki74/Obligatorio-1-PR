@@ -28,7 +28,13 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
+        
 
+        public bool SelectGame(string game)
+        {
+            return _gameDataAccess.GetAll().Exists(g => g.Title == game);
+        }
+        
         public List<Game> SearchGames(GameSearchQuery query)
         {
             List<Game> allGames = _gameDataAccess.GetAll();
@@ -47,6 +53,7 @@ namespace Business
                 }
             }
             return filteredGames;
+    
         }
     }
 }

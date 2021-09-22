@@ -6,12 +6,12 @@ namespace Common.Protocol.NTOs
 {
     public class GameNetworkTransferObject : INetworkTransferObject<Game>
     {
-        public string OwnerName {get; set;}
-        public string Title {get; set;}
-        public string Genre {get; set;}
-        public string ESRB {get; set;}
-        public string Synopsis {get; set;}
-        public string CoverPath {get; set;}
+        public string OwnerName { get; set; } = "";
+        public string Title {get; set;} = "";
+        public string Genre {get; set;} = "";
+        public string ESRB {get; set;} = "";
+        public string Synopsis {get; set;} = "";
+        public string CoverPath {get; set;} = "";
 
         public void Load(Game game)
         {

@@ -13,6 +13,7 @@ namespace ConsoleMenus.Client
         private const string PUBLISH_GAME_OPTION = "1";
         private const string GET_ALL_GAMES_OPTION = "2";
         private const string GET_GAMES_OPTION = "4";
+        private const string SELECT_GAME_OPTION = "6";
 
         public bool RequiresAnswer => true;
 
@@ -32,6 +33,9 @@ namespace ConsoleMenus.Client
                 case GET_ALL_GAMES_OPTION:
                     _nextMenu = new ConsoleGetGamesMenu();
                     break;
+                case SELECT_GAME_OPTION:
+                    _nextMenu = new ConsoleSelectGameMenu();
+                    break;
                 case GET_GAMES_OPTION:
                     _nextMenu = new ConsoleSearchGamesMenu();
                     break;
@@ -50,6 +54,7 @@ namespace ConsoleMenus.Client
             Console.WriteLine($"{PUBLISH_GAME_OPTION}. Publish game.");
             Console.WriteLine($"{GET_ALL_GAMES_OPTION}. Get list of all games.");
             Console.WriteLine($"{GET_GAMES_OPTION}. Search game.");
+            Console.WriteLine($"{SELECT_GAME_OPTION}. Select a game");
             Console.WriteLine($"{EXIT_OPTION}. Exit application.");
         }
     }
