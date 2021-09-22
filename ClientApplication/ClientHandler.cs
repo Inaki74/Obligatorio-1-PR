@@ -13,6 +13,7 @@ using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
 using Common.Configuration;
+using System.Collections.Generic;
 
 namespace ClientApplication
 {
@@ -82,6 +83,13 @@ namespace ClientApplication
             // Enviar caratula si corresponde
             _vaporProtocol.SendCover(game.Title, game.CoverPath);
             
+            return response;
+        }
+
+        public List<string> GetGames()
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_GET_GAMES_CODE, null);
+
             return response;
         }
 

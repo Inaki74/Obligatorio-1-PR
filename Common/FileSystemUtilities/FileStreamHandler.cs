@@ -19,7 +19,7 @@ namespace Common.FileSystemUtilities
                     var read = fs.Read(data, bytesRead, length - bytesRead);
                     if (read == 0)
                     {
-                        throw new Exception("Couldn't not read file");
+                        throw new Exception("Could not read file");
                     }
                     bytesRead += read;
                 }
@@ -32,7 +32,8 @@ namespace Common.FileSystemUtilities
         {
             if (File.Exists(fileName))
             {
-                using (var fs = new FileStream(fileName, FileMode.Append))
+                File.Delete(fileName);
+                using (var fs = new FileStream(fileName, FileMode.Create))
                 {
                     fs.Write(data, 0, data.Length);
                 }

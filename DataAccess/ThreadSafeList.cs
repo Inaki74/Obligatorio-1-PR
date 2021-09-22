@@ -22,7 +22,7 @@ namespace DataAccess
         {
             lock(_lock)
             {
-                _internalList.Add(toRemove);
+                _internalList.Remove(toRemove);
             }
         }
 
