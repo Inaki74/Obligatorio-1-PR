@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Business;
 using BusinessInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
+using Common.Protocol.NTOs;
 using Domain;
 
 namespace Common.Commands
@@ -15,20 +17,23 @@ namespace Common.Commands
         // Get games list
         public string ActionReq(byte[] payload)
         {
-            //conseguir todos los juegos
             int statusCode = 0;
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
             try
             {
-                List<Game> coincidences = gameLogic.SearchGames();
+                //Decode query
+                GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
+                GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
+
+                List<Game> coincidences = gameLogic.SearchGames(query);
                 statusCode = StatusCodeConstants.OK;
                 response = EncodeGameList(coincidences);
 
                 return statusCode.ToString() + response;
             }
-            catch(Exception e)
+            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
             {
                 statusCode = StatusCodeConstants.ERROR_SERVER;
                 response = $"Something went wrong server-side: {e.Message}";
