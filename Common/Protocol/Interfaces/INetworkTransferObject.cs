@@ -5,7 +5,7 @@ namespace Common.Protocol.Interfaces
     public interface INetworkTransferObject<T>
     {
         string Encode();
-        T Decode();
+        T Decode(string toDecode);
         void Load(T obj);
     }
 }

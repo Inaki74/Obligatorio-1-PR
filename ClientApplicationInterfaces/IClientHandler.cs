@@ -10,19 +10,12 @@ namespace ClientApplicationInterfaces
         static IClientHandler Instance { get; set; }
 
         bool ConnectToServer();
-
-        //TODO: Cambiar a cada cosa necesaria
-
-        // string
         string PublishGame(GameNetworkTransferObject game);
 
-        // lista de strings
-        List<string> GetGames();
+        VaporStatusResponse GetGames();
 
-        // string
-        VaporStatusResponse<string> Login(UserNetworkTransferObject user);
+        VaporStatusResponse Login(UserNetworkTransferObject user);
 
-        // string
         string Exit();
     }
 }

@@ -26,9 +26,9 @@ namespace Common.Commands
             {
                 List<Game> allGames = gameLogic.GetAllGames();
                 statusCode = StatusCodeConstants.OK;
-                response = "All games obtained.";
+                response = EncodeGameList(allGames);
 
-                return statusCode.ToString() + response + EncodeGameList(allGames);
+                return statusCode.ToString() + response;
             }
             catch(Exception e)
             {
@@ -39,12 +39,15 @@ namespace Common.Commands
         }
 
         // Lo que hace el cliente.
-        public VaporStatusResponse<T> ActionRes<T>(byte[] payload)
+        public VaporStatusResponse ActionRes(byte[] payload)
         {
-            VaporStatusResponse<T> statusMessage = ParseStatusResponse<T>(payload);
+            VaporStatusResponse statusMessage = ParseStatusResponse(payload);
 
-            statusMessage.Payload = default(T);
-
+            if(statusMessage.Code == StatusCodeConstants.OK)
+            {
+                statusMessage.GamesList = DecodeGameList(statusMessage.Message);
+            }
+            
             return statusMessage;
         }
 
@@ -65,9 +68,19 @@ namespace Common.Commands
             return encoded;
         }
 
-        private void DecodeGameList(string data)
+        private List<Game> DecodeGameList(string data)
         {
-            
+            List<Game> ret = new List<Game>();
+            int cantJuegos = int.Parse(data.Substring(0, VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE));
+            string restOfData = data.Substring(VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE, data.Length - VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE);
+
+            for(int i = 0; i < cantJuegos; i++)
+            {
+                GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+                ret.Add(game.Decode(restOfData));
+            }
+            return ret;
         }
     }
 }

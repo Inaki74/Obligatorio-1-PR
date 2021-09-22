@@ -49,11 +49,9 @@ namespace Common.Commands
         }
 
         //build the payload for the response
-        public VaporStatusResponse<T> ActionRes<T>(byte[] payload)
+        public VaporStatusResponse ActionRes(byte[] payload)
         {
-            VaporStatusResponse<T> statusMessage = ParseStatusResponse<T>(payload);
-
-            statusMessage.Payload = default(T);
+            VaporStatusResponse statusMessage = ParseStatusResponse(payload);
 
             return statusMessage;
         }

@@ -18,7 +18,7 @@ namespace Common.Protocol.NTOs
             return Username;
         }
 
-        public User Decode()
+        public User Decode(string toDecode)
         {
             throw new NotImplementedException();
         }

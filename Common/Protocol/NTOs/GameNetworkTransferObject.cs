@@ -40,9 +40,41 @@ namespace Common.Protocol.NTOs
             return input;
         }
 
-        public Game Decode()
+        public Game Decode(string toDecode)
         {
-            throw new NotImplementedException();
+            //Desarmar payload en un juego. Agregarlo a la lista.
+            // Payload = 
+            //  Cada field:
+            //        XXXX XXXX... - Largo Info
+            // Orden: Titulo -> Genero -> Esrb -> Synopsis -> Caratula
+            Game game = new Game();
+
+            int index = 0;
+            string username = ExtractGameField(toDecode, ref index);
+            string title = ExtractGameField(toDecode, ref index);
+            string genre = ExtractGameField(toDecode, ref index);
+            string esrb = ExtractGameField(toDecode, ref index);
+            string synopsis = ExtractGameField(toDecode, ref index);
+            //string caratula = ExtractField(payloadAsString, ref index);
+
+            game.Owner = new User(username, -1);
+            game.Title = title;
+            game.Genre = genre;
+            game.ESRB = esrb;
+            game.Synopsis = synopsis;
+            // caratula
+
+            return game;
+        }
+
+        private string ExtractGameField(string payload, ref int index)
+        {
+            int length = int.Parse(payload.Substring(index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
+            index += VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+            string field = payload.Substring(index, length);
+            index += length;
+
+            return field;
         }
     }
 }

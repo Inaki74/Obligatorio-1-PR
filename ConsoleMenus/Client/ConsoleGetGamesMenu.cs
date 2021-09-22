@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using ClientApplicationInterfaces;
 using ConsoleMenusInterfaces;
+using Common.Protocol;
+using Common;
+using Domain;
 
 namespace ConsoleMenus.Client
 {
@@ -14,15 +17,24 @@ namespace ConsoleMenus.Client
         public bool Action(string answer)
         {
             // Conseguir la lista
-            List<string> listaDeJuegos = IClientHandler.Instance.GetGames();
+            VaporStatusResponse response = IClientHandler.Instance.GetGames();
 
             // Imprimirla
-            Console.WriteLine("TODOS LOS JUEGOS \n");
-            foreach(string game in listaDeJuegos)
+            if(response.Code == StatusCodeConstants.OK)
             {
-                Console.WriteLine($"   {game}");
+                Console.WriteLine("TODOS LOS JUEGOS \n");
+                foreach(Game game in response.GamesList)
+                {
+                    Console.WriteLine($"   {game.Title}");
+                }
+                Console.WriteLine("");
             }
-            Console.WriteLine("");
+            else
+            {
+                Console.WriteLine(response.Message);
+            }
+
+            _nextMenu = new ConsoleMainMenu();
 
             return false;
         }
