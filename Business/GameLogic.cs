@@ -28,5 +28,25 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
+
+        public List<Game> SearchGames(GameSearchQuery query)
+        {
+            List<Game> allGames = _gameDataAccess.GetAll();
+
+            return FilterGames(allGames, query);
+        }
+
+        private List<Game> FilterGames(List<Game> games, GameSearchQuery query)
+        {
+            List<Game> filteredGames = new List<Game>();
+            foreach(Game game in games)
+            {
+                if(game.FulfillsQuery(query))
+                {
+                    filteredGames.Add(game);
+                }
+            }
+            return filteredGames;
+        }
     }
 }

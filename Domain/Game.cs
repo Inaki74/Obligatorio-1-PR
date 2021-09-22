@@ -10,6 +10,7 @@ namespace Domain
         public string ESRB {get; set;}
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
+        public int OverallScore {get; set;}
 
         public Game(){}
         public Game(string title, string genre, string esrb, string synopsis, string path)
@@ -20,6 +21,37 @@ namespace Domain
             ESRB = esrb;
             Synopsis = synopsis;
             CoverPath = path;
+            OverallScore = 0;
+        }
+
+        public bool FulfillsQuery(GameSearchQuery query)
+        {
+            return FulfillsTitle(query.Title) || FulfillsGenre(query.Genre) || FulfillsScore(query.Score);
+        }
+
+        private bool FulfillsTitle(string aTitle)
+        {
+            return Title.Contains(aTitle);
+        }
+
+        private bool FulfillsGenre(string aGenre)
+        {
+            if(string.IsNullOrEmpty(aGenre))
+            {
+                return false;
+            }
+
+            return Genre.Equals(aGenre);
+        }
+
+        private bool FulfillsScore(int aScore)
+        {
+            if(aScore == -1)
+            {
+                return false;
+            }
+
+            return OverallScore >= aScore;
         }
     }
 }
