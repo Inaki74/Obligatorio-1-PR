@@ -5,6 +5,6 @@ namespace ClientApplicationInterfaces
 {
     public interface IClientCommandHandler
     {
-        VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket);
+        VaporStatusResponse<T> ExecuteCommand<T>(VaporProcessedPacket processedPacket);
     }
 }

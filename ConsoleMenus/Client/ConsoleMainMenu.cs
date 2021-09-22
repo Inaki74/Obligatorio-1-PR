@@ -22,8 +22,8 @@ namespace ConsoleMenus.Client
             switch(answer)
             {
                 case EXIT_OPTION:
-                    VaporStatusResponse response = IClientHandler.Instance.Exit();
-                    Console.WriteLine(response.Message);
+                    string response = IClientHandler.Instance.Exit();
+                    Console.WriteLine(response);
                     return true;
                 case PUBLISH_GAME_OPTION:
                     _nextMenu = new ConsolePublishGameMenu();

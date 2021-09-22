@@ -14,15 +14,15 @@ namespace ClientApplicationInterfaces
         //TODO: Cambiar a cada cosa necesaria
 
         // string
-        VaporStatusResponse PublishGame(GameNetworkTransferObject game);
+        string PublishGame(GameNetworkTransferObject game);
 
         // lista de strings
         List<string> GetGames();
 
         // string
-        VaporStatusResponse Login(UserNetworkTransferObject user);
+        VaporStatusResponse<string> Login(UserNetworkTransferObject user);
 
         // string
-        VaporStatusResponse Exit();
+        string Exit();
     }
 }

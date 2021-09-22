@@ -2,26 +2,19 @@ using System;
 
 namespace Common.Protocol
 {
-    public struct VaporStatusResponse
+    public class VaporStatusResponse<T>
     {
-        public readonly int Code { get; }
+        public int Code { get; }
 
-        public readonly string Message { get; }
+        public string Message { get; }
+
+        public T Payload { get; set; } 
 
         public VaporStatusResponse(int code, string msg)
         {
             Code = code;
             Message = msg;
         }
-    }
-
-    public struct VaporStatusResponse<T>
-    {
-        public readonly int Code { get; }
-
-        public readonly string Message { get; }
-
-        public T Payload { get; } 
 
         public VaporStatusResponse(int code, string msg, T payload)
         {

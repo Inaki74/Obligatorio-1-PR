@@ -39,9 +39,13 @@ namespace Common.Commands
             return statusCode.ToString() + response;
         }
 
-        public VaporStatusResponse ActionRes(byte[] payload)
+        public VaporStatusResponse<T> ActionRes<T>(byte[] payload)
         {
-            return ParseStatusResponse(payload);
+            VaporStatusResponse<T> statusMessage = ParseStatusResponse<T>(payload);
+
+            statusMessage.Payload = default(T);
+
+            return statusMessage;
         }
 
         private Game DisassembleGamePayload(byte[] payload)

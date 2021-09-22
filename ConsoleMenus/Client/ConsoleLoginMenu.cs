@@ -24,7 +24,7 @@ namespace ConsoleMenus.Client
             UserNetworkTransferObject user = new UserNetworkTransferObject();
             user.Username = answer;
 
-            VaporStatusResponse response = IClientHandler.Instance.Login(user);
+            VaporStatusResponse<string> response = IClientHandler.Instance.Login(user);
 
             switch(response.Code)
             {

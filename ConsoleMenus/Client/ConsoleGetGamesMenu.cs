@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ClientApplicationInterfaces;
 using ConsoleMenusInterfaces;
 
 namespace ConsoleMenus.Client
@@ -12,9 +14,15 @@ namespace ConsoleMenus.Client
         public bool Action(string answer)
         {
             // Conseguir la lista
-            
+            List<string> listaDeJuegos = IClientHandler.Instance.GetGames();
 
             // Imprimirla
+            Console.WriteLine("TODOS LOS JUEGOS \n");
+            foreach(string game in listaDeJuegos)
+            {
+                Console.WriteLine($"   {game}");
+            }
+            Console.WriteLine("");
 
             return false;
         }
