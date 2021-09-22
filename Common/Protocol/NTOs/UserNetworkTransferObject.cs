@@ -10,7 +10,7 @@ namespace Common.Protocol.NTOs
 
         public void Load(User obj)
         {
-            throw new NotImplementedException();
+            Username = obj.Username;
         }
 
         public string Encode()
@@ -20,7 +20,7 @@ namespace Common.Protocol.NTOs
 
         public User Decode(string toDecode)
         {
-            throw new NotImplementedException();
+            return new User(toDecode, -1);
         }
     }
 }

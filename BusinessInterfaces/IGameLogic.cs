@@ -9,5 +9,7 @@ namespace BusinessInterfaces
         void AddGame(Game game);
 
         List<Game> GetAllGames();
+
+        List<Game> SearchGames(GameSearchQuery query);
     }
 }
