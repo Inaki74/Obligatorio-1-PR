@@ -1,9 +1,10 @@
 using System;
 using Common.Protocol.Interfaces;
+using Domain;
 
 namespace Common.Protocol.NTOs
 {
-    public class GameNetworkTransferObject : INetworkTransferObject
+    public class GameNetworkTransferObject : INetworkTransferObject<Game>
     {
         public string OwnerName {get; set;}
         public string Title {get; set;}
@@ -12,7 +13,17 @@ namespace Common.Protocol.NTOs
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
 
-        public string ToCharacters()
+        public void Load(Game game)
+        {
+            OwnerName = game.Owner.Username;
+            Title = game.Title;
+            Genre = game.Genre;
+            ESRB = game.ESRB;
+            Synopsis = game.Synopsis;
+            CoverPath = game.CoverPath;
+        }
+
+        public string Encode()
         {
             string input = "";
 
@@ -27,6 +38,11 @@ namespace Common.Protocol.NTOs
             input += VaporProtocolHelper.FillNumber(Synopsis.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Synopsis;
 
             return input;
+        }
+
+        public Game Decode()
+        {
+            throw new NotImplementedException();
         }
     }
 }

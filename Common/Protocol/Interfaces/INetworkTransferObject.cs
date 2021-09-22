@@ -2,8 +2,10 @@ using System;
 
 namespace Common.Protocol.Interfaces
 {
-    public interface INetworkTransferObject
+    public interface INetworkTransferObject<T>
     {
-        string ToCharacters();
+        string Encode();
+        T Decode();
+        void Load(T obj);
     }
 }

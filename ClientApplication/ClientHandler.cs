@@ -78,7 +78,7 @@ namespace ClientApplication
         public string PublishGame(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
-            VaporStatusResponse<string> response = ExecuteCommand<string>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
+            VaporStatusResponse<string> response = ExecuteCommand<string, Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
 
             // Enviar caratula si corresponde
             _vaporProtocol.SendCover(game.Title, game.CoverPath);
@@ -88,14 +88,14 @@ namespace ClientApplication
 
         public List<string> GetGames()
         {
-            VaporStatusResponse<List<string>> response = ExecuteCommand<List<String>>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
+            VaporStatusResponse<List<string>> response = ExecuteCommand<List<String>, Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
 
             return response.Payload;
         }
 
         public VaporStatusResponse<string> Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse<string> response = ExecuteCommand<string>(CommandConstants.COMMAND_LOGIN_CODE, user);
+            VaporStatusResponse<string> response = ExecuteCommand<string, User>(CommandConstants.COMMAND_LOGIN_CODE, user);
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
@@ -110,14 +110,14 @@ namespace ClientApplication
             UserNetworkTransferObject user = new UserNetworkTransferObject();
             user.Username = _clientSession.Username;
 
-            VaporStatusResponse<string> response = ExecuteCommand<string>(CommandConstants.COMMAND_EXIT_CODE, user);
+            VaporStatusResponse<string> response = ExecuteCommand<string, User>(CommandConstants.COMMAND_EXIT_CODE, user);
             _tcpClient.Close();
             return response.Message;
         }
 
-        private VaporStatusResponse<T> ExecuteCommand<T>(string command, INetworkTransferObject payload)
+        private VaporStatusResponse<T> ExecuteCommand<T, P>(string command, INetworkTransferObject<P> payload)
         {
-            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.ToCharacters());
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.Encode());
             VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand<T>(vaporProcessedPacket);

@@ -13,6 +13,9 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_LOGIN_CODE:
                     finalCommand = new LoginCommand();
                     break;
+                case CommandConstants.COMMAND_GET_GAMES_CODE:
+                    finalCommand = new GetGamesCommand();
+                    break;
                 case CommandConstants.COMMAND_EXIT_CODE:
                     finalCommand = new ExitCommand();
                     break;
