@@ -1,12 +1,20 @@
 using System;
+using System.Collections.Generic;
+using Common.Protocol.Interfaces;
+using Domain;
 
 namespace Common.Protocol
 {
-    public struct VaporStatusResponse
+    public class VaporStatusResponse
     {
-        public readonly int Code { get; }
+        public int Code { get; }
 
-        public readonly string Message { get; }
+        public string Message { get; }
+
+        // GET GAMES
+        public List<Game> GamesList { get; set; } 
+
+        public VaporStatusResponse(){}
 
         public VaporStatusResponse(int code, string msg)
         {

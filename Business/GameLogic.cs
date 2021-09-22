@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BusinessInterfaces;
 using DataAccess;
 using Domain;
@@ -21,6 +22,11 @@ namespace Business
             }
             
             throw new Exception("Game already exists!");
+        }
+
+        public List<Game> GetAllGames()
+        {
+            return _gameDataAccess.GetAll();
         }
     }
 }

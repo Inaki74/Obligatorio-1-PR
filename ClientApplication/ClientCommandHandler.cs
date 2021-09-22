@@ -19,8 +19,6 @@ namespace ClientApplication
             
             return command.ActionRes(processedPacket.Payload);
         }
-        
-        
 
     }
 }

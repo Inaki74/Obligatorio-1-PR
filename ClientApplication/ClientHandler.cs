@@ -13,6 +13,7 @@ using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
 using Common.Configuration;
+using System.Collections.Generic;
 
 namespace ClientApplication
 {
@@ -74,20 +75,27 @@ namespace ClientApplication
             return true;
         }
 
-        public VaporStatusResponse PublishGame(GameNetworkTransferObject game)
+        public string PublishGame(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
 
             // Enviar caratula si corresponde
             _vaporProtocol.SendCover(game.Title, game.CoverPath);
             
+            return response.Message;
+        }
+
+        public VaporStatusResponse GetGames()
+        {
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
+
             return response;
         }
 
         public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, user);
+            VaporStatusResponse response = ExecuteCommand<User>(CommandConstants.COMMAND_LOGIN_CODE, user);
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
@@ -97,22 +105,39 @@ namespace ClientApplication
             return response;
         }
 
-        public VaporStatusResponse Exit()
+        public string Exit()
         {
             UserNetworkTransferObject user = new UserNetworkTransferObject();
             user.Username = _clientSession.Username;
 
-            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_EXIT_CODE, user);
+            VaporStatusResponse response = ExecuteCommand<User>(CommandConstants.COMMAND_EXIT_CODE, user);
             _tcpClient.Close();
-            return response;
+            return response.Message;
         }
 
-        private VaporStatusResponse ExecuteCommand(string command, INetworkTransferObject payload)
+        private VaporStatusResponse ExecuteCommand<P>(string command, INetworkTransferObject<P> payload)
         {
-            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payload.ToCharacters());
+            string payloadString = "";
+            if(payload != null)
+            {
+                payloadString = payload.Encode();
+            }
+
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payloadString);
             VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+        }
+
+        private List<string> GetOnlyTitles(List<Game> games)
+        {
+            List<string> ret = new List<string>();
+            foreach(Game game in games)
+            {
+                ret.Add(game.Title);
+            }
+
+            return ret;
         }
     }
 }

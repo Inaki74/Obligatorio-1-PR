@@ -35,7 +35,9 @@ namespace Common.Commands
         // Lo que hace el cliente.
         public VaporStatusResponse ActionRes(byte[] payload)
         {
-            return ParseStatusResponse(payload);
+            VaporStatusResponse statusMessage = ParseStatusResponse(payload);
+
+            return statusMessage;
         }
     }
 }

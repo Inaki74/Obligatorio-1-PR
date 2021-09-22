@@ -41,7 +41,7 @@ namespace DataAccess
 
         public List<Game> GetAll()
         {
-            throw new NotImplementedException();
+            return Database.Instance.Games.GetInternalList();
         }
 
         public void Update(Game elem)

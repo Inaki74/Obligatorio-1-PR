@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Domain;
 
 namespace BusinessInterfaces
@@ -6,5 +7,7 @@ namespace BusinessInterfaces
     public interface IGameLogic
     {
         void AddGame(Game game);
+
+        List<Game> GetAllGames();
     }
 }
