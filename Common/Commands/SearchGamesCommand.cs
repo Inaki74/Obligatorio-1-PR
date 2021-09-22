@@ -10,38 +10,41 @@ using Domain;
 
 namespace Common.Commands
 {
-    public class GetGamesCommand : CommandBase, ICommand
+    public class SearchGamesCommand : CommandBase, ICommand
     {
-        public string Command => CommandConstants.COMMAND_GET_GAMES_CODE;
+        public string Command => CommandConstants.COMMAND_SEARCH_GAMES_CODE;
 
-        // Lo que hace el server.
+        // Get games list
         public string ActionReq(byte[] payload)
         {
-            //conseguir todos los juegos
             int statusCode = 0;
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
             try
             {
-                List<Game> allGames = gameLogic.GetAllGames();
+                //Decode query
+                GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
+                GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
+
+                List<Game> coincidences = gameLogic.SearchGames(query);
                 statusCode = StatusCodeConstants.OK;
-                response = EncodeGameList(allGames);
+                response = EncodeGameList(coincidences);
 
                 return statusCode.ToString() + response;
             }
-            catch(Exception e)
+            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
             {
                 statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message}";
+                response = $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
                 return statusCode.ToString() + response;
             }
         }
 
-        // Lo que hace el cliente.
-        public VaporStatusResponse ActionRes(byte[] payload)
+        // Decode games list
+        public VaporStatusResponse ActionRes(byte[] reqPayload)
         {
-            VaporStatusResponse statusMessage = ParseStatusResponse(payload);
+            VaporStatusResponse statusMessage = ParseStatusResponse(reqPayload);
 
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
@@ -78,7 +81,7 @@ namespace Common.Commands
             for(int i = 0; i < cantJuegos; i++)
             {
                 GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-                string gameData = restOfData.Substring(index, restOfData.Length - index);
+                string gameData = restOfData.Substring(index);
 
                 Game game = gameNTO.Decode(gameData);
                 ret.Add(game);
