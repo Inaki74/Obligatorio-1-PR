@@ -71,7 +71,7 @@ namespace ConsoleMenus.Client
                 score = Console.ReadLine();
             }
 
-            if(string.IsNullOrEmpty(title) && string.IsNullOrEmpty(genre) && score == "-1")
+            if(string.IsNullOrEmpty(title) && string.IsNullOrEmpty(genre) && score == "0")
             {
                 Console.WriteLine("\nNo parameters introduced, cancelling search.");
                 return null;
@@ -86,7 +86,7 @@ namespace ConsoleMenus.Client
 
             if(string.IsNullOrEmpty(score))
             {
-                score = "-1";
+                score = "0";
                 return true;
             }
 

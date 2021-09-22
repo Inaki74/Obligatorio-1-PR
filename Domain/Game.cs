@@ -46,7 +46,7 @@ namespace Domain
 
         private bool FulfillsScore(int aScore)
         {
-            if(aScore == -1)
+            if(aScore == 0)
             {
                 return false;
             }
