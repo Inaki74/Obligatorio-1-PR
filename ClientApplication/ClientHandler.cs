@@ -105,6 +105,11 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse SelectGame(string game)
+        {
+            throw new NotImplementedException();
+        }
+
         public string Exit()
         {
             UserNetworkTransferObject user = new UserNetworkTransferObject();

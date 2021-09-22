@@ -16,6 +16,8 @@ namespace ClientApplicationInterfaces
 
         VaporStatusResponse Login(UserNetworkTransferObject user);
 
+        VaporStatusResponse SelectGame(string game);
+
         string Exit();
     }
 }

@@ -1,19 +1,24 @@
-﻿using ConsoleMenusInterfaces;
+﻿using System;
+using ClientApplicationInterfaces;
+using Common.Protocol;
+using ConsoleMenusInterfaces;
 
 namespace ConsoleMenus.Client
 {
     public class ConsoleSelectGameMenu : ConsoleMenusBase, IConsoleMenu
     {
         public IConsoleMenu NextMenu { get; }
-        public bool RequiresAnswer { get; }
+        public bool RequiresAnswer => true;
         public void PrintMenu()
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Title:");
         }
 
         public bool Action(string answer)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Looking for game...");
+            VaporStatusResponse response = IClientHandler.Instance.SelectGame(answer);
+            _nextMenu = new ConsoleGameMenu();
         }
     }
 }
