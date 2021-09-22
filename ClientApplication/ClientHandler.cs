@@ -95,7 +95,7 @@ namespace ClientApplication
 
         public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse response = ExecuteCommand<User>(CommandConstants.COMMAND_LOGIN_CODE, user);
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, user);
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
@@ -107,7 +107,15 @@ namespace ClientApplication
 
         public VaporStatusResponse SelectGame(string game)
         {
-            throw new NotImplementedException();
+            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            gameDummy.Title = game;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy);
+            if (response.Code == StatusCodeConstants.OK)
+            {
+                _clientSession.gameSelected = game;
+            }
+
+            return response;
         }
 
         public string Exit()

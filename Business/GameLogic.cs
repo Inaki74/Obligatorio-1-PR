@@ -28,5 +28,10 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
+
+        public bool SelectGame(string game)
+        {
+            return _gameDataAccess.GetAll().Exists(g => g.Title == game);
+        }
     }
 }

@@ -22,6 +22,9 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_PUBLISH_GAME_CODE:
                     finalCommand = new PublishGameCommand();
                     break;
+                case CommandConstants.COMMAND_SELECT_GAME_CODE:
+                    finalCommand = new SelectGameCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion
