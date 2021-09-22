@@ -12,7 +12,7 @@ namespace Business
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
         public void AddGame(Game game)
         {
-            bool exists = _gameDataAccess.Get(game.Title) != null;
+            bool exists = GetAllGames().Exists(g => game.Equals(g));
             if (!exists)
             {
                 User realOwner = _userDataAccess.Get(game.Owner.Username);

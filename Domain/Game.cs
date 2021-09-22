@@ -29,9 +29,27 @@ namespace Domain
             return FulfillsTitle(query.Title) || FulfillsGenre(query.Genre) || FulfillsScore(query.Score);
         }
 
+        public override bool Equals(object obj)
+        {
+            Game gameInObj = (Game)obj;
+
+            string gameInObjTitleLower = gameInObj.Title.ToLower();
+            string thisTitleLower = this.Title.ToLower();
+
+            return gameInObjTitleLower == thisTitleLower;
+        }
+
         private bool FulfillsTitle(string aTitle)
         {
-            return Title.Contains(aTitle);
+            if(string.IsNullOrEmpty(aTitle))
+            {
+                return false;
+            }
+
+            string noCapsInTitle = aTitle.ToLower();
+            string noCapsTitle = Title.ToLower();
+
+            return noCapsTitle.Contains(noCapsInTitle);
         }
 
         private bool FulfillsGenre(string aGenre)
@@ -41,7 +59,10 @@ namespace Domain
                 return false;
             }
 
-            return Genre.Equals(aGenre);
+            string noCapsInGenre = aGenre.ToLower();
+            string noCapsGenre = Genre.ToLower();
+
+            return noCapsGenre.Equals(noCapsInGenre);
         }
 
         private bool FulfillsScore(int aScore)

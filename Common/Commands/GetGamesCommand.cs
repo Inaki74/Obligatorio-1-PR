@@ -74,11 +74,17 @@ namespace Common.Commands
             int cantJuegos = int.Parse(data.Substring(0, VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE));
             string restOfData = data.Substring(VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE, data.Length - VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE);
 
+            int index = 0;
             for(int i = 0; i < cantJuegos; i++)
             {
-                GameNetworkTransferObject game = new GameNetworkTransferObject();
+                GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+                string gameData = restOfData.Substring(index, restOfData.Length - index);
 
-                ret.Add(game.Decode(restOfData));
+                Game game = gameNTO.Decode(gameData);
+                ret.Add(game);
+
+                gameNTO.Load(game);
+                index += gameNTO.Encode().Length;
             }
             return ret;
         }
