@@ -36,7 +36,7 @@ namespace Common.Commands
             catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
             {
                 statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message}";
+                response = $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
                 return statusCode.ToString() + response;
             }
         }

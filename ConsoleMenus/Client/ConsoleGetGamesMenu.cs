@@ -22,7 +22,7 @@ namespace ConsoleMenus.Client
             // Imprimirla
             if(response.Code == StatusCodeConstants.OK)
             {
-                Console.WriteLine("TODOS LOS JUEGOS \n");
+                Console.WriteLine("ALL GAMES \n");
                 foreach(Game game in response.GamesList)
                 {
                     Console.WriteLine($"   {game.Title}");
