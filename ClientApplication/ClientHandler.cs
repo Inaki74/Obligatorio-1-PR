@@ -93,6 +93,13 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
+        {
+            VaporStatusResponse response = ExecuteCommand<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);
+
+            return response;
+        }
+
         public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
             VaporStatusResponse response = ExecuteCommand<User>(CommandConstants.COMMAND_LOGIN_CODE, user);
