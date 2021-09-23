@@ -59,6 +59,9 @@ namespace ConsoleMenus.Client
                     break;
                 case MODIFY_OPTION:
                     break;
+                case PUBLIC_REVIEW_OPTION:
+                    _nextMenu = new ConsolePublishReviewMenu();
+                    break;
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();
                     break;

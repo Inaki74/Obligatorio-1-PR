@@ -14,19 +14,20 @@ namespace Common.Commands
         public string Command { get; }
         public string ActionReq(byte[] payload)
         {
-            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
-            int statusCode = 0;
-            string response = "";
-            try
-            {
-                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-                IGameLogic gameLogic = new GameLogic();
-                bool gameSuccesfullyAcquired = gameLogic.AcquireGame(game.Title, )
-            }
-            catch (Exception e)
-            {
+            // GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            // int statusCode = 0;
+            // string response = "";
+            // try
+            // {
+            //     Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
+            //     IGameLogic gameLogic = new GameLogic();
+            //     bool gameSuccesfullyAcquired = gameLogic.AcquireGame(game.Title, );
+            // }
+            // catch (Exception e)
+            // {
                 
-            }
+            // }
+            return "";
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)
