@@ -58,5 +58,18 @@ namespace Business
             return filteredGames;
     
         }
+
+        public bool CheckIsOwner(GameOwnershipQuery query)
+        {
+            Game game = _gameDataAccess.Get(query.Gamename);
+
+            return game.Owner.Username == query.Username;
+        }
+
+        public void DeleteGame(Game game)
+        {
+            // Remove for all users who acquired the game as well.
+            _gameDataAccess.Delete(game);
+        }
     }
 }

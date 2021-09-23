@@ -25,7 +25,6 @@ namespace Common.Protocol.NTOs
 
         public string Encode()
         {
-            // 
             string title = _gameQuery.Title;
             string genre = _gameQuery.Genre;
             int score = _gameQuery.Score;

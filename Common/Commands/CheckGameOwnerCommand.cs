@@ -20,7 +20,7 @@ namespace Common.Commands
             {
                 GameOwnershipQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                //bool isOwner = gameLogic.CheckIsOwner(query);
+                bool isOwner = gameLogic.CheckIsOwner(query);
 
                 statusCode = StatusCodeConstants.OK;
 

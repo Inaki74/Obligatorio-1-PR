@@ -25,7 +25,7 @@ namespace DataAccess
 
         public void Delete(Game elem)
         {
-            throw new NotImplementedException();
+            Database.Instance.Games.Remove(elem);
         }
 
         public Game Get(int id)

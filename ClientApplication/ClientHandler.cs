@@ -106,14 +106,7 @@ namespace ClientApplication
 
             VaporStatusResponse response = ExecuteCommand<GameOwnershipQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
 
-            if(response.Code == StatusCodeConstants.OK)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return response.Code == StatusCodeConstants.OK;
         }
 
         public VaporStatusResponse GetGames()
