@@ -4,7 +4,7 @@ namespace BusinessInterfaces
 {
     public interface IUserLogic
     {
-        bool Login(User username);
-        void Logout(string username);
+        bool Login(User user);
+        void Logout(User user);
     }
 }

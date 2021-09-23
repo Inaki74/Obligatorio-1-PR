@@ -33,8 +33,9 @@ namespace Business
             return true;
         }
 
-        public void Logout(string username)
+        public void Logout(User user)
         {
+            string username = user.Username;
             User loggedUser = _userDataAccess.Get(username);
             loggedUser.LoggedIn = false;
             _userDataAccess.Update(loggedUser);
