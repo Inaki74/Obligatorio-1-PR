@@ -152,10 +152,11 @@ namespace ClientApplication
 
         public VaporStatusResponse AcquireGame()
         {
-            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
-            gameDummy.Title = _clientSession.gameSelected;
-            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, gameDummy);
-        
+            GameOwnershipQueryNetworkTransferObject query = new GameOwnershipQueryNetworkTransferObject();
+            query.Gamename = _clientSession.gameSelected;
+            query.Username = _clientSession.Username;
+            VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query);
+            
             return response;
         }
 

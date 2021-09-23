@@ -46,15 +46,14 @@ namespace Business
             return FilterGames(allGames, query);
         }
 
-        public bool AcquireGame(string game, string username)
+        public bool AcquireGame(GameUserRelationQuery query)
         {
-            Game dummyGame = new Game();
-            dummyGame.Title = game;
-            Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+            
+            Game realGame = GetAllGames().FirstOrDefault(g => g.Title == query.Gamename);
             bool gameAcquired = false;
             if (realGame != null)
             {
-                User user = _userDataAccess.Get(username);
+                User user = _userDataAccess.Get(query.Username);
                 user.ownedGames.Add(realGame);
                 _userDataAccess.Update(user);
                 gameAcquired = true;
