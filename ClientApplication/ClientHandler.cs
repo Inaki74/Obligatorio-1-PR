@@ -135,6 +135,10 @@ namespace ClientApplication
             return response.Message;
         }
 
+        // Send information to the Server and execute command when we receive a response.
+        // command is the command key.
+        // payload is what to send wrapped in a NTO.
+        // P is the type of payload the NTO brings.
         private VaporStatusResponse ExecuteCommand<P>(string command, INetworkTransferObject<P> payload)
         {
             string payloadString = "";

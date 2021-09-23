@@ -9,13 +9,14 @@ namespace Business
     {
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
 
-        public bool Login(string username)
+        public bool Login(User dummyUser)
         {
+            string username = dummyUser.Username;
             User user = _userDataAccess.Get(username);
             if (user == null)
             {
                 AddUser(username);
-                Login(username);
+                Login(dummyUser);
                 return false;
             }
 
