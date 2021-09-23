@@ -18,11 +18,11 @@ namespace Common.Commands
             string response = "";
             try
             {
-                GameOwnershipQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
                 bool isOwner = gameLogic.CheckIsOwner(query);
 
-                statusCode = StatusCodeConstants.OK;
+                statusCode = isOwner ? StatusCodeConstants.OK : StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED;
 
                 return statusCode.ToString() + response;
                 

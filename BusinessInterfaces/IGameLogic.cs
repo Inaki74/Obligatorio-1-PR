@@ -15,7 +15,7 @@ namespace BusinessInterfaces
 
         List<Game> SearchGames(GameSearchQuery query);
 
-        bool CheckIsOwner(GameOwnershipQuery query);
+        bool CheckIsOwner(GameUserRelationQuery query);
 
         void DeleteGame(Game game);
 

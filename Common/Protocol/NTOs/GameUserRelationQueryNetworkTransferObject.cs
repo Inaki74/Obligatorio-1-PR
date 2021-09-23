@@ -4,12 +4,12 @@ using Domain.HelperObjects;
 
 namespace Common.Protocol.NTOs
 {
-    public class GameOwnershipQueryNetworkTransferObject : INetworkTransferObject<GameOwnershipQuery>
+    public class GameOwnershipQueryNetworkTransferObject : INetworkTransferObject<GameUserRelationQuery>
     {
         public string Username { get; set; } = "";
         public string Gamename {get; set;} = "";
 
-        public void Load(GameOwnershipQuery game)
+        public void Load(GameUserRelationQuery game)
         {
             Username = game.Username;
             Gamename = game.Gamename;
@@ -26,9 +26,9 @@ namespace Common.Protocol.NTOs
             return input;
         }
 
-        public GameOwnershipQuery Decode(string toDecode)
+        public GameUserRelationQuery Decode(string toDecode)
         {
-            GameOwnershipQuery deleteQuery = new GameOwnershipQuery();
+            GameUserRelationQuery deleteQuery = new GameUserRelationQuery();
 
             int index = 0;
             string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);

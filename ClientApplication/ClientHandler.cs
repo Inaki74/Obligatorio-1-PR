@@ -87,26 +87,28 @@ namespace ClientApplication
             return response.Message;
         }
 
-        public string DeleteGame(GameNetworkTransferObject game)
+        public string DeleteGame()
         {
-            game.Title = _clientSession.gameSelected;;
+            GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+            game.Title = _clientSession.gameSelected;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
             
             return response.Message;
         }
 
-        public bool CheckIsOwner()
+        public VaporStatusResponse CheckIsOwner()
         {
-            GameOwnershipQuery query = new GameOwnershipQuery();
+            GameUserRelationQuery query = new GameUserRelationQuery();
             query.Username = _clientSession.Username;
             query.Gamename = _clientSession.gameSelected;
 
             GameOwnershipQueryNetworkTransferObject queryNTO = new GameOwnershipQueryNetworkTransferObject();
             queryNTO.Load(query);
 
-            VaporStatusResponse response = ExecuteCommand<GameOwnershipQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
+            VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
 
-            return response.Code == StatusCodeConstants.OK;
+            return response;
         }
 
         public VaporStatusResponse GetGames()

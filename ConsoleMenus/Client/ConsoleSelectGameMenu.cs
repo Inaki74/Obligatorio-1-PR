@@ -21,9 +21,18 @@ namespace ConsoleMenus.Client
             VaporStatusResponse response = IClientHandler.Instance.SelectGame(answer);
             if (response.Code == StatusCodeConstants.OK)
             {
-                bool isOwnerResponse = IClientHandler.Instance.CheckIsOwner();
+                VaporStatusResponse isOwnerResponse = IClientHandler.Instance.CheckIsOwner();
 
-                _nextMenu = new ConsoleGameMenu(isOwnerResponse);
+                if(isOwnerResponse.Code != StatusCodeConstants.OK && isOwnerResponse.Code != StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED)
+                {
+                    Console.WriteLine(isOwnerResponse.Message);
+                    _nextMenu = new ConsoleMainMenu();
+                    return false;
+                }
+                else
+                {
+                    _nextMenu = new ConsoleGameMenu(isOwnerResponse.Code == StatusCodeConstants.OK);
+                }
             }
             else
             {

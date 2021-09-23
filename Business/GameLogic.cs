@@ -59,7 +59,7 @@ namespace Business
     
         }
 
-        public bool CheckIsOwner(GameOwnershipQuery query)
+        public bool CheckIsOwner(GameUserRelationQuery query)
         {
             Game game = _gameDataAccess.Get(query.Gamename);
 

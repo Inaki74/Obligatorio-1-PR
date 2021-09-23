@@ -20,9 +20,10 @@ namespace Common.Commands
             {
                 Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                //gameLogic.DeleteGame(game);
+                gameLogic.DeleteGame(game);
 
                 statusCode = StatusCodeConstants.OK;
+                response = "Game deleted successfully.";
 
                 return statusCode.ToString() + response;
                 
