@@ -6,7 +6,7 @@ using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace Common.Commands
 {

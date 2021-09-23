@@ -4,7 +4,7 @@ using ClientApplicationInterfaces;
 using ConsoleMenusInterfaces;
 using Common.Protocol;
 using Common;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace ConsoleMenus.Client
 {

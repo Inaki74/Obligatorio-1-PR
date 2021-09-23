@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Business;
 using BusinessInterfaces;
@@ -8,19 +8,19 @@ using Domain.BusinessObjects;
 
 namespace Common.Commands
 {
-    public class SelectGameCommand : CommandBase, Interfaces.ICommand
+    public class DeleteGameCommand : CommandBase, Interfaces.ICommand
     {
         public string Command => CommandConstants.COMMAND_SELECT_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
             int statusCode = 0;
             string response = "";
             try
             {
-                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
+                User game = userDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                bool gameSelected = gameLogic.SelectGame(game.Title);
+                bool gameSelected = true;//gameLogic.SelectGame(game.Title);
                 if (gameSelected)
                 {
                     statusCode = StatusCodeConstants.OK;

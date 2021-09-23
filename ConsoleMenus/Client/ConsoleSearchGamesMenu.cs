@@ -4,7 +4,8 @@ using Common;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using ConsoleMenusInterfaces;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace ConsoleMenus.Client
 {

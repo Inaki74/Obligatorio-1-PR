@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Domain;
+using Domain.HelperObjects;
+using Domain.BusinessObjects;
 
 namespace BusinessInterfaces
 {

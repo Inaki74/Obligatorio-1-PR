@@ -6,7 +6,8 @@ using BusinessInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain;
+using Domain.HelperObjects;
+using Domain.BusinessObjects;
 
 namespace Common.Commands
 {

@@ -1,6 +1,6 @@
 using System;
 using Common.Protocol.Interfaces;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace Common.Protocol.NTOs
 {

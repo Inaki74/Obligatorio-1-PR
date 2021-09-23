@@ -1,7 +1,8 @@
 ﻿using System;
 using BusinessInterfaces;
 using DataAccess;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Business
 {
