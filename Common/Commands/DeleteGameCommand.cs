@@ -4,7 +4,7 @@ using Business;
 using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain.HelperObjects;
+using Domain.BusinessObjects;
 
 namespace Common.Commands
 {
@@ -13,14 +13,14 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_DELETE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            GameDeleteQueryNetworkTransferObject queryDummy = new GameDeleteQueryNetworkTransferObject();
+            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
             int statusCode = 0;
             string response = "";
             try
             {
-                GameDeleteQuery deleteQuery = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                //gameLogic.DeleteGame(deleteQuery);
+                //gameLogic.DeleteGame(game);
 
                 statusCode = StatusCodeConstants.OK;
 

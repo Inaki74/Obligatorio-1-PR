@@ -33,6 +33,9 @@ namespace ConsoleMenus.Client
             //igual al switch en Main Menu
             switch (answer)
             {
+                case DELETE_OPTION:
+                    _nextMenu = new ConsoleDeleteGameMenu();
+                    break;
                 case MODIFY_OPTION:
                     break;
                 case GO_BACK_OPTION:
