@@ -24,12 +24,12 @@ namespace Common.Commands
                 if (gameSelected)
                 {
                     statusCode = StatusCodeConstants.OK;
-                    response = "Game selected succesfully";
+                    response = "Game selected succesfully.";
                 }
                 else
                 {
                     statusCode = StatusCodeConstants.ERROR_CLIENT;
-                    response = "Was not able to select game";
+                    response = "Couldn't select game. Game doesn't exist.";
                 }
                 return statusCode.ToString() + response;
                 

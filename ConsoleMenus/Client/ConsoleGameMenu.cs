@@ -11,8 +11,9 @@ namespace ConsoleMenus.Client
         private const string VIEW_RATING_OPTION = "4";
         private const string VIEW_REVIEW_OPTION = "5";
         private const string VIEW_DETAILS_OPTION = "6";
+        private const string GO_BACK_OPTION = "0";
         
-        public IConsoleMenu NextMenu { get; }
+        public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer => true;
         public void PrintMenu()
         {
@@ -23,6 +24,7 @@ namespace ConsoleMenus.Client
             Console.WriteLine($"{VIEW_RATING_OPTION}. View rating.");
             Console.WriteLine($"{VIEW_REVIEW_OPTION}. View game reviews.");
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
+            Console.WriteLine($"{GO_BACK_OPTION}. Go back.");
         }
 
         public bool Action(string answer)
@@ -33,11 +35,14 @@ namespace ConsoleMenus.Client
             {
                 case MODIFY_OPTION:
                     break;
+                case GO_BACK_OPTION:
+                    _nextMenu = new ConsoleMainMenu();
+                    break;
                 default:
                     break;
             }
-            
-            throw new System.NotImplementedException();
+
+            return false;
         }
     }
 }
