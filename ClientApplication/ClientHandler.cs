@@ -125,6 +125,15 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse AcquireGame()
+        {
+            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            gameDummy.Title = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, gameDummy);
+        
+            return response;
+        }
+
         public string Exit()
         {
             UserNetworkTransferObject user = new UserNetworkTransferObject();

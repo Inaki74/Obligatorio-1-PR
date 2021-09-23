@@ -14,5 +14,7 @@ namespace BusinessInterfaces
 
         List<Game> SearchGames(GameSearchQuery query);
 
+        bool AcquireGame(string game, string username);
+
     }
 }

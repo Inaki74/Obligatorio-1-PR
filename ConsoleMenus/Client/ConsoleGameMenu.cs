@@ -1,4 +1,6 @@
 ﻿using System;
+using ClientApplicationInterfaces;
+using Common.Protocol;
 using ConsoleMenusInterfaces;
 
 namespace ConsoleMenus.Client
@@ -11,6 +13,7 @@ namespace ConsoleMenus.Client
         private const string VIEW_RATING_OPTION = "4";
         private const string VIEW_REVIEW_OPTION = "5";
         private const string VIEW_DETAILS_OPTION = "6";
+        private const string ACQUIRE_GAME_OPTION = "7";
         private const string GO_BACK_OPTION = "0";
         
         public IConsoleMenu NextMenu => _nextMenu;
@@ -24,6 +27,7 @@ namespace ConsoleMenus.Client
             Console.WriteLine($"{VIEW_RATING_OPTION}. View rating.");
             Console.WriteLine($"{VIEW_REVIEW_OPTION}. View game reviews.");
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
+            Console.WriteLine($"{ACQUIRE_GAME_OPTION}. Acquire game.");
             Console.WriteLine($"{GO_BACK_OPTION}. Go back.");
         }
 
@@ -34,6 +38,12 @@ namespace ConsoleMenus.Client
             switch (answer)
             {
                 case MODIFY_OPTION:
+                    break;
+                case ACQUIRE_GAME_OPTION:
+                    Console.WriteLine("Looking for game...");
+                    VaporStatusResponse response = IClientHandler.Instance.AcquireGame();
+                    Console.WriteLine(response.Message);
+                    _nextMenu = new ConsoleMainMenu();
                     break;
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();
