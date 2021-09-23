@@ -10,7 +10,7 @@ namespace Common.Commands
 {
     public class CheckGameOwnerCommand : CommandBase, Interfaces.ICommand
     {
-        public string Command => CommandConstants.COMMAND_DELETE_GAME_CODE;
+        public string Command => CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
             GameOwnershipQueryNetworkTransferObject queryDummy = new GameOwnershipQueryNetworkTransferObject();

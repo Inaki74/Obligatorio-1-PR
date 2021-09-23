@@ -11,6 +11,8 @@
         public const string COMMAND_DELETE_GAME_CODE = "10";
 
         public const string COMMAND_SEARCH_GAMES_CODE =  "08";
+
+        public const string COMMAND_CHECKOWNERSHIP_GAME_CODE = "15";
         
         public const string COMMAND_EXIT_CODE = "20";
     }

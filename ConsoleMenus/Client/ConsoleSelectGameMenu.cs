@@ -21,7 +21,9 @@ namespace ConsoleMenus.Client
             VaporStatusResponse response = IClientHandler.Instance.SelectGame(answer);
             if (response.Code == StatusCodeConstants.OK)
             {
-                _nextMenu = new ConsoleGameMenu();
+                bool isOwnerResponse = IClientHandler.Instance.CheckIsOwner();
+
+                _nextMenu = new ConsoleGameMenu(isOwnerResponse);
             }
             else
             {

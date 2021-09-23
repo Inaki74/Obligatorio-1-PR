@@ -95,6 +95,27 @@ namespace ClientApplication
             return response.Message;
         }
 
+        public bool CheckIsOwner()
+        {
+            GameOwnershipQuery query = new GameOwnershipQuery();
+            query.Username = _clientSession.Username;
+            query.Gamename = _clientSession.gameSelected;
+
+            GameOwnershipQueryNetworkTransferObject queryNTO = new GameOwnershipQueryNetworkTransferObject();
+            queryNTO.Load(query);
+
+            VaporStatusResponse response = ExecuteCommand<GameOwnershipQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
+
+            if(response.Code == StatusCodeConstants.OK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public VaporStatusResponse GetGames()
         {
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);

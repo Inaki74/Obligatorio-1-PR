@@ -12,9 +12,13 @@ namespace ClientApplicationInterfaces
         bool ConnectToServer();
         string PublishGame(GameNetworkTransferObject game);
 
+        string DeleteGame(GameNetworkTransferObject query);
+
         VaporStatusResponse GetGames();
 
         VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
+
+        bool CheckIsOwner();
 
         VaporStatusResponse Login(UserNetworkTransferObject user);
 
