@@ -11,10 +11,11 @@ namespace ConsoleMenus.Client
         private const string VIEW_DETAILS_OPTION = "4";
         private const string MODIFY_OPTION = "5";
         private const string DELETE_OPTION = "6";
+        private const string ACQUIRE_GAME_OPTION = "7";
         private const string GO_BACK_OPTION = "0";
 
         private bool _isGameOwner = false;
-        
+
         public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer => true;
 
@@ -30,7 +31,8 @@ namespace ConsoleMenus.Client
             Console.WriteLine($"{VIEW_RATING_OPTION}. View rating.");
             Console.WriteLine($"{VIEW_REVIEW_OPTION}. View game reviews.");
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
-            
+            Console.WriteLine($"{ACQUIRE_GAME_OPTION}. Acquire game.");
+
             if(_isGameOwner)
             {
                 Console.WriteLine($"{MODIFY_OPTION}. Modify game");
@@ -60,6 +62,9 @@ namespace ConsoleMenus.Client
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();
                     break;
+                case ACQUIRE_GAME_OPTION:
+                    _nextMenu = new ConsoleMainMenu();
+                    break;
                 default:
                     break;
             }
@@ -68,3 +73,10 @@ namespace ConsoleMenus.Client
         }
     }
 }
+
+
+
+
+
+
+

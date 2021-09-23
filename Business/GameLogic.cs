@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
@@ -43,6 +44,23 @@ namespace Business
             List<Game> allGames = _gameDataAccess.GetAll();
 
             return FilterGames(allGames, query);
+        }
+
+        public bool AcquireGame(string game, string username)
+        {
+            Game dummyGame = new Game();
+            dummyGame.Title = game;
+            Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+            bool gameAcquired = false;
+            if (realGame != null)
+            {
+                User user = _userDataAccess.Get(username);
+                user.ownedGames.Add(realGame);
+                _userDataAccess.Update(user);
+                gameAcquired = true;
+            }
+
+            return gameAcquired;
         }
 
         private List<Game> FilterGames(List<Game> games, GameSearchQuery query)

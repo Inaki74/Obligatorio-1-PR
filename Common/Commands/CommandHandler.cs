@@ -34,6 +34,9 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_SELECT_GAME_CODE:
                     finalCommand = new SelectGameCommand();
                     break;
+                case CommandConstants.COMMAND_ACQUIRE_GAME_CODE:
+                    finalCommand = new AcquireGameCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion
