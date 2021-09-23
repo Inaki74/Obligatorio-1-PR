@@ -6,6 +6,8 @@ namespace Common.Protocol.NTOs
     {
         public static string ExtractGameField(string payload, ref int index)
         {
+            //Extracts field of shape:
+            //  XXXX XXXXX... -> FIELDLENGTH FIELD
             int length = int.Parse(payload.Substring(index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
             index += VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
             string field = payload.Substring(index, length);

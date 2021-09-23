@@ -29,5 +29,6 @@ namespace DataAccess
 
         public ThreadSafeList<User> Users = new ThreadSafeList<User>();
         public ThreadSafeList<Game> Games = new ThreadSafeList<Game>();
+        public ThreadSafeList<Review> Reviews = new ThreadSafeList<Review>();
     }
 }
