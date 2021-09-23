@@ -4,7 +4,8 @@ using Business;
 using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
-
+using Common.Protocol.NTOs;
+using Domain.BusinessObjects;
 
 namespace Common.Commands
 {
@@ -19,13 +20,15 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             //Tomas el nombre de usuario y buscan en db
+            UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
             int statusCode = 0;
             string response = "";
 
             UserLogic userLogic = new UserLogic();
             try
             {
-                bool userExisted = userLogic.Login(Encoding.UTF8.GetString(payload));
+                User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+                bool userExisted = userLogic.Login(user);
 
                 if(userExisted)
                 {

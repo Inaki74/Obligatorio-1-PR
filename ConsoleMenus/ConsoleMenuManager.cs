@@ -28,6 +28,7 @@ namespace ConsoleMenus
 
         public void ExecuteMenu()
         {
+            Console.WriteLine("");
             _currentMenu.PrintMenu();
             Console.WriteLine("");
 

@@ -1,8 +1,10 @@
-﻿namespace BusinessInterfaces
+﻿using Domain.BusinessObjects;
+
+namespace BusinessInterfaces
 {
     public interface IUserLogic
     {
-        bool Login(string username);
-        void Logout(string username);
+        bool Login(User user);
+        void Logout(User user);
     }
 }

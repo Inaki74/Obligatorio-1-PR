@@ -1,6 +1,6 @@
 using System;
 using Common.Protocol.Interfaces;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace Common.Protocol.NTOs
 {
@@ -50,11 +50,11 @@ namespace Common.Protocol.NTOs
             Game game = new Game();
 
             int index = 0;
-            string username = ExtractGameField(toDecode, ref index);
-            string title = ExtractGameField(toDecode, ref index);
-            string genre = ExtractGameField(toDecode, ref index);
-            string esrb = ExtractGameField(toDecode, ref index);
-            string synopsis = ExtractGameField(toDecode, ref index);
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
             //string caratula = ExtractField(payloadAsString, ref index);
 
             game.Owner = new User(username, -1);
@@ -65,16 +65,6 @@ namespace Common.Protocol.NTOs
             // caratula
 
             return game;
-        }
-
-        private string ExtractGameField(string payload, ref int index)
-        {
-            int length = int.Parse(payload.Substring(index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
-            index += VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-            string field = payload.Substring(index, length);
-            index += length;
-
-            return field;
         }
     }
 }

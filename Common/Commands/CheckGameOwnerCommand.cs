@@ -1,36 +1,29 @@
-﻿using System;
+using System;
 using System.Text;
 using Business;
 using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Common.Commands
 {
-    public class SelectGameCommand : CommandBase, Interfaces.ICommand
+    public class CheckGameOwnerCommand : CommandBase, Interfaces.ICommand
     {
-        public string Command => CommandConstants.COMMAND_SELECT_GAME_CODE;
+        public string Command => CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            GameOwnershipQueryNetworkTransferObject queryDummy = new GameOwnershipQueryNetworkTransferObject();
             int statusCode = 0;
             string response = "";
             try
             {
-                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
+                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                bool gameSelected = gameLogic.SelectGame(game.Title);
-                if (gameSelected)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    response = "Game selected succesfully.";
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.ERROR_CLIENT;
-                    response = "Couldn't select game. Game doesn't exist.";
-                }
+                bool isOwner = gameLogic.CheckIsOwner(query);
+
+                statusCode = isOwner ? StatusCodeConstants.OK : StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED;
+
                 return statusCode.ToString() + response;
                 
             }

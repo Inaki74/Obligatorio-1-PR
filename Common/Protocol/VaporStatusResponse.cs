@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Common.Protocol.Interfaces;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace Common.Protocol
 {

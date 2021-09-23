@@ -4,7 +4,8 @@ using Common;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using ConsoleMenusInterfaces;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace ConsoleMenus.Client
 {
@@ -31,7 +32,17 @@ namespace ConsoleMenus.Client
 
             if(response.Code == StatusCodeConstants.OK)
             {
-                Console.WriteLine("GAMES FOUND:\n");
+                bool listIsEmpty = response.GamesList.Count == 0;
+
+                if(!listIsEmpty)
+                {
+                    Console.WriteLine("GAMES FOUND:\n");
+                }
+                else
+                { 
+                    Console.WriteLine("No games were found.");
+                }
+
                 foreach(Game game in response.GamesList)
                 {
                     Console.WriteLine($"   {game.Title}");

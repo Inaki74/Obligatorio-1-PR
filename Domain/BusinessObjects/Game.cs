@@ -1,6 +1,7 @@
 using System;
+using Domain.HelperObjects;
 
-namespace Domain
+namespace Domain.BusinessObjects
 {
     public class Game
     {

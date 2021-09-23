@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domain
+namespace Domain.BusinessObjects
 {
     public class User
     {

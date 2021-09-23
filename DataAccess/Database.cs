@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Domain;
+using Domain.BusinessObjects;
 
 namespace DataAccess
 {

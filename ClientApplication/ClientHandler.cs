@@ -8,7 +8,8 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
 using Common;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
@@ -86,6 +87,30 @@ namespace ClientApplication
             return response.Message;
         }
 
+        public string DeleteGame()
+        {
+            GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+            game.Title = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
+            
+            return response.Message;
+        }
+
+        public VaporStatusResponse CheckIsOwner()
+        {
+            GameUserRelationQuery query = new GameUserRelationQuery();
+            query.Username = _clientSession.Username;
+            query.Gamename = _clientSession.gameSelected;
+
+            GameOwnershipQueryNetworkTransferObject queryNTO = new GameOwnershipQueryNetworkTransferObject();
+            queryNTO.Load(query);
+
+            VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
+
+            return response;
+        }
+
         public VaporStatusResponse GetGames()
         {
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
@@ -135,6 +160,10 @@ namespace ClientApplication
             return response.Message;
         }
 
+        // Send information to the Server and execute command when we receive a response.
+        // command is the command key.
+        // payload is what to send wrapped in a NTO.
+        // P is the type of payload the NTO brings.
         private VaporStatusResponse ExecuteCommand<P>(string command, INetworkTransferObject<P> payload)
         {
             string payloadString = "";

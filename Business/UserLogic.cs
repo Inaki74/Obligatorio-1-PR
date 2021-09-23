@@ -1,7 +1,8 @@
 ﻿using System;
 using BusinessInterfaces;
 using DataAccess;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Business
 {
@@ -9,13 +10,14 @@ namespace Business
     {
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
 
-        public bool Login(string username)
+        public bool Login(User dummyUser)
         {
+            string username = dummyUser.Username;
             User user = _userDataAccess.Get(username);
             if (user == null)
             {
                 AddUser(username);
-                Login(username);
+                Login(dummyUser);
                 return false;
             }
 
@@ -32,8 +34,9 @@ namespace Business
             return true;
         }
 
-        public void Logout(string username)
+        public void Logout(User user)
         {
+            string username = user.Username;
             User loggedUser = _userDataAccess.Get(username);
             loggedUser.LoggedIn = false;
             _userDataAccess.Update(loggedUser);

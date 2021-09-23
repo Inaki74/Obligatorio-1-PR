@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Domain;
+using Domain.HelperObjects;
+using Domain.BusinessObjects;
 
 namespace BusinessInterfaces
 {
@@ -13,6 +14,10 @@ namespace BusinessInterfaces
         bool SelectGame(string game);
 
         List<Game> SearchGames(GameSearchQuery query);
+
+        bool CheckIsOwner(GameUserRelationQuery query);
+
+        void DeleteGame(Game game);
 
     }
 }
