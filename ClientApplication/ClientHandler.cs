@@ -87,6 +87,15 @@ namespace ClientApplication
             return response.Message;
         }
 
+        public string DeleteGame(GameDeleteQueryNetworkTransferObject query)
+        {
+            query.Username = _clientSession.Username;
+            query.Gamename = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<GameDeleteQuery>(CommandConstants.COMMAND_DELETE_GAME_CODE, query);
+            
+            return response.Message;
+        }
+
         public VaporStatusResponse GetGames()
         {
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);

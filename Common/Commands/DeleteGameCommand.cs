@@ -4,33 +4,26 @@ using Business;
 using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Common.Commands
 {
     public class DeleteGameCommand : CommandBase, Interfaces.ICommand
     {
-        public string Command => CommandConstants.COMMAND_SELECT_GAME_CODE;
+        public string Command => CommandConstants.COMMAND_DELETE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
+            GameDeleteQueryNetworkTransferObject queryDummy = new GameDeleteQueryNetworkTransferObject();
             int statusCode = 0;
             string response = "";
             try
             {
-                User game = userDummy.Decode(Encoding.UTF8.GetString(payload));
+                GameDeleteQuery deleteQuery = queryDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                bool gameSelected = true;//gameLogic.SelectGame(game.Title);
-                if (gameSelected)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    response = "Game selected succesfully.";
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.ERROR_CLIENT;
-                    response = "Couldn't select game. Game doesn't exist.";
-                }
+                //gameLogic.DeleteGame(deleteQuery);
+
+                statusCode = StatusCodeConstants.OK;
+
                 return statusCode.ToString() + response;
                 
             }
