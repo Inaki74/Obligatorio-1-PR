@@ -28,19 +28,22 @@ namespace ConsoleMenus
 
         public void ExecuteMenu()
         {
+            Console.WriteLine("");
             _currentMenu.PrintMenu();
+            Console.WriteLine("");
 
             var answer = "";
             if(_currentMenu.RequiresAnswer)
             {
-                Console.WriteLine("Answer: ");
                 answer = Console.ReadLine();
+                Console.WriteLine("");
             }
 
             try
             {
-                _currentMenu.Action(answer);
+                bool exit = _currentMenu.Action(answer);
                 _currentMenu = _currentMenu.NextMenu;
+                _exit = exit;
             }
             catch(Exception e)
             {

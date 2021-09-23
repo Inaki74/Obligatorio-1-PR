@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using Common.Protocol;
+using Common.Protocol.NTOs;
 
 namespace ClientApplicationInterfaces
 {
@@ -7,7 +10,20 @@ namespace ClientApplicationInterfaces
         static IClientHandler Instance { get; set; }
 
         bool ConnectToServer();
+        string PublishGame(GameNetworkTransferObject game);
 
-        void Login(string username);
+        string DeleteGame();
+
+        VaporStatusResponse GetGames();
+
+        VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
+
+        VaporStatusResponse CheckIsOwner();
+
+        VaporStatusResponse Login(UserNetworkTransferObject user);
+
+        VaporStatusResponse SelectGame(string game);
+
+        string Exit();
     }
 }

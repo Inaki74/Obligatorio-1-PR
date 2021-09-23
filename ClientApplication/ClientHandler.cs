@@ -7,6 +7,14 @@ using ClientApplicationInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
 using Common.NetworkUtilities;
+using Common;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
+using Common.Protocol.Interfaces;
+using Common.Protocol.NTOs;
+using Common.Configuration.Interfaces;
+using Common.Configuration;
+using System.Collections.Generic;
 
 namespace ClientApplication
 {
@@ -20,11 +28,14 @@ namespace ClientApplication
             }
         }
 
+        private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpClient _tcpClient;
 
-        private ClientCommandHandler _commandHandler;
+        private VaporProtocol _vaporProtocol;
+        private IClientSession _clientSession;
+        private IClientCommandHandler _commandHandler;
         
         public ClientHandler()
         {
@@ -36,10 +47,16 @@ namespace ClientApplication
             {
                 throw new Exception("Singleton already instanced. Do not instance singleton twice!");
             }
-            
-            //TODO: Create config file with IP and Port
-            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 0);
-            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
+
+            _configurationHandler = new ConfigurationHandler();
+
+            string clientIp = _configurationHandler.GetField(ConfigurationConstants.CLIENT_IP_KEY);
+            int clientPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.CLIENT_PORT_KEY));
+            string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
+            int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+
+            _clientIpEndPoint = new IPEndPoint(IPAddress.Parse(clientIp), clientPort);
+            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             _tcpClient = new TcpClient(_clientIpEndPoint);
         }
 
@@ -48,7 +65,7 @@ namespace ClientApplication
             try
             {
                 _tcpClient.Connect(_serverIpEndPoint);
-                //_commandHandler = new ClientCommandHandler();
+                _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
             catch(Exception e)
             {
@@ -59,13 +76,117 @@ namespace ClientApplication
             return true;
         }
 
-        public void Login(string username)
+        public string PublishGame(GameNetworkTransferObject game)
         {
-            VaporProtocol vp = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
-            vp.Send(ReqResHeader.REQ, CommandConstants.COMMAND_LOGIN_CODE, username.Length, username);
-            VaporProcessedPacket vaporProcessedPacket = vp.Receive();
-            ClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+            game.OwnerName = _clientSession.Username;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
+
+            // Enviar caratula si corresponde
+            _vaporProtocol.SendCover(game.Title, game.CoverPath);
+            
+            return response.Message;
+        }
+
+        public string DeleteGame()
+        {
+            GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+            game.Title = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
+            
+            return response.Message;
+        }
+
+        public VaporStatusResponse CheckIsOwner()
+        {
+            GameUserRelationQuery query = new GameUserRelationQuery();
+            query.Username = _clientSession.Username;
+            query.Gamename = _clientSession.gameSelected;
+
+            GameOwnershipQueryNetworkTransferObject queryNTO = new GameOwnershipQueryNetworkTransferObject();
+            queryNTO.Load(query);
+
+            VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
+
+            return response;
+        }
+
+        public VaporStatusResponse GetGames()
+        {
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
+
+            return response;
+        }
+
+        public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
+        {
+            VaporStatusResponse response = ExecuteCommand<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);
+
+            return response;
+        }
+
+        public VaporStatusResponse Login(UserNetworkTransferObject user)
+        {
+            VaporStatusResponse response = ExecuteCommand(CommandConstants.COMMAND_LOGIN_CODE, user);
+
+            if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
+            {
+                _clientSession = new ClientSession(user.Username);
+            }
+
+            return response;
+        }
+
+        public VaporStatusResponse SelectGame(string game)
+        {
+            GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            gameDummy.Title = game;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy);
+            if (response.Code == StatusCodeConstants.OK)
+            {
+                _clientSession.gameSelected = game;
+            }
+
+            return response;
+        }
+
+        public string Exit()
+        {
+            UserNetworkTransferObject user = new UserNetworkTransferObject();
+            user.Username = _clientSession.Username;
+
+            VaporStatusResponse response = ExecuteCommand<User>(CommandConstants.COMMAND_EXIT_CODE, user);
+            _tcpClient.Close();
+            return response.Message;
+        }
+
+        // Send information to the Server and execute command when we receive a response.
+        // command is the command key.
+        // payload is what to send wrapped in a NTO.
+        // P is the type of payload the NTO brings.
+        private VaporStatusResponse ExecuteCommand<P>(string command, INetworkTransferObject<P> payload)
+        {
+            string payloadString = "";
+            if(payload != null)
+            {
+                payloadString = payload.Encode();
+            }
+
+            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payloadString);
+            VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
+            IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+        }
+
+        private List<string> GetOnlyTitles(List<Game> games)
+        {
+            List<string> ret = new List<string>();
+            foreach(Game game in games)
+            {
+                ret.Add(game.Title);
+            }
+
+            return ret;
         }
     }
 }

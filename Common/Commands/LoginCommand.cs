@@ -4,11 +4,12 @@ using Business;
 using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
-
+using Common.Protocol.NTOs;
+using Domain.BusinessObjects;
 
 namespace Common.Commands
 {
-    public class LoginCommand : Interfaces.ICommand
+    public class LoginCommand : CommandBase, Interfaces.ICommand
     {
         //client -> server
         //server -> client
@@ -19,21 +20,25 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             //Tomas el nombre de usuario y buscan en db
+            UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
             int statusCode = 0;
             string response = "";
 
             UserLogic userLogic = new UserLogic();
             try
             {
-                bool userExisted = userLogic.Login(Encoding.UTF8.GetString(payload));
+                User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+                bool userExisted = userLogic.Login(user);
 
                 if(userExisted)
                 {
                     statusCode = StatusCodeConstants.OK;
+                    response = "Logged in!";
                 }
                 else
                 {
                     statusCode = StatusCodeConstants.INFO;
+                    response = "User didn't exist, created new user.";
                 }
             }
             catch(Exception e)
@@ -47,29 +52,11 @@ namespace Common.Commands
         }
 
         //build the payload for the response
-        public void ActionRes(byte[] payload)
+        public VaporStatusResponse ActionRes(byte[] payload)
         {
-            // XX#XXXX...
-            // statusCode#Mensaje
-            string payloadString = Encoding.UTF8.GetString(payload);
-            int statusCode = int.Parse(payloadString.Substring(0, VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE));
-            string message = payloadString.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE, payloadString.Length-VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
-            string response = "";
+            VaporStatusResponse statusMessage = ParseStatusResponse(payload);
 
-            switch(statusCode)
-            {
-                case StatusCodeConstants.OK:
-                    response = "Logged in!";
-                    break;
-                case StatusCodeConstants.INFO:
-                    response = "User didn't exist, created new user.";
-                    break;
-                case StatusCodeConstants.ERROR_CLIENT:
-                    response = message;
-                    break;
-            }
-
-            Console.WriteLine(response);
+            return statusMessage;
         }
     }
 }

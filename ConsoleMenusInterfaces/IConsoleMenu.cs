@@ -7,6 +7,6 @@ namespace ConsoleMenusInterfaces
         bool RequiresAnswer { get; }
         void PrintMenu();
 
-        void Action(string answer);
+        bool Action(string answer);
     }
 }

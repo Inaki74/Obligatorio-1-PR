@@ -8,31 +8,17 @@ using Common.Protocol;
 
 namespace ClientApplication
 {
-    public class ClientCommandHandler : IClientCommandHandler
+    public class ClientCommandHandler : CommandHandler, IClientCommandHandler
     {
         //Get command type and payload from menus input
         //Call ActionReq for desired command with payload as parameter
         
-        public void ExecuteCommand(VaporProcessedPacket processedPacket)
+        public VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket)
         {
-            ICommand finalCommand = new LoginCommand();
-
-            switch (processedPacket.Command)
-            {
-                case CommandConstants.COMMAND_LOGIN_CODE:
-                    finalCommand = new LoginCommand();
-                    break;
-                default:
-                    Console.WriteLine("Command doesnt exist");
-                    // tirar excepcion
-                    break;
-                
-            }
+            ICommand command = DecideCommand(processedPacket.Command);
             
-            finalCommand.ActionRes(processedPacket.Payload);
+            return command.ActionRes(processedPacket.Payload);
         }
-        
-        
 
     }
 }

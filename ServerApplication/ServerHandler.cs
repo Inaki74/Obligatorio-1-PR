@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using Common.Commands;
+using Common.Configuration;
+using Common.Configuration.Interfaces;
 using Common.NetworkUtilities;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
@@ -21,6 +24,7 @@ namespace ServerApplication
             }
         }
 
+        private readonly IConfigurationHandler _configurationHandler;
         private TcpClient _currentFoundClient;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpListener _tcpServerListener;
@@ -37,8 +41,12 @@ namespace ServerApplication
                 throw new Exception("Singleton already instanced. Do not instance singleton twice!");
             }
 
-            //TODO: Create config file with IP and Port 
-            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6000);
+            _configurationHandler = new ConfigurationHandler();
+
+            string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
+            int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+            
+            _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             _tcpServerListener = new TcpListener(_serverIpEndPoint);
         }
 
@@ -68,11 +76,24 @@ namespace ServerApplication
                 VaporProtocol vp = new VaporProtocol(streamHandler);
                 IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
 
-                while(true)
+                bool connected = true;
+
+                while(connected)
                 {
-                    VaporProcessedPacket processedPacket = vp.Receive();
+                    VaporProcessedPacket processedPacket = vp.ReceiveCommand();
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-                    vp.Send(ReqResHeader.RES, response.Command, response.Response.Length, response.Response);
+                    vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
+
+                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
+                    {
+                        string path = GetPathFromAppSettings();
+                        vp.ReceiveCover(path);
+                    }
+
+                    if(response.Command == CommandConstants.COMMAND_EXIT_CODE)
+                    {
+                        connected = false;
+                    }
                 }
             }
             catch(SocketException e)
@@ -83,6 +104,21 @@ namespace ServerApplication
             {
                 Console.WriteLine("Goodbye client!");
             }
+        }
+
+        private string GetPathFromAppSettings()
+        {
+            string path = "";
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                path = _configurationHandler.GetField(ConfigurationConstants.WIN_SERVER_IMAGEPATH_KEY);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                path = _configurationHandler.GetField(ConfigurationConstants.OSX_SERVER_IMAGEPATH_KEY);
+            }
+
+            return path;
         }
     }
 }
