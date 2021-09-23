@@ -12,8 +12,8 @@ namespace Common.Protocol.NTOs
             GameSearchQuery query = new GameSearchQuery();
 
             int index = 0;
-            string title = ExtractGameField(toDecode, ref index);
-            string genre = ExtractGameField(toDecode, ref index);
+            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
             int score = int.Parse(toDecode.Substring(index, VaporProtocolSpecification.GAME_SCOREINPUT_FIXED_SIZE));
             
             query.Title = title;
@@ -44,16 +44,6 @@ namespace Common.Protocol.NTOs
         public void Load(GameSearchQuery obj)
         {
             _gameQuery = obj;
-        }
-
-        private string ExtractGameField(string payload, ref int index)
-        {
-            int length = int.Parse(payload.Substring(index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
-            index += VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-            string field = payload.Substring(index, length);
-            index += length;
-
-            return field;
         }
     }
 }
