@@ -40,11 +40,13 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_ACQUIRE_GAME_CODE:
                     finalCommand = new AcquireGameCommand();
                     break;
+                case CommandConstants.COMMAND_GET_GAME_SCORE_CODE:
+                    finalCommand = new GetGameScoreCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion
                     break;
-                
             }
 
             return finalCommand;

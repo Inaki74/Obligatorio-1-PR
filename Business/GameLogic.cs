@@ -62,20 +62,6 @@ namespace Business
             return gameAcquired;
         }
 
-        private List<Game> FilterGames(List<Game> games, GameSearchQuery query)
-        {
-            List<Game> filteredGames = new List<Game>();
-            foreach(Game game in games)
-            {
-                if(game.FulfillsQuery(query))
-                {
-                    filteredGames.Add(game);
-                }
-            }
-            return filteredGames;
-    
-        }
-
         public bool CheckIsOwner(GameUserRelationQuery query)
         {
             Game game = _gameDataAccess.GetCopy(query.Gamename);
@@ -87,6 +73,38 @@ namespace Business
         {
             // Remove for all users who acquired the game as well.
             _gameDataAccess.Delete(game);
+        }
+
+        private List<Game> FilterGames(List<Game> games, GameSearchQuery query)
+        {
+            List<Game> filteredGames = new List<Game>();
+            foreach(Game game in games)
+            {
+                if(FulfillsQuery(game, query))
+                {
+                    filteredGames.Add(game);
+                }
+            }
+            return filteredGames;
+        }
+
+        private bool FulfillsQuery(Game game, GameSearchQuery query)
+        {
+            bool titleCoincidence = game.FulfillsTitle(query.Title);
+            bool genreCoincidence = game.FulfillsGenre(query.Genre);
+            bool scoreCoincidence = FulfillsScoreQuery(game, query);
+
+            return titleCoincidence && genreCoincidence && scoreCoincidence;
+        }
+
+        private bool FulfillsScoreQuery(Game game, GameSearchQuery query)
+        {
+            IReviewLogic reviewLogic = new ReviewLogic();
+            float score = reviewLogic.GetGameScore(game);
+
+            if(query.Score == 0) return true;
+
+            return score >= query.Score;
         }
     }
 }

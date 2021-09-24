@@ -11,8 +11,12 @@ namespace Common.Protocol
 
         public string Message { get; }
 
+        // POSSIBLE PAYLOADS
         // GET GAMES
         public List<Game> GamesList { get; set; } 
+        // GET GAME REVIEWS AND SCORE
+        public List<Review> ReviewsList { get; set; }
+        public float GameScore { get; set; }
 
         public VaporStatusResponse(){}
 

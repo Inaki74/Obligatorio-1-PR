@@ -12,6 +12,12 @@ namespace ConsoleMenus.Client
         public bool RequiresAnswer => true;
         
         private const string YES_RESPONSE = "y";
+
+        private bool _isGameOwner;
+        public ConsoleAcquireGameMenu(bool isGameOwner)
+        {
+            _isGameOwner = isGameOwner;
+        }
         public void PrintMenu()
         {
             Console.WriteLine($"Are you sure you want to acquire this game? \nPress {YES_RESPONSE} to continue. Any other key to cancel)");
@@ -29,7 +35,7 @@ namespace ConsoleMenus.Client
             {
                 Console.WriteLine("Game wasn't acquired.");
             }
-            _nextMenu = new ConsoleMainMenu();
+            _nextMenu = new ConsoleGameMenu(_isGameOwner);
             return false;
         }
     }
