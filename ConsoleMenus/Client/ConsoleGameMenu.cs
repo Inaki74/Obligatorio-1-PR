@@ -78,7 +78,7 @@ namespace ConsoleMenus.Client
                     _nextMenu = new ConsoleMainMenu();
                     break;
                 case ACQUIRE_GAME_OPTION:
-                    _nextMenu = new ConsoleMainMenu();
+                    _nextMenu = new ConsoleAcquireGameMenu();
                     break;
                 default:
                     break;

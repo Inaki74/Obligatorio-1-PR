@@ -5,34 +5,49 @@ using BusinessInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
-using Domain;
+using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Common.Commands
 {
     public class AcquireGameCommand : CommandBase, ICommand
     {
-        public string Command { get; }
+        public string Command => CommandConstants.COMMAND_ACQUIRE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            // GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
-            // int statusCode = 0;
-            // string response = "";
-            // try
-            // {
-            //     Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-            //     IGameLogic gameLogic = new GameLogic();
-            //     bool gameSuccesfullyAcquired = gameLogic.AcquireGame(game.Title, );
-            // }
-            // catch (Exception e)
-            // {
-                
-            // }
-            return "";
+            GameOwnershipQueryNetworkTransferObject queryDummy = new GameOwnershipQueryNetworkTransferObject();
+            int statusCode = 0;
+            string response = "";
+            try
+            {
+                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+                IGameLogic gameLogic = new GameLogic();
+                bool gameSuccesfullyAcquired = gameLogic.AcquireGame(query);
+                if (gameSuccesfullyAcquired)
+                {
+                    statusCode = StatusCodeConstants.OK;
+                    response = "Game acquired succesfully";
+                }
+                else
+                {
+                    statusCode = StatusCodeConstants.ERROR_SERVER;
+                    response = "Something went wrong!";
+                }
+                return statusCode.ToString() + response;
+            }
+            catch (Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                response = "No puede adquirir el juego";
+                return statusCode.ToString() + response;
+            }
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)
         {
-            throw new System.NotImplementedException();
+            VaporStatusResponse statusMessage = ParseStatusResponse(reqPayload);
+
+            return statusMessage;
         }
     }
 }

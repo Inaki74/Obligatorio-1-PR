@@ -44,7 +44,7 @@ namespace Business
             return FilterGames(allGames, query);
         }
 
-        public bool AcquireGame(string game, string username)
+        public bool AcquireGame(GameUserRelationQuery query)
         {
             //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
@@ -53,7 +53,7 @@ namespace Business
             bool gameAcquired = false;
             if (realGame != null)
             {
-                User user = _userDataAccess.Get(username);
+                User user = _userDataAccess.Get(query.Username);
                 user.ownedGames.Add(realGame);
                 _userDataAccess.Update(user);
                 gameAcquired = true;
