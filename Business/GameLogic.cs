@@ -30,8 +30,6 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
-        
-
         public bool SelectGame(string game)
         {
             Game dummyGame = new Game();
@@ -48,6 +46,7 @@ namespace Business
 
         public bool AcquireGame(string game, string username)
         {
+            //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
             dummyGame.Title = game;
             Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
@@ -79,7 +78,7 @@ namespace Business
 
         public bool CheckIsOwner(GameUserRelationQuery query)
         {
-            Game game = _gameDataAccess.Get(query.Gamename);
+            Game game = _gameDataAccess.GetCopy(query.Gamename);
 
             return game.Owner.Username == query.Username;
         }

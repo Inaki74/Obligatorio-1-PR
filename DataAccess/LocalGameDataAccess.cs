@@ -28,12 +28,14 @@ namespace DataAccess
             Database.Instance.Games.Remove(elem);
         }
 
-        public Game Get(int id)
+        public Game Get(string id)
         {
-            throw new NotImplementedException();
+            Game dummyGame = GetCopy(id);
+            Game game = Database.Instance.Games.Get(dummyGame);
+            return game;
         }
 
-        public Game Get(string title)
+        public Game GetCopy(string title)
         {
             Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Title == title);
             return game;

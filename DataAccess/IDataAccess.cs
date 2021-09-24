@@ -5,9 +5,8 @@ namespace DataAccess
 {
     public interface IDataAccess<T>
     {
-        T Get(int id);
-
         T Get(string id);
+        T GetCopy(string id);
         List<T> GetAll();
         void Add(T elem);
         void Delete(T elem);

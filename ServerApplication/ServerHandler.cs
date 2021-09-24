@@ -86,6 +86,8 @@ namespace ServerApplication
 
                     if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
                     {
+                        //TODO: Si modificamos el nombre del juego, tiene que cambiar el nombre de la imagen.
+                        // Para eso, mejor guardamos la imagen con nombre ID que nunca cambia...
                         string path = GetPathFromAppSettings();
                         vp.ReceiveCover(path);
                     }

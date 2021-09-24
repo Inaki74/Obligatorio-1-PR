@@ -18,22 +18,14 @@ namespace DataAccess
         }
         
 
-        public User Get(int id)
+        public User Get(string id)
         {
-            try
-            {
-                User user = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == id);
-                return user;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Something went wrong in the data access");
-                return null;
-            }
-            
+            User dummyUser = GetCopy(id);
+            User user = Database.Instance.Users.Get(dummyUser);
+            return user;
         }
 
-        public User Get(string id)
+        public User GetCopy(string id)
         {
             User user = Database.Instance.Users.GetCopyOfInternalList().FirstOrDefault(u => u.Username == id);
             return user;

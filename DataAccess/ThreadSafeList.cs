@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -24,6 +25,14 @@ namespace DataAccess
             {
                 _internalList.Remove(toRemove);
             }
+        }
+
+        public T Get(T toGet)
+        {
+            lock (_lock)
+            {
+                return _internalList.FirstOrDefault(t => t.Equals(toGet));
+            }  
         }
 
         // Hace una copia de la lista interna y la devuelve.

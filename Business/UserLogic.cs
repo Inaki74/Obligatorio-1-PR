@@ -13,7 +13,7 @@ namespace Business
         public bool Login(User dummyUser)
         {
             string username = dummyUser.Username;
-            User user = _userDataAccess.Get(username);
+            User user = _userDataAccess.GetCopy(username);
             if (user == null)
             {
                 AddUser(username);
@@ -37,7 +37,7 @@ namespace Business
         public void Logout(User user)
         {
             string username = user.Username;
-            User loggedUser = _userDataAccess.Get(username);
+            User loggedUser = _userDataAccess.GetCopy(username);
             loggedUser.LoggedIn = false;
             _userDataAccess.Update(loggedUser);
         }
