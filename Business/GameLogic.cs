@@ -48,7 +48,7 @@ namespace Business
         {
             //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
-            dummyGame.Title = game;
+            dummyGame.Title = query.Gamename;
             Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
             bool gameAcquired = false;
             if (realGame != null)
