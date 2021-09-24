@@ -5,7 +5,7 @@ namespace ConsoleMenus.Client
 {
     public class ConsoleGameMenu : ConsoleMenusBase, IConsoleMenu
     {
-        private const string VIEW_RATING_OPTION = "1";
+        private const string VIEW_GAME_SCORE_OPTION = "1";
         private const string VIEW_REVIEW_OPTION = "2";
         private const string VIEW_DETAILS_OPTION = "3";
         private const string ACQUIRE_GAME_OPTION = "4";
@@ -29,7 +29,7 @@ namespace ConsoleMenus.Client
         {
             Console.WriteLine("Select an option: ");
             
-            Console.WriteLine($"{VIEW_RATING_OPTION}. View rating.");
+            Console.WriteLine($"{VIEW_GAME_SCORE_OPTION}. View game score.");
             Console.WriteLine($"{VIEW_REVIEW_OPTION}. View game reviews.");
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
             Console.WriteLine($"{ACQUIRE_GAME_OPTION}. Acquire game.");
@@ -66,21 +66,26 @@ namespace ConsoleMenus.Client
 
             switch (answer)
             {
-                case DELETE_OPTION:
-                    _nextMenu = new ConsoleDeleteGameMenu();
+                case VIEW_GAME_SCORE_OPTION:
+                    _nextMenu = new ConsoleGetGameScoreMenu(_isGameOwner);
                     break;
-                case MODIFY_OPTION:
+                case ACQUIRE_GAME_OPTION:
+                    _nextMenu = new ConsoleAcquireGameMenu(_isGameOwner);
                     break;
                 case PUBLIC_REVIEW_OPTION:
                     _nextMenu = new ConsolePublishReviewMenu();
                     break;
+                case MODIFY_OPTION:
+                    break;
+                case DELETE_OPTION:
+                    _nextMenu = new ConsoleDeleteGameMenu();
+                    break;
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();
                     break;
-                case ACQUIRE_GAME_OPTION:
-                    _nextMenu = new ConsoleAcquireGameMenu();
-                    break;
                 default:
+                    Console.WriteLine("That's not a valid option");
+                    _nextMenu = this;
                     break;
             }
 

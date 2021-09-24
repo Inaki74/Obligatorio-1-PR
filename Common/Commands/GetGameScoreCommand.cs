@@ -13,9 +13,9 @@ namespace Common.Commands
 {
     public class GetGameScoreCommand : CommandBase, ICommand
     {
-        public string Command => CommandConstants.COMMAND_SEARCH_GAMES_CODE;
+        public string Command => CommandConstants.COMMAND_GET_GAME_SCORE_CODE;
 
-        // Get games list
+        // Get reviews list
         public string ActionReq(byte[] payload)
         {
             int statusCode = 0;
@@ -49,10 +49,25 @@ namespace Common.Commands
 
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                //statusMessage.GamesList = DecodeReviewList(statusMessage.Message);
+                //statusMessage.ReviewsList = DecodeReviewList(statusMessage.Message);
+                //statusMessage.GameScore = CalculateGameScore(statusMessage.ReviewsList);
             }
             
             return statusMessage;
+        }
+
+        private int CalculateGameScore(List<Review> reviews)
+        {
+            int score = 0;
+
+            foreach(Review review in reviews)
+            {
+                score += review.Score;
+            }
+
+            score /= reviews.Count;
+
+            return score;
         }
 
         private string EncodeReviewList(List<Review> reviews)
