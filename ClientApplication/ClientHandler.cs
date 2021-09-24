@@ -97,6 +97,15 @@ namespace ClientApplication
             return response.Message;
         }
 
+        public string PublishReview(ReviewNetworkTransferObject review)
+        {
+            review.Username = _clientSession.Username;
+            review.Gamename = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review);
+            
+            return response.Message;
+        }
+
         public VaporStatusResponse CheckIsOwner()
         {
             GameUserRelationQuery query = new GameUserRelationQuery();
