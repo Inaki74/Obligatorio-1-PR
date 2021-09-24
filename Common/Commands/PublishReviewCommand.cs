@@ -19,7 +19,7 @@ namespace Common.Commands
             // Armado de juego
             Review review = DisassembleReviewPayload(payload);
 
-            //IReviewLogic reviewLogic = new ReviewLogic();
+            IReviewLogic reviewLogic = new ReviewLogic();
             
             // Response
             int statusCode = 0;
@@ -27,7 +27,7 @@ namespace Common.Commands
             
             try
             {
-                //reviewLogic.AddReview(review);
+                reviewLogic.AddReview(review);
                 statusCode = StatusCodeConstants.OK;
                 response = "Review published!";
             }

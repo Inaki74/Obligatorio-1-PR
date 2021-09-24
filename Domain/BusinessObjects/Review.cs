@@ -14,5 +14,12 @@ namespace Domain.BusinessObjects
         {
 
         }
+
+        public override bool Equals(object obj)
+        {
+            Review rev = (Review)obj;
+
+            return this.ReviewPublisher.Equals(rev.ReviewPublisher) && this.Game.Equals(rev.Game);
+        }
     }
 }

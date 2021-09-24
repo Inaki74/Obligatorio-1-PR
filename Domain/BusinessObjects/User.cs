@@ -18,5 +18,12 @@ namespace Domain.BusinessObjects
             this.ID = id;
             ownedGames = new List<Game>();
         }
+
+        public override bool Equals(object obj)
+        {
+            User user = (User)obj;
+
+            return this.Username == user.Username;
+        }
     }
 }

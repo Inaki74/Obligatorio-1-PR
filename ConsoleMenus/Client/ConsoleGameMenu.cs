@@ -34,6 +34,7 @@ namespace ConsoleMenus.Client
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
             Console.WriteLine($"{ACQUIRE_GAME_OPTION}. Acquire game.");
 
+            // No tiene sentido que el creador del juego pueda poner un review.
             if(!_isGameOwner)
             {
                 Console.WriteLine($"{PUBLIC_REVIEW_OPTION}. Public review");
