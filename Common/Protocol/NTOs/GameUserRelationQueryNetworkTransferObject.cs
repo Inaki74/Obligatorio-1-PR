@@ -31,8 +31,8 @@ namespace Common.Protocol.NTOs
             GameUserRelationQuery deleteQuery = new GameUserRelationQuery();
 
             int index = 0;
-            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
 
             deleteQuery.Username = username;
             deleteQuery.Gamename = gamename;

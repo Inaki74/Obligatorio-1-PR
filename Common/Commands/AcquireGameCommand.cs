@@ -41,8 +41,6 @@ namespace Common.Commands
                 response = "No puede adquirir el juego";
                 return statusCode.ToString() + response;
             }
-
-            
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

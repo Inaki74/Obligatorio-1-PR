@@ -2,6 +2,7 @@ using System;
 
 namespace Domain.BusinessObjects
 {
+    [Serializable]
     public class Review
     {
         public int ID {get; set;}
@@ -13,6 +14,13 @@ namespace Domain.BusinessObjects
         public Review()
         {
 
+        }
+
+        public override bool Equals(object obj)
+        {
+            Review rev = (Review)obj;
+
+            return this.ReviewPublisher.Equals(rev.ReviewPublisher) && this.Game.Equals(rev.Game);
         }
     }
 }

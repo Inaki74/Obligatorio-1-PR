@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.BusinessObjects
 {
+    [Serializable]
     public class User
     {
         public string Username { get; set; }
@@ -17,6 +18,13 @@ namespace Domain.BusinessObjects
             this.LoggedIn = false;
             this.ID = id;
             ownedGames = new List<Game>();
+        }
+
+        public override bool Equals(object obj)
+        {
+            User user = (User)obj;
+
+            return this.Username == user.Username;
         }
     }
 }

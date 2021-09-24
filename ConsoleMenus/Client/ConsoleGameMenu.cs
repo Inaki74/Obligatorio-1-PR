@@ -5,13 +5,14 @@ namespace ConsoleMenus.Client
 {
     public class ConsoleGameMenu : ConsoleMenusBase, IConsoleMenu
     {
-        private const string PUBLIC_REVIEW_OPTION = "1";
-        private const string VIEW_RATING_OPTION = "2";
-        private const string VIEW_REVIEW_OPTION = "3";
-        private const string VIEW_DETAILS_OPTION = "4";
-        private const string MODIFY_OPTION = "5";
-        private const string DELETE_OPTION = "6";
-        private const string ACQUIRE_GAME_OPTION = "7";
+        private const string VIEW_RATING_OPTION = "1";
+        private const string VIEW_REVIEW_OPTION = "2";
+        private const string VIEW_DETAILS_OPTION = "3";
+        private const string ACQUIRE_GAME_OPTION = "4";
+        private const string PUBLIC_REVIEW_OPTION = "5";
+        private const string MODIFY_OPTION = "6";
+        private const string DELETE_OPTION = "7";
+        
         private const string GO_BACK_OPTION = "0";
 
         private bool _isGameOwner = false;
@@ -27,11 +28,17 @@ namespace ConsoleMenus.Client
         public void PrintMenu()
         {
             Console.WriteLine("Select an option: ");
-            Console.WriteLine($"{PUBLIC_REVIEW_OPTION}. Public review");
+            
             Console.WriteLine($"{VIEW_RATING_OPTION}. View rating.");
             Console.WriteLine($"{VIEW_REVIEW_OPTION}. View game reviews.");
             Console.WriteLine($"{VIEW_DETAILS_OPTION}. View Game details.");
             Console.WriteLine($"{ACQUIRE_GAME_OPTION}. Acquire game.");
+
+            // No tiene sentido que el creador del juego pueda poner un review.
+            if(!_isGameOwner)
+            {
+                Console.WriteLine($"{PUBLIC_REVIEW_OPTION}. Public review");
+            }
 
             if(_isGameOwner)
             {
@@ -52,12 +59,20 @@ namespace ConsoleMenus.Client
                 answer = "";
             }
 
+            if(_isGameOwner && answer == PUBLIC_REVIEW_OPTION)
+            {
+                answer = "";
+            }
+
             switch (answer)
             {
                 case DELETE_OPTION:
                     _nextMenu = new ConsoleDeleteGameMenu();
                     break;
                 case MODIFY_OPTION:
+                    break;
+                case PUBLIC_REVIEW_OPTION:
+                    _nextMenu = new ConsolePublishReviewMenu();
                     break;
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();

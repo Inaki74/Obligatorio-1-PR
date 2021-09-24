@@ -67,6 +67,7 @@ namespace ClientApplication
                 _tcpClient.Connect(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
+            //TODO: ACTUALLY HANDLE EXCEPTIONS!!!
             catch(Exception e)
             {
                 Console.WriteLine($"An unexpected error ocurred {e.Message}");
@@ -93,6 +94,15 @@ namespace ClientApplication
 
             game.Title = _clientSession.gameSelected;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
+            
+            return response.Message;
+        }
+
+        public string PublishReview(ReviewNetworkTransferObject review)
+        {
+            review.Username = _clientSession.Username;
+            review.Gamename = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review);
             
             return response.Message;
         }

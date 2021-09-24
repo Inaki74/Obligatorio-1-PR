@@ -28,12 +28,12 @@ namespace DataAccess
             Database.Instance.Reviews.Remove(elem);
         }
 
-        public Review Get(int id)
+        public Review Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Review Get(string title)
+        public Review GetCopy(string title)
         {
             //Review game = Database.Instance.Reviews.GetInternalList().FirstOrDefault(g => g.Title == title);
             //return game;
@@ -43,7 +43,7 @@ namespace DataAccess
 
         public List<Review> GetAll()
         {
-            return Database.Instance.Reviews.GetInternalList();
+            return Database.Instance.Reviews.GetCopyOfInternalList();
         }
 
         public void Update(Review elem)

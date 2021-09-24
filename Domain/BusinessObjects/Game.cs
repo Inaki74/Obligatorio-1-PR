@@ -3,6 +3,7 @@ using Domain.HelperObjects;
 
 namespace Domain.BusinessObjects
 {
+    [Serializable]
     public class Game
     {
         public User Owner { get; set; }
