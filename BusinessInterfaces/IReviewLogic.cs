@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Domain.BusinessObjects;
 
 namespace BusinessInterfaces
@@ -8,5 +9,6 @@ namespace BusinessInterfaces
         void AddReview(Review review);
 
         bool Exists(Review review);
+        List<Review> GetReviews(Game game);
     }
 }

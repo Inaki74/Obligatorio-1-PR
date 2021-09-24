@@ -28,9 +28,9 @@ namespace Common.Commands
                 GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                 Game game = gameNTO.Decode(Encoding.UTF8.GetString(payload));
 
-                //List<Review> gameReviewList = reviewLogic.GetReviews(game);
+                List<Review> gameReviewList = reviewLogic.GetReviews(game);
                 statusCode = StatusCodeConstants.OK;
-                //response = EncodeReviewList(gameReviewList);
+                response = EncodeReviewList(gameReviewList);
 
                 return statusCode.ToString() + response;
             }
@@ -49,8 +49,8 @@ namespace Common.Commands
 
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                //statusMessage.ReviewsList = DecodeReviewList(statusMessage.Message);
-                //statusMessage.GameScore = CalculateGameScore(statusMessage.ReviewsList);
+                statusMessage.ReviewsList = DecodeReviewList(statusMessage.Message);
+                statusMessage.GameScore = CalculateGameScore(statusMessage.ReviewsList);
             }
             
             return statusMessage;

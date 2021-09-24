@@ -28,5 +28,21 @@ namespace Business
 
             return allReviews.Exists(r => r.Equals(review));
         }
+
+        public List<Review> GetReviews(Game game)
+        {
+            List<Review> allReviews = _reviewDataAccess.GetAll();
+            List<Review> thisGamesReviews = new List<Review>();
+
+            allReviews.ForEach(r => 
+            {
+                if(r.Game.Equals(game))
+                {
+                    thisGamesReviews.Add(r);
+                }
+            });
+
+            return thisGamesReviews;
+        }
     }
 }
