@@ -67,6 +67,7 @@ namespace ClientApplication
                 _tcpClient.Connect(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
+            //TODO: ACTUALLY HANDLE EXCEPTIONS!!!
             catch(Exception e)
             {
                 Console.WriteLine($"An unexpected error ocurred {e.Message}");

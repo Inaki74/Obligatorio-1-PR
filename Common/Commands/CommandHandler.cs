@@ -25,6 +25,9 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_PUBLISH_GAME_CODE:
                     finalCommand = new PublishGameCommand();
                     break;
+                case CommandConstants.COMMAND_PUBLISH_REVIEW_CODE:
+                    finalCommand = new PublishReviewCommand();
+                    break;
                 case CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE:
                     finalCommand = new CheckGameOwnerCommand();
                     break;
