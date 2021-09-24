@@ -13,8 +13,8 @@ namespace Common.Protocol.NTOs
 
         public void Load(Review review)
         {
-            Username = review.ReviewPublisher.Username;
-            Gamename = review.Game.Title;
+            Username = review.ReviewPublisher != null ? review.ReviewPublisher.Username : String.Empty;
+            Gamename = review.Game != null ? review.Game.Title : String.Empty;
             Description = review.Description;
             Score = review.Score.ToString();
         }
@@ -42,10 +42,10 @@ namespace Common.Protocol.NTOs
             Review review = new Review();
 
             int index = 0;
-            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string description = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string description = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, 1);
 
             User dummyUser = new User(username, -1);
             Game dummyGame = new Game();

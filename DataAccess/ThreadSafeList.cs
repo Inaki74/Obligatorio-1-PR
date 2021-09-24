@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using Domain.BusinessObjects;
 
 namespace DataAccess
 {
@@ -45,7 +47,7 @@ namespace DataAccess
 
             lock (_lock)
             {
-                _internalList.ForEach(elem => copy.Add(elem));
+                _internalList.ForEach(elem => copy.Add(elem.DeepClone<T>()));
             }   
 
             return copy;

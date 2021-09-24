@@ -2,6 +2,7 @@ using System;
 
 namespace Domain.BusinessObjects
 {
+    [Serializable]
     public class Review
     {
         public int ID {get; set;}

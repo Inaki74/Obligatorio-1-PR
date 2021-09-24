@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.BusinessObjects
 {
+    [Serializable]
     public class User
     {
         public string Username { get; set; }

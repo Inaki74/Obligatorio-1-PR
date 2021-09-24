@@ -50,11 +50,11 @@ namespace Common.Protocol.NTOs
             Game game = new Game();
 
             int index = 0;
-            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
-            string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index);
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
             //string caratula = ExtractField(payloadAsString, ref index);
 
             game.Owner = new User(username, -1);
