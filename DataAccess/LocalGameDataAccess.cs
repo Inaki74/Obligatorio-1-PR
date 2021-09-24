@@ -35,13 +35,13 @@ namespace DataAccess
 
         public Game Get(string title)
         {
-            Game game = Database.Instance.Games.GetInternalList().FirstOrDefault(g => g.Title == title);
+            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Title == title);
             return game;
         }
 
         public List<Game> GetAll()
         {
-            return Database.Instance.Games.GetInternalList();
+            return Database.Instance.Games.GetCopyOfInternalList();
         }
 
         public void Update(Game elem)

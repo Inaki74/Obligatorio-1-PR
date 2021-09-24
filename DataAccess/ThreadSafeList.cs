@@ -26,9 +26,20 @@ namespace DataAccess
             }
         }
 
-        public List<T> GetInternalList()
+        // Hace una copia de la lista interna y la devuelve.
+        // Esto hace que sea thread-safe ya que nunca vamos a estar leyendo una lista que puede ser modificada en un momento.
+        // Por ende, nunca hacer Add o Remove en esta copia porque obviamente no va a afectar a la lista real.
+        // Usar solo para consultar a la lista.
+        public List<T> GetCopyOfInternalList()
         {
-            return _internalList;
+            List<T> copy = new List<T>();
+
+            lock (_lock)
+            {
+                _internalList.ForEach(elem => copy.Add(elem));
+            }   
+
+            return copy;
         }
     }
 }

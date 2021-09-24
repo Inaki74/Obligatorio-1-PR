@@ -43,7 +43,7 @@ namespace DataAccess
 
         public List<Review> GetAll()
         {
-            return Database.Instance.Reviews.GetInternalList();
+            return Database.Instance.Reviews.GetCopyOfInternalList();
         }
 
         public void Update(Review elem)
