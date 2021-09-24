@@ -28,11 +28,19 @@ namespace ConsoleMenus.Client
             // Imprimirla
             if(response.Code == StatusCodeConstants.OK)
             {
-                Console.WriteLine("GAME OVERALL SCORE\n");
+                bool listIsEmpty = response.ReviewsList.Count == 0;
 
-                Console.WriteLine($"   {response.GameScore}");
+                if(listIsEmpty)
+                {
+                    Console.WriteLine("NO REVIEWS FOUND.");
+                }
+                else
+                {
+                    Console.WriteLine("GAME OVERALL SCORE\n");
+                    Console.WriteLine($"   {response.GameScore}");
+                    Console.WriteLine("CALCULATED FROM REVIEWS FROM:\n");
+                }
 
-                Console.WriteLine("CALCULATED FROM REVIEWS FROM:\n");
                 foreach(Review review in response.ReviewsList)
                 {
                     Console.WriteLine($"   {review.ReviewPublisher.Username}");
@@ -51,7 +59,7 @@ namespace ConsoleMenus.Client
 
         public void PrintMenu()
         {
-            Console.WriteLine("Fetching all games ...");
+            Console.WriteLine("Fetching game reviews ...");
         }
     }
 }

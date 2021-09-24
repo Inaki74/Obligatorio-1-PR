@@ -10,5 +10,7 @@ namespace BusinessInterfaces
 
         bool Exists(Review review);
         List<Review> GetReviews(Game game);
+        float GetGameScore(Game game);
+        float GetGameScore(List<Review> reviewList);
     }
 }

@@ -50,25 +50,22 @@ namespace Common.Commands
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
                 statusMessage.ReviewsList = DecodeReviewList(statusMessage.Message);
-                statusMessage.GameScore = CalculateGameScore(statusMessage.ReviewsList);
+
+                if(statusMessage.ReviewsList.Count != 0)
+                {
+                    IReviewLogic reviewLogic = new ReviewLogic();
+                    statusMessage.GameScore = reviewLogic.GetGameScore(statusMessage.ReviewsList);
+                }
+                else
+                {
+                    statusMessage.GameScore = 0f;
+                }
             }
             
             return statusMessage;
         }
 
-        private int CalculateGameScore(List<Review> reviews)
-        {
-            int score = 0;
-
-            foreach(Review review in reviews)
-            {
-                score += review.Score;
-            }
-
-            score /= reviews.Count;
-
-            return score;
-        }
+        
 
         private string EncodeReviewList(List<Review> reviews)
         {

@@ -12,7 +12,6 @@ namespace Domain.BusinessObjects
         public string ESRB {get; set;}
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
-        public int OverallScore {get; set;}
 
         public Game(){}
         public Game(string title, string genre, string esrb, string synopsis, string path)
@@ -23,12 +22,6 @@ namespace Domain.BusinessObjects
             ESRB = esrb;
             Synopsis = synopsis;
             CoverPath = path;
-            OverallScore = 0;
-        }
-
-        public bool FulfillsQuery(GameSearchQuery query)
-        {
-            return FulfillsTitle(query.Title) || FulfillsGenre(query.Genre) || FulfillsScore(query.Score);
         }
 
         public override bool Equals(object obj)
@@ -40,12 +33,11 @@ namespace Domain.BusinessObjects
 
             return gameInObjTitleLower == thisTitleLower;
         }
-
-        private bool FulfillsTitle(string aTitle)
+        public bool FulfillsTitle(string aTitle)
         {
             if(string.IsNullOrEmpty(aTitle))
             {
-                return false;
+                return true;
             }
 
             string noCapsInTitle = aTitle.ToLower();
@@ -54,27 +46,17 @@ namespace Domain.BusinessObjects
             return noCapsTitle.Contains(noCapsInTitle);
         }
 
-        private bool FulfillsGenre(string aGenre)
+        public bool FulfillsGenre(string aGenre)
         {
             if(string.IsNullOrEmpty(aGenre))
             {
-                return false;
+                return true;
             }
 
             string noCapsInGenre = aGenre.ToLower();
             string noCapsGenre = Genre.ToLower();
 
             return noCapsGenre.Equals(noCapsInGenre);
-        }
-
-        private bool FulfillsScore(int aScore)
-        {
-            if(aScore == 0)
-            {
-                return false;
-            }
-
-            return OverallScore >= aScore;
         }
     }
 }
