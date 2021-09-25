@@ -98,6 +98,18 @@ namespace ClientApplication
             return response.Message;
         }
 
+        public string ModifyGame(GameNetworkTransferObject game)
+        {
+            game.OwnerName = _clientSession.Username;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
+
+            // Enviar caratula si corresponde
+            if(game.CoverPath != )
+            _vaporProtocol.SendCover(game.Title, game.CoverPath);
+            
+            return response.Message;
+        }
+
         public string PublishReview(ReviewNetworkTransferObject review)
         {
             review.Username = _clientSession.Username;

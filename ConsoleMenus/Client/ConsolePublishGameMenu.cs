@@ -41,17 +41,17 @@ namespace ConsoleMenus.Client
         {
             GameNetworkTransferObject input = new GameNetworkTransferObject();
 
-            Console.WriteLine("Game Title: ");
-            string title = Console.ReadLine();
+                Console.WriteLine("Game Title: ");
+                string title = Console.ReadLine();
 
-            Console.WriteLine("Genre: ");
-            string genre = Console.ReadLine();
+                Console.WriteLine("Genre: ");
+                string genre = Console.ReadLine();
 
-            Console.WriteLine("Public ESRB rating: ");
-            string esrb = Console.ReadLine();
+                Console.WriteLine("Public ESRB rating: ");
+                string esrb = Console.ReadLine();
 
-            Console.WriteLine("Enter the game's synopsis: ");
-            string synopsis = Console.ReadLine();
+                Console.WriteLine("Enter the game's synopsis: ");
+                string synopsis = Console.ReadLine();
 
             Console.WriteLine("Enter the Cover image Path: ");
             string coverPath = Console.ReadLine();

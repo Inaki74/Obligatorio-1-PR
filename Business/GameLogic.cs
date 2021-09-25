@@ -26,6 +26,18 @@ namespace Business
             throw new Exception("Game already exists!");
         }
 
+        public void ModifyGame(Game game)
+        {
+            bool exists = GetAllGames().Exists(g => game.Id == g.Id);
+            if (exists)
+            {
+                _gameDataAccess.Update(game);
+                return;
+            }
+
+            throw new Exception("Game doesnt exist!");
+        }
+
         public List<Game> GetAllGames()
         {
             return _gameDataAccess.GetAll();

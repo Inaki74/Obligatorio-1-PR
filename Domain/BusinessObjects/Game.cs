@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Domain.HelperObjects;
 
 namespace Domain.BusinessObjects
@@ -13,8 +14,13 @@ namespace Domain.BusinessObjects
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
         public int OverallScore {get; set;}
+        private static int _nextId;
+        public int Id { get; private set; }
 
-        public Game(){}
+        public Game()
+        {
+            this.Id = Interlocked.Increment(ref _nextId);
+        }
         public Game(string title, string genre, string esrb, string synopsis, string path)
         {
             //Owner = user;
@@ -24,6 +30,7 @@ namespace Domain.BusinessObjects
             Synopsis = synopsis;
             CoverPath = path;
             OverallScore = 0;
+            this.Id = Interlocked.Increment(ref _nextId);
         }
 
         public bool FulfillsQuery(GameSearchQuery query)

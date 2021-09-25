@@ -9,6 +9,8 @@ namespace BusinessInterfaces
     {
         void AddGame(Game game);
 
+        void ModifyGame(Game game);
+
         List<Game> GetAllGames();
 
         bool SelectGame(string game);

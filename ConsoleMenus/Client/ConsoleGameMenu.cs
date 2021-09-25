@@ -70,6 +70,7 @@ namespace ConsoleMenus.Client
                     _nextMenu = new ConsoleDeleteGameMenu();
                     break;
                 case MODIFY_OPTION:
+                    _nextMenu = new ConsoleModifyGameMenu();
                     break;
                 case PUBLIC_REVIEW_OPTION:
                     _nextMenu = new ConsolePublishReviewMenu();
