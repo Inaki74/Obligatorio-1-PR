@@ -34,6 +34,7 @@ namespace Domain.BusinessObjects
         public bool FulfillsQuery(GameSearchQuery query)
         {
             return FulfillsTitle(query.Title) || FulfillsGenre(query.Genre) || FulfillsScore(query.Score);
+
         }
 
         public override bool Equals(object obj)
@@ -45,12 +46,11 @@ namespace Domain.BusinessObjects
 
             return gameInObjTitleLower == thisTitleLower;
         }
-
-        private bool FulfillsTitle(string aTitle)
+        public bool FulfillsTitle(string aTitle)
         {
             if(string.IsNullOrEmpty(aTitle))
             {
-                return false;
+                return true;
             }
 
             string noCapsInTitle = aTitle.ToLower();
@@ -59,27 +59,17 @@ namespace Domain.BusinessObjects
             return noCapsTitle.Contains(noCapsInTitle);
         }
 
-        private bool FulfillsGenre(string aGenre)
+        public bool FulfillsGenre(string aGenre)
         {
             if(string.IsNullOrEmpty(aGenre))
             {
-                return false;
+                return true;
             }
 
             string noCapsInGenre = aGenre.ToLower();
             string noCapsGenre = Genre.ToLower();
 
             return noCapsGenre.Equals(noCapsInGenre);
-        }
-
-        private bool FulfillsScore(int aScore)
-        {
-            if(aScore == 0)
-            {
-                return false;
-            }
-
-            return OverallScore >= aScore;
         }
     }
 }

@@ -139,6 +139,16 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse GetGameScore()
+        {
+            GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+            game.Title = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game);
+
+            return response;
+        }
+
         public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
         {
             VaporStatusResponse response = ExecuteCommand<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);

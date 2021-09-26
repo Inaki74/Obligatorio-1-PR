@@ -12,8 +12,8 @@ namespace ConsoleMenus.Client
         private const string EXIT_OPTION = "0";
         private const string PUBLISH_GAME_OPTION = "1";
         private const string GET_ALL_GAMES_OPTION = "2";
-        private const string GET_GAMES_OPTION = "4";
-        private const string SELECT_GAME_OPTION = "6";
+        private const string GET_GAMES_OPTION = "3";
+        private const string SELECT_GAME_OPTION = "4";
 
         public bool RequiresAnswer => true;
 

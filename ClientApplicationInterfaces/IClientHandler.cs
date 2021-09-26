@@ -20,6 +20,8 @@ namespace ClientApplicationInterfaces
 
         VaporStatusResponse GetGames();
 
+        VaporStatusResponse GetGameScore();
+
         VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
 
         VaporStatusResponse CheckIsOwner();
