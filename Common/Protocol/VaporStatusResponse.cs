@@ -13,6 +13,8 @@ namespace Common.Protocol
 
         // GET GAMES
         public List<Game> GamesList { get; set; } 
+        
+        public int gameId { get; set; }
 
         public VaporStatusResponse(){}
 

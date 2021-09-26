@@ -8,11 +8,13 @@ namespace ClientApplication
         private readonly string _username;
         public string Username => _username;
         public string gameSelected { get; set; }
+        public int gameSelectedId { get; set; }
 
         public ClientSession(string username)
         {
             _username = username;
             gameSelected = null;
+            gameSelectedId = -1;
         }
     }
 }

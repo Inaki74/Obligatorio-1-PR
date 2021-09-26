@@ -104,7 +104,6 @@ namespace ClientApplication
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
 
             // Enviar caratula si corresponde
-            if(game.CoverPath != )
             _vaporProtocol.SendCover(game.Title, game.CoverPath);
             
             return response.Message;
@@ -167,6 +166,7 @@ namespace ClientApplication
             if (response.Code == StatusCodeConstants.OK)
             {
                 _clientSession.gameSelected = game;
+                _clientSession.gameSelectedId = response.gameId;
             }
 
             return response;

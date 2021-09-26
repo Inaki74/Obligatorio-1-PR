@@ -13,7 +13,7 @@ namespace BusinessInterfaces
 
         List<Game> GetAllGames();
 
-        bool SelectGame(string game);
+        Game SelectGame(string game);
 
         List<Game> SearchGames(GameSearchQuery query);
 

@@ -7,5 +7,6 @@ namespace ClientApplicationInterfaces
         string Username {get;}
         
         string gameSelected { get; set; }
+        int gameSelectedId { get; set; }
     }
 }

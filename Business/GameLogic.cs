@@ -42,11 +42,11 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
-        public bool SelectGame(string game)
+        public Game SelectGame(string game)
         {
             Game dummyGame = new Game();
             dummyGame.Title = game;
-            return GetAllGames().Exists(g => g.Equals(dummyGame));
+            return GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
         }
         
         public List<Game> SearchGames(GameSearchQuery query)
