@@ -33,11 +33,21 @@ namespace DataAccess
             throw new NotImplementedException();
         }
 
+        public Review Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public Review GetCopy(string title)
         {
             //Review game = Database.Instance.Reviews.GetInternalList().FirstOrDefault(g => g.Title == title);
             //return game;
 
+            throw new NotImplementedException();
+        }
+
+        public Review GetCopyId(int id)
+        {
             throw new NotImplementedException();
         }
 

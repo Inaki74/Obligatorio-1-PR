@@ -25,10 +25,20 @@ namespace DataAccess
             return user;
         }
 
+        public User Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public User GetCopy(string id)
         {
             User user = Database.Instance.Users.GetCopyOfInternalList().FirstOrDefault(u => u.Username == id);
             return user;
+        }
+
+        public User GetCopyId(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public List<User> GetAll()
