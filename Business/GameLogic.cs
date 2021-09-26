@@ -122,22 +122,18 @@ namespace Business
             {
                 finalGame.Title = modifiedGame.Title;
             }
-
             if (modifiedGame.Genre != "")
             {
                 finalGame.Genre = modifiedGame.Genre;
             }
-
             if (modifiedGame.ESRB != "")
             {
                 finalGame.ESRB = modifiedGame.ESRB;
             }
-
             if (modifiedGame.Synopsis != "")
             {
                 finalGame.Synopsis = modifiedGame.Synopsis;
             }
-            
             return finalGame;
         }
     }
