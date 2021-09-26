@@ -20,8 +20,8 @@ namespace Common.Commands
             {
                 Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                bool gameSelected = gameLogic.SelectGame(game.Title);
-                if (gameSelected)
+                Game gameSelected = gameLogic.SelectGame(game.Title);
+                if (gameSelected != null)
                 {
                     statusCode = StatusCodeConstants.OK;
                     response = "Game selected succesfully.";

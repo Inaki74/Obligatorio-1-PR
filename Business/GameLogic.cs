@@ -19,6 +19,7 @@ namespace Business
             {
                 User realOwner = _userDataAccess.Get(game.Owner.Username);
                 game.Owner = realOwner;
+                game.Id = LocalGameDataAccess.CurrentId;
                 _gameDataAccess.Add(game);
                 return;
             }
@@ -26,15 +27,36 @@ namespace Business
             throw new Exception("Game already exists!");
         }
 
+        public void ModifyGame(Game game)
+        {
+            Game oldGame = _gameDataAccess.GetCopyId(game.Id);
+            if (oldGame != null)
+            {
+                if (oldGame.Owner.Equals(game.Owner))
+                {
+                    Game finalGame = GetFinalGame(game, oldGame);
+                    _gameDataAccess.Update(finalGame);
+                    return; 
+                }
+                else
+                {
+                    throw new Exception("You dont have permission to modify this game");
+                }
+                
+            }
+
+            throw new Exception("Game doesnt exist!");
+        }
+
         public List<Game> GetAllGames()
         {
             return _gameDataAccess.GetAll();
         }
-        public bool SelectGame(string game)
+        public Game SelectGame(string game)
         {
             Game dummyGame = new Game();
             dummyGame.Title = game;
-            return GetAllGames().Exists(g => g.Equals(dummyGame));
+            return GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
         }
         
         public List<Game> SearchGames(GameSearchQuery query)
@@ -105,6 +127,32 @@ namespace Business
             if(query.Score == 0) return true;
 
             return score >= query.Score;
+        }
+
+        private Game GetFinalGame(Game modifiedGame, Game oldGame)
+        {
+            Game finalGame = _gameDataAccess.GetCopyId(oldGame.Id);
+            if (modifiedGame.Title != "")
+            {
+                finalGame.Title = modifiedGame.Title;
+            }
+
+            if (modifiedGame.Genre != "")
+            {
+                finalGame.Genre = modifiedGame.Genre;
+            }
+
+            if (modifiedGame.ESRB != "")
+            {
+                finalGame.ESRB = modifiedGame.ESRB;
+            }
+
+            if (modifiedGame.Synopsis != "")
+            {
+                finalGame.Synopsis = modifiedGame.Synopsis;
+            }
+            
+            return finalGame;
         }
     }
 }

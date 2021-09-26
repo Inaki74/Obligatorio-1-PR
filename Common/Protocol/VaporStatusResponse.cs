@@ -14,6 +14,7 @@ namespace Common.Protocol
         // POSSIBLE PAYLOADS
         // GET GAMES
         public List<Game> GamesList { get; set; } 
+
         // GET GAME REVIEWS AND SCORE
         public List<Review> ReviewsList { get; set; }
         public float GameScore { get; set; }

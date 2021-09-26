@@ -9,6 +9,7 @@
         public const string COMMAND_PUBLISH_REVIEW_CODE = "05";
         public const string COMMAND_SELECT_GAME_CODE = "06"; 
         public const string COMMAND_SEARCH_GAMES_CODE =  "08";
+        public const string COMMAND_MODIFY_GAME_CODE = "09";
         public const string COMMAND_DELETE_GAME_CODE = "10";
         public const string COMMAND_GET_GAME_SCORE_CODE = "14";
         public const string COMMAND_CHECKOWNERSHIP_GAME_CODE = "15";

@@ -69,6 +69,8 @@ namespace ConsoleMenus.Client
                 case VIEW_GAME_SCORE_OPTION:
                     _nextMenu = new ConsoleGetGameScoreMenu(_isGameOwner);
                     break;
+                case MODIFY_OPTION:
+                    _nextMenu = new ConsoleModifyGameMenu();
                 case ACQUIRE_GAME_OPTION:
                     _nextMenu = new ConsoleAcquireGameMenu(_isGameOwner);
                     break;

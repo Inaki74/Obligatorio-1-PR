@@ -35,9 +35,22 @@ namespace DataAccess
             return game;
         }
 
+        public Game Get(int id)
+        {
+            Game dummyGame = GetCopyId(id);
+            Game game = Database.Instance.Games.Get(dummyGame);
+            return game;
+        }
+
         public Game GetCopy(string title)
         {
             Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Title == title);
+            return game;
+        }
+
+        public Game GetCopyId(int id)
+        {
+            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Id == id);
             return game;
         }
 
@@ -48,7 +61,9 @@ namespace DataAccess
 
         public void Update(Game elem)
         {
-            throw new NotImplementedException();
+            Game oldGame = GetCopyId(elem.Id);
+            Database.Instance.Games.Remove(oldGame);
+            Database.Instance.Games.Add(elem);
         }
     }
 }

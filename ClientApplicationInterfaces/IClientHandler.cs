@@ -14,6 +14,8 @@ namespace ClientApplicationInterfaces
 
         string DeleteGame();
 
+        string ModifyGame(GameNetworkTransferObject game);
+
         string PublishReview(ReviewNetworkTransferObject game);
 
         VaporStatusResponse GetGames();
