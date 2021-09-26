@@ -14,14 +14,12 @@ namespace Domain.BusinessObjects
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
         public int OverallScore {get; set;}
-        private static int _nextId;
-        public int Id { get; private set; }
+        public int Id { get; set; }
 
         public Game()
         {
-            this.Id = Interlocked.Increment(ref _nextId);
         }
-        public Game(string title, string genre, string esrb, string synopsis, string path)
+        public Game(string title, string genre, string esrb, string synopsis, string path,int id)
         {
             //Owner = user;
             Title = title;
@@ -30,7 +28,7 @@ namespace Domain.BusinessObjects
             Synopsis = synopsis;
             CoverPath = path;
             OverallScore = 0;
-            this.Id = Interlocked.Increment(ref _nextId);
+            this.Id = id;
         }
 
         public bool FulfillsQuery(GameSearchQuery query)

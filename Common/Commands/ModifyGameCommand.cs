@@ -10,7 +10,7 @@ namespace Common.Commands
 {
     public class ModifyGameCommand : CommandBase, Interfaces.ICommand
     {
-        public string Command { get; }
+        public string Command => CommandConstants.COMMAND_MODIFY_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
             Game game = DisassembleGamePayload(payload);

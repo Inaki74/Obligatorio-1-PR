@@ -19,6 +19,7 @@ namespace Business
             {
                 User realOwner = _userDataAccess.Get(game.Owner.Username);
                 game.Owner = realOwner;
+                game.Id = LocalGameDataAccess.CurrentId;
                 _gameDataAccess.Add(game);
                 return;
             }
@@ -28,11 +29,20 @@ namespace Business
 
         public void ModifyGame(Game game)
         {
-            bool exists = GetAllGames().Exists(g => game.Id == g.Id);
-            if (exists)
+            Game oldGame = _gameDataAccess.GetCopyId(game.Id);
+            if (oldGame != null)
             {
-                _gameDataAccess.Update(game);
-                return;
+                if (oldGame.Owner.Equals(game.Owner))
+                {
+                    Game finalGame = GetFinalGame(game, oldGame);
+                    _gameDataAccess.Update(finalGame);
+                    return; 
+                }
+                else
+                {
+                    throw new Exception("You dont have permission to modify this game");
+                }
+                
             }
 
             throw new Exception("Game doesnt exist!");
@@ -99,6 +109,32 @@ namespace Business
         {
             // Remove for all users who acquired the game as well.
             _gameDataAccess.Delete(game);
+        }
+
+        private Game GetFinalGame(Game modifiedGame, Game oldGame)
+        {
+            Game finalGame = _gameDataAccess.GetCopyId(oldGame.Id);
+            if (modifiedGame.Title != "")
+            {
+                finalGame.Title = modifiedGame.Title;
+            }
+
+            if (modifiedGame.Genre != "")
+            {
+                finalGame.Genre = modifiedGame.Genre;
+            }
+
+            if (modifiedGame.ESRB != "")
+            {
+                finalGame.ESRB = modifiedGame.ESRB;
+            }
+
+            if (modifiedGame.Synopsis != "")
+            {
+                finalGame.Synopsis = modifiedGame.Synopsis;
+            }
+            
+            return finalGame;
         }
     }
 }

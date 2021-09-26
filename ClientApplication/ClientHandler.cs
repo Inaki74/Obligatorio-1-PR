@@ -104,7 +104,7 @@ namespace ClientApplication
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
 
             // Enviar caratula si corresponde
-            _vaporProtocol.SendCover(game.Title, game.CoverPath);
+            //_vaporProtocol.SendCover(game.Title, game.CoverPath);
             
             return response.Message;
         }

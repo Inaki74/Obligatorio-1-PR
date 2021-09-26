@@ -7,7 +7,7 @@ namespace ConsoleMenus.Client
 {
     public class ConsoleModifyGameMenu : ConsoleMenusBase, IConsoleMenu
     {
-        public IConsoleMenu NextMenu { get; }
+        public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer { get; }
         public void PrintMenu()
         {
