@@ -176,7 +176,6 @@ namespace ClientApplication
             if (response.Code == StatusCodeConstants.OK)
             {
                 _clientSession.gameSelected = game;
-                _clientSession.gameSelectedId = response.gameId;
             }
 
             return response;

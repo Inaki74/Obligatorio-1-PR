@@ -71,13 +71,12 @@ namespace ConsoleMenus.Client
                     break;
                 case MODIFY_OPTION:
                     _nextMenu = new ConsoleModifyGameMenu();
+                    break;
                 case ACQUIRE_GAME_OPTION:
                     _nextMenu = new ConsoleAcquireGameMenu(_isGameOwner);
                     break;
                 case PUBLIC_REVIEW_OPTION:
                     _nextMenu = new ConsolePublishReviewMenu();
-                    break;
-                case MODIFY_OPTION:
                     break;
                 case DELETE_OPTION:
                     _nextMenu = new ConsoleDeleteGameMenu();

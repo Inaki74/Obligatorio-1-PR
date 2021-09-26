@@ -30,22 +30,8 @@ namespace Business
         public void ModifyGame(Game game)
         {
             Game oldGame = _gameDataAccess.GetCopyId(game.Id);
-            if (oldGame != null)
-            {
-                if (oldGame.Owner.Equals(game.Owner))
-                {
-                    Game finalGame = GetFinalGame(game, oldGame);
-                    _gameDataAccess.Update(finalGame);
-                    return; 
-                }
-                else
-                {
-                    throw new Exception("You dont have permission to modify this game");
-                }
-                
-            }
-
-            throw new Exception("Game doesnt exist!");
+            Game finalGame = GetFinalGame(game, oldGame);
+            _gameDataAccess.Update(finalGame);
         }
 
         public List<Game> GetAllGames()

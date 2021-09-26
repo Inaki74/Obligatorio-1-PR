@@ -42,6 +42,7 @@ namespace Common.Commands
                     break;
                 case CommandConstants.COMMAND_MODIFY_GAME_CODE:
                     finalCommand = new ModifyGameCommand();
+                    break;
                 case CommandConstants.COMMAND_GET_GAME_SCORE_CODE:
                     finalCommand = new GetGameScoreCommand();
                     break;

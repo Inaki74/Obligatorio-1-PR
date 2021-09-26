@@ -27,15 +27,9 @@ namespace Domain.BusinessObjects
             ESRB = esrb;
             Synopsis = synopsis;
             CoverPath = path;
-            OverallScore = 0;
             this.Id = id;
         }
-
-        public bool FulfillsQuery(GameSearchQuery query)
-        {
-            return FulfillsTitle(query.Title) || FulfillsGenre(query.Genre) || FulfillsScore(query.Score);
-
-        }
+        
 
         public override bool Equals(object obj)
         {
