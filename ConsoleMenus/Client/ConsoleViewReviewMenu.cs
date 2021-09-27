@@ -17,14 +17,17 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            string username = Console.ReadLine();
-            VaporStatusResponse response = IClientHandler.Instance.GetGameReview(username);
-            Review review = response.Review;
-            Console.WriteLine($"Game: {review.Game.Title}");
-            Console.WriteLine($"Score: {review.Score}");
-            Console.WriteLine($"Description: {review.Description}");
-            Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
-
+            
+                string username = Console.ReadLine();
+                VaporStatusResponse response = IClientHandler.Instance.GetGameReview(username);
+                Review review = response.Review;
+                Console.WriteLine($"Game: {review.Game.Title}");
+                Console.WriteLine($"Score: {review.Score}");
+                Console.WriteLine($"Description: {review.Description}");
+                Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
+                _nextMenu = new ConsoleMainMenu();
+            
+            
             return false;
         }
 
