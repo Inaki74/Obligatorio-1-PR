@@ -46,6 +46,9 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_GET_GAME_SCORE_CODE:
                     finalCommand = new GetGameScoreCommand();
                     break;
+                case CommandConstants.COMMAND_VIEW_REVIEW_CODE:
+                    finalCommand = new ViewReviewCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion

@@ -21,6 +21,8 @@ namespace ClientApplicationInterfaces
         VaporStatusResponse GetGames();
 
         VaporStatusResponse GetGameScore();
+        
+        VaporStatusResponse GetGameReview(string username);
 
         VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
 

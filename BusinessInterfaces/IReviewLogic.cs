@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace BusinessInterfaces
 {
@@ -12,5 +13,6 @@ namespace BusinessInterfaces
         List<Review> GetReviews(Game game);
         float GetGameScore(Game game);
         float GetGameScore(List<Review> reviewList);
+        Review GetReview(GameUserRelationQuery reviewDummy);
     }
 }

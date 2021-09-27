@@ -149,6 +149,17 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse GetGameReview(string username)
+        {
+            ReviewNetworkTransferObject review = new ReviewNetworkTransferObject();
+            review.Gamename = _clientSession.gameSelected;
+            review.Username = username;
+            
+            VaporStatusResponse response = ExecuteCommand<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review);
+            
+            return response;
+        }
+
         public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
         {
             VaporStatusResponse response = ExecuteCommand<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);

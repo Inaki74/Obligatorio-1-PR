@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
+using Domain.HelperObjects;
 
 namespace Business
 {
@@ -51,6 +52,16 @@ namespace Business
             float finalScore = (float)score / reviews.Count;
 
             return finalScore;
+        }
+
+        public Review GetReview(GameUserRelationQuery reviewDummy)
+        {
+            Game game = _gameDataAccess.Get(reviewDummy.Gamename);
+            User owner = _userDataAccess.Get(reviewDummy.Username);
+            List<Review> gameReviews = GetReviews(game);
+            Review gameUserReview = gameReviews.FirstOrDefault(r => r.ReviewPublisher.Equals(owner));
+
+            return gameUserReview;
         }
 
         public List<Review> GetReviews(Game game)
