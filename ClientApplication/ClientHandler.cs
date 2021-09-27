@@ -77,22 +77,23 @@ namespace ClientApplication
             return true;
         }
 
-        public string PublishGame(GameNetworkTransferObject game)
+        public VaporStatusResponse PublishGame(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
 
             // Enviar caratula si corresponde
-            _vaporProtocol.SendCover(game.Title, game.CoverPath);
+            // TODO: Agregar un try/catch.
+            _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
             
-            return response.Message;
+            return response;
         }
 
         public string DeleteGame()
         {
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
-            game.Title = _clientSession.gameSelected;
+            game.ID = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
             
             return response.Message;
@@ -112,7 +113,7 @@ namespace ClientApplication
         public string PublishReview(ReviewNetworkTransferObject review)
         {
             review.Username = _clientSession.Username;
-            review.Gamename = _clientSession.gameSelected;
+            review.Gameid = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review);
             
             return response.Message;
@@ -122,7 +123,7 @@ namespace ClientApplication
         {
             GameUserRelationQuery query = new GameUserRelationQuery();
             query.Username = _clientSession.Username;
-            query.Gamename = _clientSession.gameSelected;
+            query.Gameid = _clientSession.GameSelectedId;
 
             GameUserRelationQueryNetworkTransferObject queryNTO = new GameUserRelationQueryNetworkTransferObject();
             queryNTO.Load(query);
@@ -143,7 +144,7 @@ namespace ClientApplication
         {
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
-            game.Title = _clientSession.gameSelected;
+            game.ID = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game);
 
             return response;
@@ -152,7 +153,7 @@ namespace ClientApplication
         public VaporStatusResponse GetGameReview(string username)
         {
             ReviewNetworkTransferObject review = new ReviewNetworkTransferObject();
-            review.Gamename = _clientSession.gameSelected;
+            review.Gameid = _clientSession.GameSelectedId;
             review.Username = username;
             
             VaporStatusResponse response = ExecuteCommand<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review);
@@ -186,7 +187,7 @@ namespace ClientApplication
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy);
             if (response.Code == StatusCodeConstants.OK)
             {
-                _clientSession.gameSelected = game;
+                _clientSession.GameSelectedId = response.SelectedGameId;
             }
 
             return response;
@@ -195,7 +196,7 @@ namespace ClientApplication
         public VaporStatusResponse AcquireGame()
         {
             GameUserRelationQueryNetworkTransferObject query = new GameUserRelationQueryNetworkTransferObject();
-            query.Gamename = _clientSession.gameSelected;
+            query.Gameid = _clientSession.GameSelectedId;
             query.Username = _clientSession.Username;
             VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query);
             

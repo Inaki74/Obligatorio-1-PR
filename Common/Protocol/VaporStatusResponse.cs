@@ -12,6 +12,8 @@ namespace Common.Protocol
         public string Message { get; }
 
         // POSSIBLE PAYLOADS
+        // SELECT GAME
+        public int SelectedGameId {get; set;}
         // GET GAMES
         public List<Game> GamesList { get; set; } 
 

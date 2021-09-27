@@ -31,15 +31,16 @@ namespace ConsoleMenus.Client
                 }
                 else
                 {
+                    Console.WriteLine("Game selected!");
                     _nextMenu = new ConsoleGameMenu(isOwnerResponse.Code == StatusCodeConstants.OK);
                 }
             }
             else
             {
+                Console.WriteLine(response.Message);
                 _nextMenu = new ConsoleMainMenu();
             }
-            
-            Console.WriteLine(response.Message);
+
             return false;
         }
     }

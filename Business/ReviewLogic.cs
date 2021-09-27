@@ -21,7 +21,7 @@ namespace Business
             }
 
             User actualUser = _userDataAccess.Get(review.ReviewPublisher.Username);
-            Game actualGame = _gameDataAccess.Get(review.Game.Title);
+            Game actualGame = _gameDataAccess.Get(review.Game.Id);
             review.ReviewPublisher = actualUser;
             review.Game = actualGame;
 
@@ -56,7 +56,7 @@ namespace Business
 
         public Review GetReview(GameUserRelationQuery reviewDummy)
         {
-            Game game = _gameDataAccess.Get(reviewDummy.Gamename);
+            Game game = _gameDataAccess.Get(reviewDummy.Gameid);
             User owner = _userDataAccess.Get(reviewDummy.Username);
             List<Review> gameReviews = GetReviews(game);
             Review gameUserReview = gameReviews.FirstOrDefault(r => r.ReviewPublisher.Equals(owner));
