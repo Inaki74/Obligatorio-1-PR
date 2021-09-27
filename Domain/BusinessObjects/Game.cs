@@ -18,6 +18,13 @@ namespace Domain.BusinessObjects
 
         public Game()
         {
+            Owner = new User("", -1);
+            Title = "";
+            Genre = "";
+            ESRB = "";
+            Synopsis = "";
+            CoverPath = "";
+            this.Id = -1;
         }
         public Game(string title, string genre, string esrb, string synopsis, string path,int id)
         {
@@ -35,10 +42,15 @@ namespace Domain.BusinessObjects
         {
             Game gameInObj = (Game)obj;
 
-            string gameInObjTitleLower = gameInObj.Title.ToLower();
-            string thisTitleLower = this.Title.ToLower();
+            if(gameInObj.Title == "")
+            {
+                string gameInObjTitleLower = gameInObj.Title.ToLower();
+                string thisTitleLower = this.Title.ToLower();
 
-            return gameInObjTitleLower == thisTitleLower;
+                return gameInObjTitleLower == thisTitleLower || gameInObj.Id == this.Id;
+            }
+
+            return gameInObj.Id == this.Id;
         }
         public bool FulfillsTitle(string aTitle)
         {

@@ -27,9 +27,10 @@ namespace Common.Commands
             
             try
             {
-                gameLogic.AddGame(game);
+                int id = gameLogic.AddGame(game);
                 statusCode = StatusCodeConstants.OK;
-                response = "Game published!";
+
+                response = EncodeGameResponse(id);
             }
             catch (Exception e)
             {
@@ -43,6 +44,7 @@ namespace Common.Commands
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);
+            statusMessage.SelectedGameId = DecodeGameIdResponse(statusMessage.Message);
 
             return statusMessage;
         }
@@ -54,6 +56,24 @@ namespace Common.Commands
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
             return game.Decode(payloadAsString);
+        }
+
+        private string EncodeGameResponse(int id)
+        {
+            Game dummyGame = new Game();
+            dummyGame.Id = id;
+
+            GameNetworkTransferObject gameDummyResponse = new GameNetworkTransferObject();
+            gameDummyResponse.Load(dummyGame);
+
+            return gameDummyResponse.Encode();
+        }
+
+        private int DecodeGameIdResponse(string payload)
+        {
+            GameNetworkTransferObject gameDummyResponse = new GameNetworkTransferObject();
+
+            return gameDummyResponse.Decode(payload).Id;
         }
     }
 }

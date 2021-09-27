@@ -7,21 +7,22 @@ namespace Common.Protocol.NTOs
     public class GameUserRelationQueryNetworkTransferObject : INetworkTransferObject<GameUserRelationQuery>
     {
         public string Username { get; set; } = "";
-        public string Gamename {get; set;} = "";
+        public int Gameid {get; set;} = -1;
 
         public void Load(GameUserRelationQuery game)
         {
             Username = game.Username;
-            Gamename = game.Gamename;
+            Gameid = game.Gameid;
         }
 
         public string Encode()
         {
             string input = "";
+            string gameIdAsString = Gameid.ToString();
 
             input += VaporProtocolHelper.FillNumber(Username.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Username;
 
-            input += VaporProtocolHelper.FillNumber(Gamename.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Gamename;
+            input += VaporProtocolHelper.FillNumber(gameIdAsString.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + gameIdAsString;
 
             return input;
         }
@@ -32,10 +33,10 @@ namespace Common.Protocol.NTOs
 
             int index = 0;
             string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            int gameid = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
 
             deleteQuery.Username = username;
-            deleteQuery.Gamename = gamename;
+            deleteQuery.Gameid = gameid;
 
             return deleteQuery;
         }

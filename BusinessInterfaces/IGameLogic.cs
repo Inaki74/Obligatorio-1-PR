@@ -7,13 +7,14 @@ namespace BusinessInterfaces
 {
     public interface IGameLogic
     {
-        void AddGame(Game game);
+        int AddGame(Game game);
 
         void ModifyGame(Game game);
 
         List<Game> GetAllGames();
 
-        Game SelectGame(string game);
+        Game SelectGame(int id);
+        int GetGameId(string title);
 
         List<Game> SearchGames(GameSearchQuery query);
 

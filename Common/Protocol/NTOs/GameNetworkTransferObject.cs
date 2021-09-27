@@ -6,6 +6,7 @@ namespace Common.Protocol.NTOs
 {
     public class GameNetworkTransferObject : INetworkTransferObject<Game>
     {
+        public int ID { get; set; } = -1;
         public string OwnerName { get; set; } = "";
         public string Title {get; set;} = "";
         public string Genre {get; set;} = "";
@@ -15,6 +16,7 @@ namespace Common.Protocol.NTOs
 
         public void Load(Game game)
         {
+            ID = game.Id;
             OwnerName = game.Owner.Username;
             Title = game.Title;
             Genre = game.Genre;
@@ -26,6 +28,9 @@ namespace Common.Protocol.NTOs
         public string Encode()
         {
             string input = "";
+            string IdAsString = ID.ToString();
+
+            input += VaporProtocolHelper.FillNumber(IdAsString.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + IdAsString;
 
             input += VaporProtocolHelper.FillNumber(OwnerName.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + OwnerName;
 
@@ -50,6 +55,7 @@ namespace Common.Protocol.NTOs
             Game game = new Game();
 
             int index = 0;
+            int id = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
             string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
             string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
             string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
@@ -57,6 +63,7 @@ namespace Common.Protocol.NTOs
             string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
             //string caratula = ExtractField(payloadAsString, ref index);
 
+            game.Id = id;
             game.Owner = new User(username, -1);
             game.Title = title;
             game.Genre = genre;

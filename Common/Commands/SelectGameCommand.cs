@@ -20,11 +20,14 @@ namespace Common.Commands
             {
                 Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
-                Game gameSelected = gameLogic.SelectGame(game.Title);
+
+                game.Id = gameLogic.GetGameId(game.Title);
+                Game gameSelected = gameLogic.SelectGame(game.Id);
                 if (gameSelected != null)
                 {
                     statusCode = StatusCodeConstants.OK;
-                    response = "Game selected succesfully.";
+                    string idAsString = gameSelected.Id.ToString();
+                    response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
                 }
                 else
                 {
@@ -37,7 +40,7 @@ namespace Common.Commands
             catch(Exception e)
             {
                 statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = "Something went wrong! exception: " + e.Message;
+                response = "Something went wrong! exception: " + e.Message + e.StackTrace;
                 return statusCode.ToString() + response;
             }
 
@@ -47,6 +50,14 @@ namespace Common.Commands
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(reqPayload);
 
+            if(statusMessage.Code == StatusCodeConstants.OK)
+            {
+                int dummy = 0;
+                int id = int.Parse(NetworkTransferHelperMethods.ExtractGameField(statusMessage.Message, ref dummy, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
+
+                statusMessage.SelectedGameId = id;
+            }
+            
             return statusMessage;
         }
     }

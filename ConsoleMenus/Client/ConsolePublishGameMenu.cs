@@ -24,10 +24,18 @@ namespace ConsoleMenus.Client
             // Escribir juego
             GameNetworkTransferObject input = GetGame();
 
-            string response = IClientHandler.Instance.PublishGame(input);
+            VaporStatusResponse response = IClientHandler.Instance.PublishGame(input);
 
             _nextMenu = new ConsoleMainMenu();
-            Console.WriteLine(response);
+
+            if(response.Code == StatusCodeConstants.OK)
+            {
+                Console.WriteLine("Game published!");
+            }
+            else
+            {
+                Console.WriteLine(response.Message);
+            }
             
             return false;
         }

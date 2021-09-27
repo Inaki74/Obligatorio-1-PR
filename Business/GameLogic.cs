@@ -12,7 +12,7 @@ namespace Business
     {
         private IDataAccess<Game> _gameDataAccess = new LocalGameDataAccess();
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
-        public void AddGame(Game game)
+        public int AddGame(Game game)
         {
             bool exists = GetAllGames().Exists(g => game.Equals(g));
             if (!exists)
@@ -21,7 +21,7 @@ namespace Business
                 game.Owner = realOwner;
                 game.Id = LocalGameDataAccess.CurrentId;
                 _gameDataAccess.Add(game);
-                return;
+                return game.Id;
             }
             
             throw new Exception("Game already exists!");
@@ -38,11 +38,20 @@ namespace Business
         {
             return _gameDataAccess.GetAll();
         }
-        public Game SelectGame(string game)
+        public Game SelectGame(int id)
         {
             Game dummyGame = new Game();
-            dummyGame.Title = game;
+            dummyGame.Title = "";
+            dummyGame.Id = id;
             return GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+        }
+
+        public int GetGameId(string title)
+        {
+            Game dummyGame = new Game();
+            dummyGame.Title = title;
+            Game found = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+            return found.Id;
         }
         
         public List<Game> SearchGames(GameSearchQuery query)
@@ -56,7 +65,7 @@ namespace Business
         {
             //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
-            dummyGame.Title = query.Gamename;
+            dummyGame.Id = query.Gameid;
             Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
             bool gameAcquired = false;
             if (realGame != null)
@@ -72,7 +81,7 @@ namespace Business
 
         public bool CheckIsOwner(GameUserRelationQuery query)
         {
-            Game game = _gameDataAccess.GetCopy(query.Gamename);
+            Game game = _gameDataAccess.GetCopyId(query.Gameid);
 
             return game.Owner.Username == query.Username;
         }
