@@ -42,7 +42,7 @@ namespace Domain.BusinessObjects
         {
             Game gameInObj = (Game)obj;
 
-            if(gameInObj.Title == "")
+            if(gameInObj.Title != "")
             {
                 string gameInObjTitleLower = gameInObj.Title.ToLower();
                 string thisTitleLower = this.Title.ToLower();

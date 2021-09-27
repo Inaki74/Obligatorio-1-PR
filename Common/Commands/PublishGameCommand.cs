@@ -44,8 +44,12 @@ namespace Common.Commands
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);
-            statusMessage.SelectedGameId = DecodeGameIdResponse(statusMessage.Message);
 
+            if(statusMessage.Code == StatusCodeConstants.OK)
+            {
+                statusMessage.SelectedGameId = DecodeGameIdResponse(statusMessage.Message);
+            }
+            
             return statusMessage;
         }
 
