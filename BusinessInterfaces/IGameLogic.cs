@@ -10,6 +10,7 @@ namespace BusinessInterfaces
         void AddGame(Game game);
 
         void ModifyGame(Game game);
+        Game GetGame(int id);
 
         List<Game> GetAllGames();
 

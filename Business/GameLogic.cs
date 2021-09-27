@@ -34,6 +34,11 @@ namespace Business
             _gameDataAccess.Update(finalGame);
         }
 
+        public Game GetGame(int id)
+        {
+            return _gameDataAccess.GetCopyId(id);
+        }
+
         public List<Game> GetAllGames()
         {
             return _gameDataAccess.GetAll();

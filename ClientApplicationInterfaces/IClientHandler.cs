@@ -24,6 +24,8 @@ namespace ClientApplicationInterfaces
         
         VaporStatusResponse GetGameReview(string username);
 
+        VaporStatusResponse GetGameDetails();
+
         VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
 
         VaporStatusResponse CheckIsOwner();
