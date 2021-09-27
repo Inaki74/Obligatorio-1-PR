@@ -124,7 +124,7 @@ namespace ClientApplication
             query.Username = _clientSession.Username;
             query.Gamename = _clientSession.gameSelected;
 
-            GameOwnershipQueryNetworkTransferObject queryNTO = new GameOwnershipQueryNetworkTransferObject();
+            GameUserRelationQueryNetworkTransferObject queryNTO = new GameUserRelationQueryNetworkTransferObject();
             queryNTO.Load(query);
 
             VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
@@ -194,7 +194,7 @@ namespace ClientApplication
 
         public VaporStatusResponse AcquireGame()
         {
-            GameOwnershipQueryNetworkTransferObject query = new GameOwnershipQueryNetworkTransferObject();
+            GameUserRelationQueryNetworkTransferObject query = new GameUserRelationQueryNetworkTransferObject();
             query.Gamename = _clientSession.gameSelected;
             query.Username = _clientSession.Username;
             VaporStatusResponse response = ExecuteCommand<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query);

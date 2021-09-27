@@ -4,7 +4,7 @@ using Domain.HelperObjects;
 
 namespace Common.Protocol.NTOs
 {
-    public class GameOwnershipQueryNetworkTransferObject : INetworkTransferObject<GameUserRelationQuery>
+    public class GameUserRelationQueryNetworkTransferObject : INetworkTransferObject<GameUserRelationQuery>
     {
         public string Username { get; set; } = "";
         public string Gamename {get; set;} = "";

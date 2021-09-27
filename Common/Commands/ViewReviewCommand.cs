@@ -19,7 +19,7 @@ namespace Common.Commands
             string response = "";
 
             IReviewLogic reviewLogic = new ReviewLogic();
-            GameOwnershipQueryNetworkTransferObject queryDummy = new GameOwnershipQueryNetworkTransferObject();
+            GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
             try
             {
                 GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));

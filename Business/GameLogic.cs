@@ -118,25 +118,11 @@ namespace Business
         private Game GetFinalGame(Game modifiedGame, Game oldGame)
         {
             Game finalGame = _gameDataAccess.GetCopyId(oldGame.Id);
-            if (modifiedGame.Title != "")
-            {
-                finalGame.Title = modifiedGame.Title;
-            }
 
-            if (modifiedGame.Genre != "")
-            {
-                finalGame.Genre = modifiedGame.Genre;
-            }
-
-            if (modifiedGame.ESRB != "")
-            {
-                finalGame.ESRB = modifiedGame.ESRB;
-            }
-
-            if (modifiedGame.Synopsis != "")
-            {
-                finalGame.Synopsis = modifiedGame.Synopsis;
-            }
+            finalGame.Title = modifiedGame.Title != "" ? modifiedGame.Title : finalGame.Title;
+            finalGame.Genre = modifiedGame.Genre != "" ? modifiedGame.Genre : finalGame.Genre;
+            finalGame.ESRB = modifiedGame.ESRB != "" ? modifiedGame.ESRB : finalGame.ESRB;
+            finalGame.Title = modifiedGame.Synopsis != "" ? modifiedGame.Synopsis : finalGame.Synopsis;
             
             return finalGame;
         }

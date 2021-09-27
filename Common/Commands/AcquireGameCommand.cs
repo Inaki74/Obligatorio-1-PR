@@ -15,7 +15,7 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_ACQUIRE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            GameOwnershipQueryNetworkTransferObject queryDummy = new GameOwnershipQueryNetworkTransferObject();
+            GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
             int statusCode = 0;
             string response = "";
             try
