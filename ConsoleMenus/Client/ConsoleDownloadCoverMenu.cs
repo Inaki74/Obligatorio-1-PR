@@ -20,7 +20,7 @@ namespace ConsoleMenus.Client
         public bool Action(string answer)
         {
             string reply = Console.ReadLine();
-            if (reply == "Y")
+            if (reply.ToUpper() == "Y")
             {
                 Console.WriteLine("Where do you want to download the image? (path)");
                 string path = Console.ReadLine();
