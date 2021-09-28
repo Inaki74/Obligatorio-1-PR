@@ -19,7 +19,7 @@ namespace Common.Protocol.NTOs
            _reviewListNTO.Load(Reviews);
             string input = _gameNTO.Encode();
             input += _reviewListNTO.Encode();
-            input += input += VaporProtocolHelper.FillNumber(Score.ToString().Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Score;
+            input += VaporProtocolHelper.FillNumber(Score.ToString().Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Score;
             return input;
         }
 

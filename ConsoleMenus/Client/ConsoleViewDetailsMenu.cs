@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClientApplicationInterfaces;
+using Common;
 using Common.Protocol;
 using ConsoleMenusInterfaces;
 using Domain.BusinessObjects;
@@ -19,15 +20,24 @@ namespace ConsoleMenus.Client
         public bool Action(string answer)
         {
             VaporStatusResponse response = IClientHandler.Instance.GetGameDetails();
-            List<Review> reviewList = response.ReviewsList;
-            Game game = response.Game;
-            Console.WriteLine($"Game: {game.Title}");
-            Console.WriteLine($"Score: {response.GameScore}");
-            Console.WriteLine($"Description: {game.Synopsis}");
-            Console.WriteLine($"Owner: {game.Owner}");
-            Console.WriteLine($"Reviews:");
-            showReviews(reviewList);
-            _nextMenu = new ConsoleMainMenu();
+            
+            if (response.Code == StatusCodeConstants.OK)
+            {
+                List<Review> reviewList = response.ReviewsList;
+                Game game = response.Game;
+                Console.WriteLine($"Game: {game.Title}");
+                Console.WriteLine($"Score: {response.GameScore}");
+                Console.WriteLine($"Description: {game.Synopsis}");
+                Console.WriteLine($"Owner: {game.Owner.Username}");
+                Console.WriteLine($"--- Game reviews ---");
+                showReviews(reviewList);
+                _nextMenu = new ConsoleDownloadCoverMenu();
+            }
+            else
+            {
+                Console.WriteLine(response.Message);
+                _nextMenu = new ConsoleMainMenu();
+            }
 
             return false;
         }
@@ -39,7 +49,7 @@ namespace ConsoleMenus.Client
                 Console.WriteLine($"Score: {review.Score}");
                 Console.WriteLine($"Description: {review.Description}");
                 Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
-                Console.WriteLine($"----------------");
+                Console.WriteLine($"--");
             }
         }
     }
