@@ -170,6 +170,18 @@ namespace ClientApplication
             return response;
         }
 
+        public VaporStatusResponse DownloadGameCover(string path)
+        {
+            GameNetworkTransferObject game = new GameNetworkTransferObject();
+
+            game.Title = _clientSession.gameSelected;
+            VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game);
+
+            _vaporProtocol.ReceiveCover(path);
+            
+            return response;
+        }
+
         public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
         {
             VaporStatusResponse response = ExecuteCommand<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);

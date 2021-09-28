@@ -1,4 +1,7 @@
 ﻿using System;
+using ClientApplicationInterfaces;
+using Common;
+using Common.Protocol;
 using ConsoleMenusInterfaces;
 
 namespace ConsoleMenus.Client
@@ -19,11 +22,13 @@ namespace ConsoleMenus.Client
             string reply = Console.ReadLine();
             if (reply == "Y")
             {
-                
+                Console.WriteLine("Where do you want to download the image? (path)");
+                string path = Console.ReadLine();
+                VaporStatusResponse response = IClientHandler.Instance.DownloadGameCover(path);
+                Console.WriteLine("Cover downloaded succesfully");
             }
-
-
-
+            
+            _nextMenu = new ConsoleMainMenu();
             return false;
         }
     }
