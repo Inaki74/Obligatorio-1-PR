@@ -7,6 +7,8 @@ using System.Threading;
 using Common.Commands;
 using Common.Configuration;
 using Common.Configuration.Interfaces;
+using Common.FileSystemUtilities;
+using Common.FileSystemUtilities.Interfaces;
 using Common.NetworkUtilities;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
@@ -99,7 +101,8 @@ namespace ServerApplication
                         string encodedGame = ExtractEncodedGame(response.Response);
                         GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                         Game gameDummy = gameNTO.Decode(encodedGame);
-                        string path = GetPathFromAppSettings() + $"{gameDummy.Id}.png";
+                        IPathHandler pathHandler = new PathHandler();
+                        string path = pathHandler.AppendPath(GetPathFromAppSettings(),$"{gameDummy.Id}.png");
                         vp.SendCover(gameDummy.Title, path);
                     }
 
