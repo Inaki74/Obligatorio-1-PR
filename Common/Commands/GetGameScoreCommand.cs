@@ -5,6 +5,7 @@ using Business;
 using BusinessInterfaces;
 using Common.Interfaces;
 using Common.Protocol;
+using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
 using Domain.HelperObjects;
 using Domain.BusinessObjects;
@@ -30,7 +31,9 @@ namespace Common.Commands
 
                 List<Review> gameReviewList = reviewLogic.GetReviews(game);
                 statusCode = StatusCodeConstants.OK;
-                response = EncodeReviewList(gameReviewList);
+                ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
+                reviewListNTO.Load(gameReviewList);
+                response = reviewListNTO.Encode();
 
                 return statusCode.ToString() + response;
             }
@@ -49,7 +52,9 @@ namespace Common.Commands
 
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                statusMessage.ReviewsList = DecodeReviewList(statusMessage.Message);
+                ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
+                
+                statusMessage.ReviewsList = reviewListNTO.Decode(statusMessage.Message);
 
                 if(statusMessage.ReviewsList.Count != 0)
                 {
@@ -64,45 +69,6 @@ namespace Common.Commands
             
             return statusMessage;
         }
-
         
-
-        private string EncodeReviewList(List<Review> reviews)
-        {
-            // CANT-REVIEWS REVIEW(1) REVIEW(2) ... REVIEW(CANT-REVIEWS)
-            string encoded = "";
-            int cantReviews = reviews.Count;
-            encoded += VaporProtocolHelper.FillNumber(cantReviews, VaporProtocolSpecification.REVIEWS_MAX_AMOUNT_FIXED_SIZE);
-
-            foreach(Review review in reviews)
-            {
-                ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
-                reviewNTO.Load(review);
-                encoded += reviewNTO.Encode();
-            }
-
-            return encoded;
-        }
-
-        private List<Review> DecodeReviewList(string data)
-        {
-            List<Review> ret = new List<Review>();
-            int cantReviews = int.Parse(data.Substring(0, VaporProtocolSpecification.REVIEWS_MAX_AMOUNT_FIXED_SIZE));
-            string restOfData = data.Substring(VaporProtocolSpecification.REVIEWS_MAX_AMOUNT_FIXED_SIZE, data.Length - VaporProtocolSpecification.REVIEWS_MAX_AMOUNT_FIXED_SIZE);
-
-            int index = 0;
-            for(int i = 0; i < cantReviews; i++)
-            {
-                ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
-                string reviewData = restOfData.Substring(index);
-
-                Review review = reviewNTO.Decode(reviewData);
-                ret.Add(review);
-
-                reviewNTO.Load(review);
-                index += reviewNTO.Encode().Length;
-            }
-            return ret;
-        }
     }
 }

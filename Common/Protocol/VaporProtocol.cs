@@ -97,7 +97,9 @@ namespace Common.Protocol
                     data = _networkStreamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
-                _fileStreamHandler.Write(data, path);
+
+                bool isFirstPart = currentPart == 1;
+                _fileStreamHandler.Write(data, path, isFirstPart);
                 currentPart++;
             }
         }

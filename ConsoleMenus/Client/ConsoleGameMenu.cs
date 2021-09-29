@@ -87,6 +87,9 @@ namespace ConsoleMenus.Client
                 case GO_BACK_OPTION:
                     _nextMenu = new ConsoleMainMenu();
                     break;
+                case VIEW_DETAILS_OPTION:
+                    _nextMenu = new ConsoleViewDetailsMenu();
+                    break;
                 default:
                     Console.WriteLine("That's not a valid option");
                     _nextMenu = this;

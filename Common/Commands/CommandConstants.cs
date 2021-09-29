@@ -14,6 +14,8 @@
         public const string COMMAND_GET_GAME_SCORE_CODE = "14";
         public const string COMMAND_CHECKOWNERSHIP_GAME_CODE = "15";
         public const string COMMAND_VIEW_REVIEW_CODE = "16";
+        public const string COMMAND_VIEW_DETAILS_CODE = "17";
+        public const string COMMAND_DOWNLOAD_COVER_CODE = "18";
         public const string COMMAND_EXIT_CODE = "20";
     }
 }

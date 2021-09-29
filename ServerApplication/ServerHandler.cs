@@ -10,6 +10,8 @@ using Common.Configuration.Interfaces;
 using Common.NetworkUtilities;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
+using Common.Protocol.NTOs;
+using Domain.BusinessObjects;
 using ServerApplicationInterfaces;
 
 namespace ServerApplication
@@ -92,6 +94,15 @@ namespace ServerApplication
                         vp.ReceiveCover(path);
                     }
 
+                    if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
+                    {
+                        string encodedGame = ExtractEncodedGame(response.Response);
+                        GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+                        Game gameDummy = gameNTO.Decode(encodedGame);
+                        string path = GetPathFromAppSettings() + $"{gameDummy.Title}.png";
+                        vp.SendCover(gameDummy.Title, path);
+                    }
+
                     if(response.Command == CommandConstants.COMMAND_EXIT_CODE)
                     {
                         connected = false;
@@ -121,6 +132,12 @@ namespace ServerApplication
             }
 
             return path;
+        }
+
+        private string ExtractEncodedGame(string response)
+        {
+            return response.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE,
+                response.Length - VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
         }
     }
 }

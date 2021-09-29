@@ -28,14 +28,24 @@ namespace Common.FileSystemUtilities
             return data;
         }
 
-        public void Write(byte[] data, string fileName)
+        public void Write(byte[] data, string fileName, bool firstPart)
         {
             if (File.Exists(fileName))
             {
-                File.Delete(fileName);
-                using (var fs = new FileStream(fileName, FileMode.Create))
+                if (firstPart)
                 {
-                    fs.Write(data, 0, data.Length);
+                    File.Delete(fileName);
+                    using (var fs = new FileStream(fileName, FileMode.Create))
+                    {
+                        fs.Write(data, 0, data.Length);
+                    }
+                }
+                else
+                {
+                    using (var fs = new FileStream(fileName, FileMode.Append))
+                    {
+                        fs.Write(data, 0, data.Length);
+                    }
                 }
             }
             else

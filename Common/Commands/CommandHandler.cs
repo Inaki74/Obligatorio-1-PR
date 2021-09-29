@@ -49,6 +49,12 @@ namespace Common.Commands
                 case CommandConstants.COMMAND_VIEW_REVIEW_CODE:
                     finalCommand = new ViewReviewCommand();
                     break;
+                case CommandConstants.COMMAND_VIEW_DETAILS_CODE:
+                    finalCommand = new ViewDetailsCommand();
+                    break;
+                case CommandConstants.COMMAND_DOWNLOAD_COVER_CODE:
+                    finalCommand = new DownloadCoverCommand();
+                    break;
                 default:
                     Console.WriteLine("Command doesnt exist");
                     // tirar excepcion

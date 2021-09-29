@@ -20,6 +20,8 @@ namespace Common.Protocol
         // GET GAME REVIEWS AND SCORE
         public List<Review> ReviewsList { get; set; }
         public Review Review { get; set; }
+        
+        public Game Game { get; set; }
         public float GameScore { get; set; }
 
         public VaporStatusResponse(){}
