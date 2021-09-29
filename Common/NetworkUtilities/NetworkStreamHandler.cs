@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Net.Sockets;
 using Common.NetworkUtilities.Interfaces;
+using Exceptions.ConnectionExceptions;
 
 namespace Common.NetworkUtilities
 {
@@ -18,12 +20,20 @@ namespace Common.NetworkUtilities
             var data = new byte[length];
             while (dataReceived < length)
             {
-                var received = _stream.Read(data, dataReceived, length - dataReceived);
-                if (received == 0)
+                try
                 {
-                    throw new SocketException(); // Podemos enviar una excepcion que fuerze el cerrado de la aplicacion.
+                    var received = _stream.Read(data, dataReceived, length - dataReceived);
+                    if (received == 0)
+                    {
+                        throw new EndpointClosedSocketException(); // Podemos enviar una excepcion que fuerze el cerrado de la aplicacion.
+                    }
+                    dataReceived += received;
                 }
-                dataReceived += received;
+                catch (IOException e)
+                {
+                    throw new EndpointClosedByServerSocketException();
+                }
+                
             }
 
             return data;

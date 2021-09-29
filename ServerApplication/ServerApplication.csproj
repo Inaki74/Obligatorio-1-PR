@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
     <ProjectReference Include="..\ServerApplicationInterfaces\ServerApplicationInterfaces.csproj" />
     <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
     <ProjectReference Include="..\ConsoleMenusInterfaces\ConsoleMenusInterfaces.csproj" />

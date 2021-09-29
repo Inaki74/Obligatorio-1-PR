@@ -1,11 +1,14 @@
 using System;
+using System.Net.Sockets;
 
 namespace Exceptions.ConnectionExceptions
 {
-    public class EndpointClosedSocketException
+    public class EndpointClosedSocketException : SocketException
     {
         public EndpointClosedSocketException()
         {
         }
+
+        public override string Message => "Client has disconnected";
     }
 }

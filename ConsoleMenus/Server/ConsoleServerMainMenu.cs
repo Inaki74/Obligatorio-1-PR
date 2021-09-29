@@ -1,4 +1,5 @@
 using System;
+using ConsoleMenus.Client;
 using ConsoleMenusInterfaces;
 using ServerApplicationInterfaces;
 
@@ -17,6 +18,7 @@ namespace ConsoleMenus.Server
             {
                 case EXIT_OPTION:
                     IServerHandler.Instance.CloseServer();
+                    _nextMenu = new ConsoleExitMenu();
                     return true;
                 default:
                     Console.WriteLine("Thats not a valid option.");
