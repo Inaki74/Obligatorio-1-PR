@@ -92,7 +92,7 @@ namespace ServerApplication
                     {
                         //TODO: Si modificamos el nombre del juego, tiene que cambiar el nombre de la imagen.
                         // Para eso, mejor guardamos la imagen con nombre ID que nunca cambia...
-                        string path = GetPathFromAppSettings();
+                        string path = _configurationHandler.GetPathFromAppSettings();
                         vp.ReceiveCover(path);
                     }
 
@@ -102,7 +102,7 @@ namespace ServerApplication
                         GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                         Game gameDummy = gameNTO.Decode(encodedGame);
                         IPathHandler pathHandler = new PathHandler();
-                        string path = pathHandler.AppendPath(GetPathFromAppSettings(),$"{gameDummy.Id}.png");
+                        string path = pathHandler.AppendPath(_configurationHandler.GetPathFromAppSettings(),$"{gameDummy.Id}.png");
                         vp.SendCover(gameDummy.Title + "-COVER" , path);
                     }
 
@@ -121,21 +121,7 @@ namespace ServerApplication
                 Console.WriteLine("Goodbye client!");
             }
         }
-
-        private string GetPathFromAppSettings()
-        {
-            string path = "";
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                path = _configurationHandler.GetField(ConfigurationConstants.WIN_SERVER_IMAGEPATH_KEY);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                path = _configurationHandler.GetField(ConfigurationConstants.OSX_SERVER_IMAGEPATH_KEY);
-            }
-
-            return path;
-        }
+        
 
         private string ExtractEncodedGame(string response)
         {

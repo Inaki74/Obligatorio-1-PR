@@ -1,6 +1,7 @@
 using System;
 using Common.Configuration.Interfaces;
 using System.Configuration;
+using System.Runtime.InteropServices;
 
 namespace Common.Configuration
 {
@@ -25,6 +26,22 @@ namespace Common.Configuration
 
                 return "";
             }
+        }
+
+        public string GetPathFromAppSettings()
+        {
+            IConfigurationHandler _configurationHandler = new ConfigurationHandler();
+            string path = "";
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                path = _configurationHandler.GetField(ConfigurationConstants.WIN_SERVER_IMAGEPATH_KEY);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                path = _configurationHandler.GetField(ConfigurationConstants.OSX_SERVER_IMAGEPATH_KEY);
+            }
+
+            return path;
         }
     }
 }
