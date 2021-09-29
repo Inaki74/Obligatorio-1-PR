@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -29,10 +30,11 @@ namespace ServerApplication
         }
 
         private readonly IConfigurationHandler _configurationHandler;
-        private TcpClient _currentFoundClient;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpListener _tcpServerListener;
-        //private tcpClient[] _tcpCLients;
+        private List<TcpClient> _tcpClients = new List<TcpClient>();
+        private int _currentThreadId = 0;
+        private bool _serverRunning;
 
         public ServerHandler()
         {
@@ -58,7 +60,19 @@ namespace ServerApplication
         {
             _tcpServerListener.Start(100);
 
+            _serverRunning = true;
+
             return true; 
+        }
+
+        public void CloseServer()
+        {
+            foreach(TcpClient client in _tcpClients)
+            {
+                client.Close();
+            }
+
+            _tcpServerListener.Stop();
         }
 
         public void StartClientListeningThread()
@@ -69,12 +83,18 @@ namespace ServerApplication
 
         private void ListenForClients()
         {
-            _currentFoundClient = _tcpServerListener.AcceptTcpClient();
+            while(_serverRunning)
+            {
+                var foundClient = _tcpServerListener.AcceptTcpClient();
+                StartClientThread(foundClient);
+
+                _tcpClients.Add(foundClient);
+            }
         }
 
-        public void StartClientThread()
+        private void StartClientThread(TcpClient acceptedTcpClient)
         {
-            var clientThread = new Thread(() => HandleClient(_currentFoundClient));
+            var clientThread = new Thread(() => HandleClient(acceptedTcpClient));
             clientThread.Start();
         }
         

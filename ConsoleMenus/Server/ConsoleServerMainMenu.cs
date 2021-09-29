@@ -16,10 +16,11 @@ namespace ConsoleMenus.Server
             switch(answer)
             {
                 case EXIT_OPTION:
-                    //IServerHandler.Instance.CloseServer();
-                    break;
+                    IServerHandler.Instance.CloseServer();
+                    return true;
                 default:
                     Console.WriteLine("Thats not a valid option.");
+                    _nextMenu = this;
                     break;
             }
 

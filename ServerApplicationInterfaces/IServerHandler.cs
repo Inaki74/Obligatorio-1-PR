@@ -10,6 +10,6 @@ namespace ServerApplicationInterfaces
 
         void StartClientListeningThread();
 
-        void StartClientThread();
+        void CloseServer();
     }
 }
