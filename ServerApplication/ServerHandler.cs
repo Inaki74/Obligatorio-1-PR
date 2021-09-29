@@ -103,7 +103,7 @@ namespace ServerApplication
                         Game gameDummy = gameNTO.Decode(encodedGame);
                         IPathHandler pathHandler = new PathHandler();
                         string path = pathHandler.AppendPath(GetPathFromAppSettings(),$"{gameDummy.Id}.png");
-                        vp.SendCover(gameDummy.Title, path);
+                        vp.SendCover(gameDummy.Title + "-COVER" , path);
                     }
 
                     if(response.Command == CommandConstants.COMMAND_EXIT_CODE)

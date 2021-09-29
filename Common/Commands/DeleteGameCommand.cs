@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Business;
 using BusinessInterfaces;
@@ -21,7 +22,7 @@ namespace Common.Commands
                 Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
                 IGameLogic gameLogic = new GameLogic(); 
                 gameLogic.DeleteGame(game);
-
+                
                 statusCode = StatusCodeConstants.OK;
                 response = "Game deleted successfully.";
 
