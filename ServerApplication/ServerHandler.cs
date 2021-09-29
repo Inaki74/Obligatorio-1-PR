@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Threading;
 using Common.Commands;
 using Common.Configuration;
@@ -28,11 +28,14 @@ namespace ServerApplication
                 return IServerHandler.Instance;
             }
         }
+        
+        private static int MAX_SECONDS_WASTED = 5000;
 
         private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpListener _tcpServerListener;
         private List<TcpClient> _tcpClients = new List<TcpClient>();
+        private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
         private int _currentThreadId = 0;
         private bool _serverRunning;
 
@@ -67,10 +70,23 @@ namespace ServerApplication
 
         public void CloseServer()
         {
+            Console.WriteLine("Starting to close server...");
+            _serverRunning = false;
+            
+            // Wait for all clients to finish their command executions.
+            if(!AllClientsFinishedExecuting()) 
+            {
+                Console.WriteLine("Waiting for clients to finish their commands...");
+                // Give Clients 5 seconds to finish executions
+                System.Threading.Thread.Sleep(MAX_SECONDS_WASTED);
+            }
+
+            Console.WriteLine("Closing connections.");
             foreach(TcpClient client in _tcpClients)
             {
                 client.Close();
             }
+            Console.WriteLine("Connections closed.");
 
             _tcpServerListener.Stop();
         }
@@ -100,6 +116,10 @@ namespace ServerApplication
         
         private void HandleClient(TcpClient acceptedTcpClient)
         {
+            int threadId = _currentThreadId;
+            _currentThreadId++;
+            _clientConnections.Add(new ClientCommandExecutionStatus(threadId));
+
             try
             {
                 INetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
@@ -108,9 +128,12 @@ namespace ServerApplication
 
                 bool connected = true;
 
-                while(connected)
+                while(connected && _serverRunning)
                 {
                     VaporProcessedPacket processedPacket = vp.ReceiveCommand();
+
+                    SetStatusOfExecuting(true, threadId);
+
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
                     vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
 
@@ -136,6 +159,8 @@ namespace ServerApplication
                     {
                         connected = false;
                     }
+
+                    SetStatusOfExecuting(false, threadId);
                 }
             }
             catch(SocketException e)
@@ -144,7 +169,7 @@ namespace ServerApplication
             }
             finally
             {
-                Console.WriteLine("Goodbye client!");
+                SetStatusOfExecuting(false, threadId);
             }
         }
 
@@ -167,6 +192,17 @@ namespace ServerApplication
         {
             return response.Substring(VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE,
                 response.Length - VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE);
+        }
+
+        private bool AllClientsFinishedExecuting()
+        {
+            return _clientConnections.All(c => !c.ExecutingCommand);
+        }
+
+        private void SetStatusOfExecuting(bool isExecuting, int threadId)
+        {
+            ClientCommandExecutionStatus connection = _clientConnections.First(c => c.ConnectionId == threadId);
+            connection.ExecutingCommand = isExecuting;
         }
     }
 }

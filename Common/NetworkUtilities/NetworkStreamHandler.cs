@@ -21,7 +21,7 @@ namespace Common.NetworkUtilities
                 var received = _stream.Read(data, dataReceived, length - dataReceived);
                 if (received == 0)
                 {
-                    throw new SocketException();
+                    throw new SocketException(); // Podemos enviar una excepcion que fuerze el cerrado de la aplicacion.
                 }
                 dataReceived += received;
             }

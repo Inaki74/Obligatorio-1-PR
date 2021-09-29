@@ -7,7 +7,7 @@ namespace ConsoleMenus.Server
     public class ConsoleServerMainMenu : ConsoleMenusBase, IConsoleMenu
     {
         private const string EXIT_OPTION = "1";
-        public bool RequiresAnswer => false;
+        public bool RequiresAnswer => true;
 
         public IConsoleMenu NextMenu => _nextMenu;
 
