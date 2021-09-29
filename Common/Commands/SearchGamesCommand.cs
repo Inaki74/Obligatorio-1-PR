@@ -55,6 +55,7 @@ namespace Common.Commands
             return statusMessage;
         }
 
+        // TODO: Usar el ListNTO
         private string EncodeGameList(List<Game> games)
         {
             // CANT-JUEGOS JUEGO(1) JUEGO(2) ... JUEGO(CANT-JUEGOS)

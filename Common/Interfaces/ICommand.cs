@@ -4,10 +4,10 @@ namespace Common.Interfaces
 {
     public interface ICommand
     {
-        public string Command {get;}
+        string Command {get;}
 
-        public string ActionReq(byte[] payload);
+        string ActionReq(byte[] payload);
 
-        public VaporStatusResponse ActionRes(byte[] reqPayload);
+        VaporStatusResponse ActionRes(byte[] reqPayload);
     }
 }

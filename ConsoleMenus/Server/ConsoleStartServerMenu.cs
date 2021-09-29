@@ -12,9 +12,16 @@ namespace ConsoleMenus.Server
 
         public bool Action(string answer)
         {
-            IServerHandler.Instance.StartServer();
+            bool serverStarted = IServerHandler.Instance.StartServer();
 
-            _nextMenu = new ConsoleListeningForClientsMenu();
+            if(serverStarted)
+            {
+                _nextMenu = new ConsoleListeningForClientsMenu();
+            }else
+            {
+                _nextMenu = this;
+            }
+            
 
             return false;
         }

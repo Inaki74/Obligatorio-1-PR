@@ -12,16 +12,16 @@ namespace ConsoleMenus.Server
 
         public bool Action(string answer)
         {
-            IServerHandler.Instance.ListenForClients();
+            IServerHandler.Instance.StartClientListeningThread();
             
-            _nextMenu = new ConsoleClientFoundMenu();
+            _nextMenu = new ConsoleServerMainMenu();
 
             return false;
         }
 
         public void PrintMenu()
         {
-            Console.WriteLine("Listening for clients...");
+            Console.WriteLine("Starting client listening thread...");
         }
     }
 }

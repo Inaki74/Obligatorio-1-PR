@@ -19,13 +19,12 @@ namespace ServerApplication
             ConsoleMenuManagerFactory consoleFactory = new ConsoleMenuManagerFactory();
             IConsoleMenuManager consoleManager = consoleFactory.Create(false);
             
-            // 2 threads
-            // 1. El que hace listen de clientes y los acepta.
-            // 2. El menu del server (que tiene el exit en esta iteracion)
             while(!consoleManager.Exit)
             {
                 consoleManager.ExecuteMenu();
             }
+
+            Console.WriteLine("Main closing.");
         }
 
         
