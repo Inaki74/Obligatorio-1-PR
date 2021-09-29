@@ -165,7 +165,7 @@ namespace ClientApplication
         {
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
-            game.Title = _clientSession.gameSelected;
+            game.ID = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_VIEW_DETAILS_CODE, game);
 
             return response;
@@ -175,7 +175,7 @@ namespace ClientApplication
         {
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
-            game.Title = _clientSession.gameSelected;
+            game.ID = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game);
 
             _vaporProtocol.ReceiveCover(path);

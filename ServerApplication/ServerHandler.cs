@@ -99,7 +99,7 @@ namespace ServerApplication
                         string encodedGame = ExtractEncodedGame(response.Response);
                         GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                         Game gameDummy = gameNTO.Decode(encodedGame);
-                        string path = GetPathFromAppSettings() + $"{gameDummy.Title}.png";
+                        string path = GetPathFromAppSettings() + $"{gameDummy.Id}.png";
                         vp.SendCover(gameDummy.Title, path);
                     }
 
