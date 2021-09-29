@@ -31,6 +31,18 @@ namespace Business
         {
             Game oldGame = _gameDataAccess.GetCopyId(game.Id);
             Game finalGame = GetFinalGame(game, oldGame);
+            
+            List<User> userList = _userDataAccess.GetAll();
+            foreach (User user in userList)
+            {
+                if (HasGame(user, oldGame))
+                {
+                    user.ownedGames.Remove(oldGame);
+                    user.ownedGames.Add(finalGame);
+                    _userDataAccess.Update(user);
+                }
+            }
+            
             _gameDataAccess.Update(finalGame);
         }
 
@@ -93,7 +105,15 @@ namespace Business
 
         public void DeleteGame(Game game)
         {
-            // Remove for all users who acquired the game as well.
+            List<User> userList = _userDataAccess.GetAll();
+            foreach (User user in userList)
+            {
+                if (HasGame(user, game))
+                {
+                    user.ownedGames.Remove(game);
+                    _userDataAccess.Update(user);
+                }
+            }
             _gameDataAccess.Delete(game);
         }
 
@@ -136,9 +156,19 @@ namespace Business
             finalGame.Title = modifiedGame.Title != "" ? modifiedGame.Title : finalGame.Title;
             finalGame.Genre = modifiedGame.Genre != "" ? modifiedGame.Genre : finalGame.Genre;
             finalGame.ESRB = modifiedGame.ESRB != "" ? modifiedGame.ESRB : finalGame.ESRB;
-            finalGame.Title = modifiedGame.Synopsis != "" ? modifiedGame.Synopsis : finalGame.Synopsis;
+            finalGame.Synopsis = modifiedGame.Synopsis != "" ? modifiedGame.Synopsis : finalGame.Synopsis;
             
             return finalGame;
+        }
+
+        private bool HasGame(User user, Game game)
+        {
+            foreach (Game currentGame in user.ownedGames)
+            {
+                if (currentGame.Equals(game)) return true;
+            }
+
+            return false;
         }
     }
 }

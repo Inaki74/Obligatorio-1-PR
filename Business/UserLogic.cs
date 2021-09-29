@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
@@ -40,6 +41,11 @@ namespace Business
             User loggedUser = _userDataAccess.GetCopy(username);
             loggedUser.LoggedIn = false;
             _userDataAccess.Update(loggedUser);
+        }
+
+        public List<User> GetAll()
+        {
+            return _userDataAccess.GetAll();
         }
 
         private void AddUser(string username)

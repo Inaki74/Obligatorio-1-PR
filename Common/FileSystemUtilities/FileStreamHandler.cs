@@ -28,6 +28,11 @@ namespace Common.FileSystemUtilities
             return data;
         }
 
+        public void Delete(string path)
+        {
+            if (File.Exists(path)) File.Delete(path);
+        }
+
         public void Write(byte[] data, string fileName, bool firstPart)
         {
             if (File.Exists(fileName))

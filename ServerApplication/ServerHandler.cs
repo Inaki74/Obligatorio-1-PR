@@ -134,11 +134,12 @@ namespace ServerApplication
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
                     vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
 
-                    if (response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
+
+                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
                     {
                         //TODO: Si modificamos el nombre del juego, tiene que cambiar el nombre de la imagen.
                         // Para eso, mejor guardamos la imagen con nombre ID que nunca cambia...
-                        string path = GetPathFromAppSettings();
+                        string path = _configurationHandler.GetPathFromAppSettings();
                         vp.ReceiveCover(path);
                     }
 
@@ -148,8 +149,8 @@ namespace ServerApplication
                         GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                         Game gameDummy = gameNTO.Decode(encodedGame);
                         IPathHandler pathHandler = new PathHandler();
-                        string path = pathHandler.AppendPath(GetPathFromAppSettings(), $"{gameDummy.Id}.png");
-                        vp.SendCover(gameDummy.Title, path);
+                        string path = pathHandler.AppendPath(_configurationHandler.GetPathFromAppSettings(),$"{gameDummy.Id}.png");
+                        vp.SendCover(gameDummy.Title + "-COVER" , path);
                     }
 
                     if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
@@ -177,21 +178,7 @@ namespace ServerApplication
                 SetStatusOfExecuting(false, threadId);
             }
         }
-
-        private string GetPathFromAppSettings()
-        {
-            string path = "";
-            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                path = _configurationHandler.GetField(ConfigurationConstants.WIN_SERVER_IMAGEPATH_KEY);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                path = _configurationHandler.GetField(ConfigurationConstants.OSX_SERVER_IMAGEPATH_KEY);
-            }
-
-            return path;
-        }
+        
 
         private string ExtractEncodedGame(string response)
         {
