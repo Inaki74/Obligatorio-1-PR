@@ -61,7 +61,13 @@ namespace ServerApplication
             return true; 
         }
 
-        public void ListenForClients()
+        public void StartClientListeningThread()
+        {
+            var clientListeningThread = new Thread(() => ListenForClients());
+            clientListeningThread.Start();
+        }
+
+        private void ListenForClients()
         {
             _currentFoundClient = _tcpServerListener.AcceptTcpClient();
         }

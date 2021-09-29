@@ -8,7 +8,7 @@ namespace ServerApplicationInterfaces
 
         bool StartServer();
 
-        void ListenForClients();
+        void StartClientListeningThread();
 
         void StartClientThread();
     }
