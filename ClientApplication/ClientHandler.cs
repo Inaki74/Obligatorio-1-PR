@@ -102,10 +102,11 @@ namespace ClientApplication
         public string ModifyGame(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
+            game.ID = _clientSession.GameSelectedId;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
 
             // Enviar caratula si corresponde
-            //_vaporProtocol.SendCover(game.Title, game.CoverPath);
+            _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
             
             return response.Message;
         }

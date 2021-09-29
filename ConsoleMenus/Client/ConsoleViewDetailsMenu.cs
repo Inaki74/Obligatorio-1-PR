@@ -27,7 +27,8 @@ namespace ConsoleMenus.Client
                 Game game = response.Game;
                 Console.WriteLine($"Game: {game.Title}");
                 Console.WriteLine($"Score: {response.GameScore}");
-                Console.WriteLine($"Description: {game.Synopsis}");
+                Console.WriteLine($"Synopsis: {game.Synopsis}");
+                Console.WriteLine($"ESRB: {game.ESRB}");
                 Console.WriteLine($"Owner: {game.Owner.Username}");
                 Console.WriteLine($"--- Game reviews ---");
                 showReviews(reviewList);
@@ -42,9 +43,9 @@ namespace ConsoleMenus.Client
             return false;
         }
 
-        private void showReviews(List<Review> ReviewList)
+        private void showReviews(List<Review> reviewList)
         {
-            foreach (Review review in ReviewList)
+            foreach (Review review in reviewList)
             {
                 Console.WriteLine($"Score: {review.Score}");
                 Console.WriteLine($"Description: {review.Description}");

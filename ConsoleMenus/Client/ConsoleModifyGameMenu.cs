@@ -42,11 +42,21 @@ namespace ConsoleMenus.Client
 
             Console.WriteLine("Enter the game's synopsis: ");
             string synopsis = Console.ReadLine();
-
+            
+            Console.WriteLine("Cover Path: ");
+            Console.WriteLine("(its necessary to introduce a new cover path to continue)");
+            string coverPath = Console.ReadLine();
+            while(coverPath == "")
+            {
+                Console.WriteLine("\nNo cover path introduced, reenter:");
+                coverPath = Console.ReadLine();
+            }
+            
             input.Title = title;
             input.Genre = genre;
             input.ESRB = esrb;
             input.Synopsis = synopsis;
+            input.CoverPath = coverPath;
 
             return input;
         }

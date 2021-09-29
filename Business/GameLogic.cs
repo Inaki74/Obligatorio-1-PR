@@ -136,7 +136,7 @@ namespace Business
             finalGame.Title = modifiedGame.Title != "" ? modifiedGame.Title : finalGame.Title;
             finalGame.Genre = modifiedGame.Genre != "" ? modifiedGame.Genre : finalGame.Genre;
             finalGame.ESRB = modifiedGame.ESRB != "" ? modifiedGame.ESRB : finalGame.ESRB;
-            finalGame.Title = modifiedGame.Synopsis != "" ? modifiedGame.Synopsis : finalGame.Synopsis;
+            finalGame.Synopsis = modifiedGame.Synopsis != "" ? modifiedGame.Synopsis : finalGame.Synopsis;
             
             return finalGame;
         }

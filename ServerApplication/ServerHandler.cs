@@ -88,7 +88,7 @@ namespace ServerApplication
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
                     vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
 
-                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE)
+                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
                     {
                         //TODO: Si modificamos el nombre del juego, tiene que cambiar el nombre de la imagen.
                         // Para eso, mejor guardamos la imagen con nombre ID que nunca cambia...
