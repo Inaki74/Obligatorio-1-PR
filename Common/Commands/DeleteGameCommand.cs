@@ -22,31 +22,23 @@ namespace Common.Commands
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
             int statusCode = 0;
             string response = "";
-            try
-            {
-                IFileStreamHandler fileStreamHandler = new FileStreamHandler();
+            
+            IFileStreamHandler fileStreamHandler = new FileStreamHandler();
                 
-                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-                IGameLogic gameLogic = new GameLogic(); 
-                gameLogic.DeleteGame(game);
-                
-                IPathHandler pathHandler = new PathHandler();
-                IConfigurationHandler configurationHandler = new ConfigurationHandler();
-                string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
-                fileStreamHandler.Delete(path);
-                statusCode = StatusCodeConstants.OK;
-                response = "Game deleted successfully.";
+            Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
+            IGameLogic gameLogic = new GameLogic(); 
+            gameLogic.DeleteGame(game);
+            
+            //Deleting image from server
+            IPathHandler pathHandler = new PathHandler();
+            IConfigurationHandler configurationHandler = new ConfigurationHandler();
+            string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
+            fileStreamHandler.Delete(path);
+            statusCode = StatusCodeConstants.OK;
+            response = "Game deleted successfully.";
 
-                return statusCode.ToString() + response;
-                
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = "Something went wrong! exception: " + e.Message;
-                return statusCode.ToString() + response;
-            }
 
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

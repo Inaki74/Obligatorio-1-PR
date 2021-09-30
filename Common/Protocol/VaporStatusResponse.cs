@@ -7,9 +7,9 @@ namespace Common.Protocol
 {
     public class VaporStatusResponse
     {
-        public int Code { get; }
+        public int Code { get; set; }
 
-        public string Message { get; }
+        public string Message { get; set; }
 
         // POSSIBLE PAYLOADS
         // SELECT GAME

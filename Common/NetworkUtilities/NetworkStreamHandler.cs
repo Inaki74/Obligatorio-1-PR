@@ -25,13 +25,17 @@ namespace Common.NetworkUtilities
                     var received = _stream.Read(data, dataReceived, length - dataReceived);
                     if (received == 0)
                     {
-                        throw new EndpointClosedSocketException(); // Podemos enviar una excepcion que fuerze el cerrado de la aplicacion.
+                        throw new EndpointClosedSocketException();
                     }
                     dataReceived += received;
                 }
-                catch (IOException e)
+                catch (IOException ioe)
                 {
                     throw new EndpointClosedByServerSocketException();
+                }
+                catch (Exception e)
+                {
+                    throw new NetworkReadException(e.Message);
                 }
                 
             }
@@ -39,9 +43,20 @@ namespace Common.NetworkUtilities
             return data;
         }
 
-        public void Write(byte[] packet) //REQ015DOOM2
+        public void Write(byte[] packet)
         {
-            _stream.Write(packet, 0, packet.Length);
+            try
+            {
+                _stream.Write(packet, 0, packet.Length);
+            }
+            catch(SocketException se)
+            {
+                throw new EndpointClosedByServerSocketException();
+            }
+            catch(IOException e)
+            {
+                throw new EndpointClosedByServerSocketException();
+            }
         }
     }
 }

@@ -16,24 +16,14 @@ namespace Common.Commands
             GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
             int statusCode = 0;
             string response = "";
-            try
-            {
-                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
-                IGameLogic gameLogic = new GameLogic(); 
-                bool isOwner = gameLogic.CheckIsOwner(query);
+            
+            GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+            IGameLogic gameLogic = new GameLogic(); 
+            bool isOwner = gameLogic.CheckIsOwner(query);
 
-                statusCode = isOwner ? StatusCodeConstants.OK : StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED;
+            statusCode = isOwner ? StatusCodeConstants.OK : StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED;
 
-                return statusCode.ToString() + response;
-                
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = "Something went wrong! exception: " + e.Message;
-                return statusCode.ToString() + response;
-            }
-
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

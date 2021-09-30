@@ -19,19 +19,12 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
 
-            try
-            {
-                Game gameDummy = DisassembleGamePayload(payload);
-                Game realGame = gameLogic.GetGame(gameDummy.Id);
-                gameNTO.Load(realGame);
-                statusCode = StatusCodeConstants.OK;
-                response = gameNTO.Encode();
-            }
-            catch (Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = e.Message;
-            }
+            Game gameDummy = DisassembleGamePayload(payload);
+            Game realGame = gameLogic.GetGame(gameDummy.Id);
+            gameNTO.Load(realGame);
+            statusCode = StatusCodeConstants.OK;
+            response = gameNTO.Encode();
+
             return statusCode.ToString() + response;
         }
 

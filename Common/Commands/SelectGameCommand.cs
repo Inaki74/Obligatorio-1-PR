@@ -17,38 +17,19 @@ namespace Common.Commands
             
             int statusCode = 0;
             string response = "";
+
+            Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
+            IGameLogic gameLogic = new GameLogic(); 
+
+            game.Id = gameLogic.GetGameId(game.Title);
             
-            try
-            {
-                Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-                IGameLogic gameLogic = new GameLogic(); 
+            Game gameSelected = gameLogic.SelectGame(game.Id);
+            statusCode = StatusCodeConstants.OK;
 
-                // TODO: Throw exception if game not found
-                game.Id = gameLogic.GetGameId(game.Title);
-                Game gameSelected = gameLogic.SelectGame(game.Id);
-                if (gameSelected != null)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    string idAsString = gameSelected.Id.ToString();
-                    
-                    int gamesInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-                    response = VaporProtocolHelper.FillNumber(idAsString.Length, gamesInputFixedSize) + idAsString;
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.ERROR_CLIENT;
-                    response = "Couldn't select game. Game doesn't exist.";
-                }
-                return statusCode.ToString() + response;
-                
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = "Something went wrong! exception: " + e.Message + e.StackTrace;
-                return statusCode.ToString() + response;
-            }
+            string idAsString = gameSelected.Id.ToString();
+            response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
 
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

@@ -20,23 +20,17 @@ namespace Common.Commands
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
+
             ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(new GameNetworkTransferObject());
             
-            try
-            {
-                List<Game> allGames = gameLogic.GetAllGames();
-                statusCode = StatusCodeConstants.OK;
-                listNTO.Load(allGames);
-                response = listNTO.Encode();
 
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message}";
-                return statusCode.ToString() + response;
-            }
+             List<Game> allGames = gameLogic.GetAllGames();
+             statusCode = StatusCodeConstants.OK;
+             listNTO.Load(allGames);
+             response = listNTO.Encode();
+
+
+            return statusCode.ToString() + response;
         }
         
         

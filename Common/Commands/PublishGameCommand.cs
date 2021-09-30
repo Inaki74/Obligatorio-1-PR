@@ -22,18 +22,10 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
             
-            try
-            {
-                int id = gameLogic.AddGame(game);
-                statusCode = StatusCodeConstants.OK;
+            int id = gameLogic.AddGame(game);
+            statusCode = StatusCodeConstants.OK;
 
-                response = EncodeGameResponse(id);
-            }
-            catch (Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = $"Something went wrong when publishing your game: {e.Message}";
-            }
+            response = EncodeGameResponse(id);
         
             return statusCode.ToString() + response;
         }

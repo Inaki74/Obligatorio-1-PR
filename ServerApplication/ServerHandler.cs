@@ -17,6 +17,7 @@ using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
 using Exceptions.ConnectionExceptions;
 using ServerApplicationInterfaces;
+using Exceptions;
 
 namespace ServerApplication
 {
@@ -132,15 +133,21 @@ namespace ServerApplication
                     SetStatusOfExecuting(true, threadId);
 
                     CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
+                    
                     vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
-
 
                     if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
                     {
-                        //TODO: Si modificamos el nombre del juego, tiene que cambiar el nombre de la imagen.
-                        // Para eso, mejor guardamos la imagen con nombre ID que nunca cambia...
                         string path = _configurationHandler.GetPathFromAppSettings();
-                        vp.ReceiveCover(path);
+                        try
+                        {
+                            vp.ReceiveCover(path);
+                        }
+                        catch(FileWritingException fwe)
+                        {
+                            Console.WriteLine(fwe.Message);
+                            Console.WriteLine("Cover wasn't received.");
+                        }
                     }
 
                     if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
@@ -148,9 +155,19 @@ namespace ServerApplication
                         string encodedGame = ExtractEncodedGame(response.Response);
                         GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
                         Game gameDummy = gameNTO.Decode(encodedGame);
+
                         IPathHandler pathHandler = new PathHandler();
                         string path = pathHandler.AppendPath(_configurationHandler.GetPathFromAppSettings(),$"{gameDummy.Id}.png");
-                        vp.SendCover(gameDummy.Title + "-COVER" , path);
+
+                        try
+                        {
+                            vp.SendCover(gameDummy.Title + "-COVER" , path);
+                        }
+                        catch(FileReadingException fre)
+                        {
+                            Console.WriteLine(fre.Message);
+                            Console.WriteLine("Cover wasn't sent.");
+                        }
                     }
 
                     if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
@@ -161,13 +178,13 @@ namespace ServerApplication
                     SetStatusOfExecuting(false, threadId);
                 }
             }
-            catch (EndpointClosedSocketException e)
+            catch (EndpointClosedSocketException ecsock)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ecsock.Message);
             }
-            catch (EndpointClosedByServerSocketException e)
+            catch (EndpointClosedByServerSocketException ecserv)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ecserv.Message);
             }
             catch(SocketException e)
             {

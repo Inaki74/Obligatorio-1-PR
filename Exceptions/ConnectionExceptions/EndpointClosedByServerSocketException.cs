@@ -2,7 +2,7 @@
 
 namespace Exceptions.ConnectionExceptions
 {
-    public class EndpointClosedByServerSocketException : SocketException
+    public class EndpointClosedByServerSocketException : ConnectionSocketException
     {
         public EndpointClosedByServerSocketException()
         {

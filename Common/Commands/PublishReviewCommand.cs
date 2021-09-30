@@ -22,26 +22,19 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
             
-            try
+            bool existed = reviewLogic.Exists(review);
+
+            reviewLogic.AddReview(review);
+
+            if(!existed)
             {
-                bool existed = reviewLogic.Exists(review);
-                reviewLogic.AddReview(review);
-                
-                if(!existed)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    response = "Review published!";
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.INFO;
-                    response = "You already had a review for this game, it was replaced with the new one.";
-                }
+                statusCode = StatusCodeConstants.OK;
+                response = "Review published!";
             }
-            catch (Exception e)
+            else
             {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = $"Something went wrong when publishing your game: {e.Message}";
+                statusCode = StatusCodeConstants.INFO;
+                response = "You already had a review for this game, it was replaced with the new one.";
             }
         
             return statusCode.ToString() + response;

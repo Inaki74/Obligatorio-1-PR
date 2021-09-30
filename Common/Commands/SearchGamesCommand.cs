@@ -8,6 +8,7 @@ using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.HelperObjects;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace Common.Commands
 {
@@ -23,26 +24,18 @@ namespace Common.Commands
 
             int statusCode = 0;
             string response = "";
-            
-            try
-            {
-                GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
-                GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
 
-                List<Game> coincidences = gameLogic.SearchGames(query);
-                listNTO.Load(coincidences);
-                response = listNTO.Encode();
+
+            GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
+            GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
+
+            List<Game> coincidences = gameLogic.SearchGames(query);
+            listNTO.Load(coincidences);
+            response = listNTO.Encode();
                 
-                statusCode = StatusCodeConstants.OK;
+            statusCode = StatusCodeConstants.OK;
                 
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
-                return statusCode.ToString() + response;
-            }
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

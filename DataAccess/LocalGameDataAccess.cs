@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -25,7 +26,12 @@ namespace DataAccess
 
         public void Delete(Game elem)
         {
-            Database.Instance.Games.Remove(elem);
+            bool existed = Database.Instance.Games.Remove(elem);
+
+            if(!existed)
+            {
+                throw new FindGameException();
+            }
         }
 
         public Game Get(string id)
@@ -44,14 +50,36 @@ namespace DataAccess
 
         public Game GetCopy(string title)
         {
-            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Title == title);
-            return game;
+            try
+            {
+                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Title == title);
+                return game;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
 
         public Game GetCopyId(int id)
         {
-            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Id == id);
-            return game;
+            try
+            {
+                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Id == id);
+                return game;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
 
         public List<Game> GetAll()

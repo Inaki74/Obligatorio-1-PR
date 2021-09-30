@@ -21,26 +21,18 @@ namespace Common.Commands
             string response = "";
 
             UserLogic userLogic = new UserLogic();
-            try
-            {
-                User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
-                bool userExisted = userLogic.Login(user);
+            User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+            bool userExisted = userLogic.Login(user);
 
-                if(userExisted)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    response = "Logged in!";
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.INFO;
-                    response = "User didn't exist, created new user.";
-                }
-            }
-            catch(Exception e)
+            if(userExisted)
             {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = $"User already logged in, exception from server: {e.Message}";
+                statusCode = StatusCodeConstants.OK;
+                response = "Logged in!";
+            }
+            else
+            {
+                statusCode = StatusCodeConstants.INFO;
+                response = "User didn't exist, created new user.";
             }
 
             return statusCode.ToString() + response;
