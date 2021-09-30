@@ -35,8 +35,7 @@ namespace ClientApplication
 
         private VaporProtocol _vaporProtocol;
         private IClientSession _clientSession;
-        private IClientCommandHandler _commandHandler;
-        
+
         public ClientHandler()
         {
             if(IClientHandler.Instance == null)
@@ -81,8 +80,7 @@ namespace ClientApplication
         {
             game.OwnerName = _clientSession.Username;
             VaporStatusResponse response = ExecuteCommand<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
-
-            // Enviar caratula si corresponde
+            
             // TODO: Agregar un try/catch.
             _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
             
@@ -235,11 +233,7 @@ namespace ClientApplication
             _tcpClient.Close();
             return response.Message;
         }
-
-        // Send information to the Server and execute command when we receive a response.
-        // command is the command key.
-        // payload is what to send wrapped in a NTO.
-        // P is the type of payload the NTO brings.
+        
         private VaporStatusResponse ExecuteCommand<P>(string command, INetworkTransferObject<P> payload)
         {
             string payloadString = "";
@@ -252,17 +246,6 @@ namespace ClientApplication
             VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
-        }
-
-        private List<string> GetOnlyTitles(List<Game> games)
-        {
-            List<string> ret = new List<string>();
-            foreach(Game game in games)
-            {
-                ret.Add(game.Title);
-            }
-
-            return ret;
         }
     }
 }

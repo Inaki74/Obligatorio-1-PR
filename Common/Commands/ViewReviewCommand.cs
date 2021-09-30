@@ -18,16 +18,21 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
 
-            IReviewLogic reviewLogic = new ReviewLogic();
             GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
+            IReviewLogic reviewLogic = new ReviewLogic();
+            
             try
             {
+                ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+                
                 GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
                 Review review = reviewLogic.GetReview(query);
-                ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+                
                 reviewNTO.Load(review);
-                statusCode = StatusCodeConstants.OK;
                 response = reviewNTO.Encode();
+                
+                statusCode = StatusCodeConstants.OK;
+                
                 return statusCode.ToString() + response;
             }
             catch(Exception e)
@@ -51,13 +56,5 @@ namespace Common.Commands
             return statusMessage;
         }
         
-        private Review DisassembleReviewPayload(byte[] payload)
-        {
-            string payloadAsString = Encoding.UTF8.GetString(payload);
-
-            ReviewNetworkTransferObject review = new ReviewNetworkTransferObject();
-
-            return review.Decode(payloadAsString);
-        }
     }
 }

@@ -11,15 +11,11 @@ namespace Common.Commands
 {
     public class LoginCommand : CommandBase, Interfaces.ICommand
     {
-        //client -> server
-        //server -> client
 
         public string Command => CommandConstants.COMMAND_LOGIN_CODE;
-
-        //Build header, send to server
+        
         public string ActionReq(byte[] payload)
         {
-            //Tomas el nombre de usuario y buscan en db
             UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
             int statusCode = 0;
             string response = "";
@@ -43,15 +39,13 @@ namespace Common.Commands
             }
             catch(Exception e)
             {
-                //Devolver Codigo de Error del sistema
                 statusCode = StatusCodeConstants.ERROR_CLIENT;
                 response = $"User already logged in, exception from server: {e.Message}";
             }
 
             return statusCode.ToString() + response;
         }
-
-        //build the payload for the response
+        
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);

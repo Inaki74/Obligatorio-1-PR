@@ -43,11 +43,6 @@ namespace Business
             _userDataAccess.Update(loggedUser);
         }
 
-        public List<User> GetAll()
-        {
-            return _userDataAccess.GetAll();
-        }
-
         private void AddUser(string username)
         {
             User newUser = new User(username, LocalUserDataAccess.CurrentId);

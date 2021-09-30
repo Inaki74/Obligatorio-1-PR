@@ -13,20 +13,21 @@ namespace Common.Commands
     public class GetGamesCommand : CommandBase, ICommand
     {
         public string Command => CommandConstants.COMMAND_GET_GAMES_CODE;
-
-        // Lo que hace el server.
+        
         public string ActionReq(byte[] payload)
         {
-            //conseguir todos los juegos
             int statusCode = 0;
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
+            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(new GameNetworkTransferObject());
+            
             try
             {
                 List<Game> allGames = gameLogic.GetAllGames();
                 statusCode = StatusCodeConstants.OK;
-                response = EncodeGameList(allGames);
+                listNTO.Load(allGames);
+                response = listNTO.Encode();
 
                 return statusCode.ToString() + response;
             }
@@ -37,56 +38,18 @@ namespace Common.Commands
                 return statusCode.ToString() + response;
             }
         }
-
-        // Lo que hace el cliente.
+        
+        
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);
-
+            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(new GameNetworkTransferObject());
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                statusMessage.GamesList = DecodeGameList(statusMessage.Message);
+                statusMessage.GamesList = listNTO.Decode(statusMessage.Message);
             }
             
             return statusMessage;
-        }
-
-        private string EncodeGameList(List<Game> games)
-        {
-            // CANT-JUEGOS JUEGO(1) JUEGO(2) ... JUEGO(CANT-JUEGOS)
-            string encoded = "";
-            int cantJuegos = games.Count;
-            encoded += VaporProtocolHelper.FillNumber(cantJuegos, VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE);
-
-            foreach(Game game in games)
-            {
-                GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-                gameNTO.Load(game);
-                encoded += gameNTO.Encode();
-            }
-
-            return encoded;
-        }
-
-        private List<Game> DecodeGameList(string data)
-        {
-            List<Game> ret = new List<Game>();
-            int cantJuegos = int.Parse(data.Substring(0, VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE));
-            string restOfData = data.Substring(VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE, data.Length - VaporProtocolSpecification.GAMES_MAX_AMOUNT_FIXED_SIZE);
-
-            int index = 0;
-            for(int i = 0; i < cantJuegos; i++)
-            {
-                GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-                string gameData = restOfData.Substring(index, restOfData.Length - index);
-
-                Game game = gameNTO.Decode(gameData);
-                ret.Add(game);
-
-                gameNTO.Load(game);
-                index += gameNTO.Encode().Length;
-            }
-            return ret;
         }
     }
 }

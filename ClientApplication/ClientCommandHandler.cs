@@ -10,9 +10,6 @@ namespace ClientApplication
 {
     public class ClientCommandHandler : CommandHandler, IClientCommandHandler
     {
-        //Get command type and payload from menus input
-        //Call ActionReq for desired command with payload as parameter
-        
         public VaporStatusResponse ExecuteCommand(VaporProcessedPacket processedPacket)
         {
             ICommand command = DecideCommand(processedPacket.Command);

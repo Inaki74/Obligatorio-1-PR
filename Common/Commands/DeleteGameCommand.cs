@@ -30,7 +30,6 @@ namespace Common.Commands
                 IGameLogic gameLogic = new GameLogic(); 
                 gameLogic.DeleteGame(game);
                 
-                //Deleting image from server
                 IPathHandler pathHandler = new PathHandler();
                 IConfigurationHandler configurationHandler = new ConfigurationHandler();
                 string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");

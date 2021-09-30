@@ -16,7 +16,6 @@ namespace Common.Commands
         {
             IGameLogic gameLogic = new GameLogic();
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-
             int statusCode = 0;
             string response = "";
 

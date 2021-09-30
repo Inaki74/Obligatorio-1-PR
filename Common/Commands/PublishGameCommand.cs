@@ -16,12 +16,9 @@ namespace Common.Commands
 
         public string ActionReq(byte[] payload)
         {
-            // Armado de juego
-            Game game = DisassembleGamePayload(payload);
-
             IGameLogic gameLogic = new GameLogic();
+            Game game = DisassembleGamePayload(payload);
             
-            // Response
             int statusCode = 0;
             string response = "";
             

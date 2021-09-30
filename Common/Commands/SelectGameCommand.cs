@@ -14,8 +14,10 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            
             int statusCode = 0;
             string response = "";
+            
             try
             {
                 Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
@@ -28,7 +30,9 @@ namespace Common.Commands
                 {
                     statusCode = StatusCodeConstants.OK;
                     string idAsString = gameSelected.Id.ToString();
-                    response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
+                    
+                    int gamesInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+                    response = VaporProtocolHelper.FillNumber(idAsString.Length, gamesInputFixedSize) + idAsString;
                 }
                 else
                 {
@@ -54,7 +58,9 @@ namespace Common.Commands
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
                 int dummy = 0;
-                int id = int.Parse(NetworkTransferHelperMethods.ExtractGameField(statusMessage.Message, ref dummy, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
+                int gameInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+                string GameFiled = NetworkTransferHelperMethods.ExtractGameField(statusMessage.Message, ref dummy, gameInputFixedSize);
+                int id = int.Parse(GameFiled);
 
                 statusMessage.SelectedGameId = id;
             }

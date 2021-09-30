@@ -26,12 +26,16 @@ namespace Common.Commands
             {
                 DetailsQuery query = new DetailsQuery();
                 Game gameDummy = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+                
                 query.Game = gameLogic.GetGame(gameDummy.Id);
                 query.Reviews = reviewLogic.GetReviews(query.Game);
                 query.Score = reviewLogic.GetGameScore(query.Game);
+                
                 detailsDummy.Load(query);
                 response = detailsDummy.Encode();
+                
                 statusCode = StatusCodeConstants.OK;
+                
                 return statusCode.ToString() + response;
             }
             catch(Exception e)
@@ -39,7 +43,7 @@ namespace Common.Commands
                 statusCode = StatusCodeConstants.ERROR_SERVER;
                 response = $"Something went wrong server-side: {e.Message}";
                 return statusCode.ToString() + response;
-            };
+            }
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)
@@ -50,6 +54,7 @@ namespace Common.Commands
             {
                 GameDetailsNetworkTransferObject detailsNTO = new GameDetailsNetworkTransferObject();
                 DetailsQuery query = detailsNTO.Decode(statusMessage.Message);
+                
                 statusMessage.Game = query.Game;
                 statusMessage.ReviewsList = query.Reviews;
                 statusMessage.GameScore = query.Score;
