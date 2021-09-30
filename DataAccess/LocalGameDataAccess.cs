@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -25,7 +26,12 @@ namespace DataAccess
 
         public void Delete(Game elem)
         {
-            Database.Instance.Games.Remove(elem);
+            bool existed = Database.Instance.Games.Remove(elem);
+
+            if(!existed)
+            {
+                throw new FindGameException();
+            }
         }
 
         public Game Get(string id)

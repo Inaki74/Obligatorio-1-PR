@@ -5,6 +5,7 @@ using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using Exceptions.BusinessExceptions;
 
 namespace Business
 {
@@ -78,22 +79,26 @@ namespace Business
             return FilterGames(allGames, query);
         }
 
-        public bool AcquireGame(GameUserRelationQuery query)
+        public void AcquireGame(GameUserRelationQuery query)
         {
-            //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
             dummyGame.Id = query.Gameid;
-            Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
-            bool gameAcquired = false;
-            if (realGame != null)
+
+            try
             {
+                Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
                 User user = _userDataAccess.Get(query.Username);
                 user.ownedGames.Add(realGame);
                 _userDataAccess.Update(user);
-                gameAcquired = true;
             }
-
-            return gameAcquired;
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException();
+            }
         }
 
         public bool CheckIsOwner(GameUserRelationQuery query)

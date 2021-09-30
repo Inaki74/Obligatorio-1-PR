@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Domain.BusinessObjects;
 using System.Linq;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -53,7 +54,12 @@ namespace DataAccess
 
         public void Delete(User elem)
         {
-            Database.Instance.Users.Remove(elem);
+            bool existed = Database.Instance.Users.Remove(elem);
+
+            if(!existed)
+            {
+                throw new FindUserException();
+            }
         }
 
         public void Update(User elem)

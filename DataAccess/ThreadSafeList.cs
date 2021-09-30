@@ -21,11 +21,11 @@ namespace DataAccess
             }
         }
 
-        public void Remove(T toRemove)
+        public bool Remove(T toRemove)
         {
             lock(_lock)
             {
-                _internalList.Remove(toRemove);
+                return _internalList.Remove(toRemove);
             }
         }
 
@@ -33,7 +33,7 @@ namespace DataAccess
         {
             lock (_lock)
             {
-                return _internalList.FirstOrDefault(t => t.Equals(toGet));
+                return _internalList.First(t => t.Equals(toGet));
             }  
         }
 
