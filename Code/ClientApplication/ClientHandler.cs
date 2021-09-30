@@ -71,7 +71,7 @@ namespace ClientApplication
             }
             catch(Exception e)
             {
-                Console.WriteLine($"Couldn't connecto to server: {e.Message}");
+                Console.WriteLine($"Couldn't connect to server: {e.Message}");
                 return false;
             }
             
