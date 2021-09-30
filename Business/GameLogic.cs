@@ -25,7 +25,7 @@ namespace Business
                 return game.Id;
             }
             
-            throw new Exception("Game already exists!");
+            throw new GameAlreadyExistsException();
         }
 
         public void ModifyGame(Game game)
