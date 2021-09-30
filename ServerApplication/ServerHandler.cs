@@ -104,6 +104,7 @@ namespace ServerApplication
             }
             
             _tcpServerListener.Stop();
+            Console.WriteLine("Server closed!");
         }
 
         private void StartClientThread(TcpClient acceptedTcpClient)
@@ -143,10 +144,11 @@ namespace ServerApplication
                         {
                             vp.ReceiveCover(path);
                         }
+                        catch (CoverNotReceivedException cre)
+                        {
+                        }
                         catch(FileWritingException fwe)
                         {
-                            Console.WriteLine(fwe.Message);
-                            Console.WriteLine("Cover wasn't received.");
                         }
                     }
 
@@ -165,8 +167,7 @@ namespace ServerApplication
                         }
                         catch(FileReadingException fre)
                         {
-                            Console.WriteLine(fre.Message);
-                            Console.WriteLine("Cover wasn't sent.");
+                            vp.SendCoverFailed();
                         }
                     }
 
@@ -180,11 +181,9 @@ namespace ServerApplication
             }
             catch (EndpointClosedSocketException ecsock)
             {
-                Console.WriteLine(ecsock.Message);
             }
             catch (EndpointClosedByServerSocketException ecserv)
             {
-                Console.WriteLine(ecserv.Message);
             }
             catch(SocketException e)
             {
@@ -218,8 +217,10 @@ namespace ServerApplication
         {
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+            
             IPEndPoint clientIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), 0);
             IPEndPoint serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
+            
             TcpClient fakeTCPClient = new TcpClient(clientIpEndPoint);
             fakeTCPClient.Connect(serverIpEndPoint);
         }

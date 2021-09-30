@@ -4,6 +4,7 @@ using Common.FileSystemUtilities;
 using Common.FileSystemUtilities.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol.Interfaces;
+using Exceptions.ConnectionExceptions;
 
 namespace Common.Protocol
 {
@@ -72,7 +73,7 @@ namespace Common.Protocol
             string isGoodCoverString = Encoding.UTF8.GetString(isGoodCover);
             if(isGoodCoverString == VaporCoverHeader.FAILED_COVER)
             {
-                return;
+                throw new CoverNotReceivedException();
             }
 
             // Recibe header
