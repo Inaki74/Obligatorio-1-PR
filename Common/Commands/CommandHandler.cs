@@ -57,7 +57,6 @@ namespace Common.Commands
                     break;
                 default:
                     Console.WriteLine("Command doesnt exist");
-                    // tirar excepcion
                     break;
             }
 
