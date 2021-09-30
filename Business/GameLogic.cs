@@ -61,15 +61,40 @@ namespace Business
             Game dummyGame = new Game();
             dummyGame.Title = "";
             dummyGame.Id = id;
-            return GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+            
+            try
+            {
+                Game found = GetAllGames().First(g => g.Equals(dummyGame));
+                return found;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException();
+            }
         }
 
         public int GetGameId(string title)
         {
             Game dummyGame = new Game();
             dummyGame.Title = title;
-            Game found = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
-            return found.Id;
+
+            try
+            {
+                Game found = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+                return found.Id;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException();
+            }
         }
         
         public List<Game> SearchGames(GameSearchQuery query)

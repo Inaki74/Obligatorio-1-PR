@@ -19,7 +19,6 @@ namespace Common.Commands
             Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
             IGameLogic gameLogic = new GameLogic(); 
 
-            // TODO: Throw exception if game not found
             game.Id = gameLogic.GetGameId(game.Title);
             
             Game gameSelected = gameLogic.SelectGame(game.Id);
