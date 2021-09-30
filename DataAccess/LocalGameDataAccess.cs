@@ -56,8 +56,19 @@ namespace DataAccess
 
         public Game GetCopyId(int id)
         {
-            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Id == id);
-            return game;
+            try
+            {
+                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Id == id);
+                return game;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException();
+            }
         }
 
         public List<Game> GetAll()
