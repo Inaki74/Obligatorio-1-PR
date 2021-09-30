@@ -28,7 +28,6 @@ namespace Domain.BusinessObjects
         }
         public Game(string title, string genre, string esrb, string synopsis, string path,int id)
         {
-            //Owner = user;
             Title = title;
             Genre = genre;
             ESRB = esrb;
