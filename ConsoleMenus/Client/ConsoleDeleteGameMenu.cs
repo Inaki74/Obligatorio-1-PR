@@ -7,7 +7,6 @@ namespace ConsoleMenus.Client
     public class ConsoleDeleteGameMenu : ConsoleMenusBase, IConsoleMenu
     {
         private const string YES_RESPONSE = "y";
-        private const string NO_RESPONSE = "n";
 
         public bool RequiresAnswer => true;
 

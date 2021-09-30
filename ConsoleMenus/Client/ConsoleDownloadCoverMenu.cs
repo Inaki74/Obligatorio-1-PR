@@ -9,21 +9,23 @@ namespace ConsoleMenus.Client
     public class ConsoleDownloadCoverMenu : ConsoleMenusBase, IConsoleMenu
     {
         public IConsoleMenu NextMenu => _nextMenu;
-        public bool RequiresAnswer => false;
+        public bool RequiresAnswer => true;
+        
+        private const string YES_RESPONSE = "y";
         public void PrintMenu()
         {
             Console.WriteLine("Want to download Cover? ");
-            Console.WriteLine("(Y if yes, anything else if not)");
+            Console.WriteLine($"(answer '{YES_RESPONSE}' if yes, anything else if not)");
             
         }
 
         public bool Action(string answer)
         {
-            string reply = Console.ReadLine();
-            if (reply.ToUpper() == "Y")
+            if (answer.ToLower() == YES_RESPONSE)
             {
                 Console.WriteLine("Where do you want to download the image? (path)");
                 string path = Console.ReadLine();
+                
                 VaporStatusResponse response = IClientHandler.Instance.DownloadGameCover(path);
                 
                 if(response.Code == StatusCodeConstants.OK)

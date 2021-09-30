@@ -25,7 +25,6 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            
             if(answer == YES_RESPONSE)
             {
                 VaporStatusResponse response = IClientHandler.Instance.AcquireGame();

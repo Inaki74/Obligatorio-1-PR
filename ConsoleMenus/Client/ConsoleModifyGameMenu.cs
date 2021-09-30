@@ -21,7 +21,7 @@ namespace ConsoleMenus.Client
 
             string response = IClientHandler.Instance.ModifyGame(input);
 
-            _nextMenu = new ConsoleMainMenu();
+            _nextMenu = new ConsoleGameMenu(true);
             Console.WriteLine(response);
             
             return false;

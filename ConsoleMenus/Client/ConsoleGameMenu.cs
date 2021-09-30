@@ -88,7 +88,7 @@ namespace ConsoleMenus.Client
                     _nextMenu = new ConsoleMainMenu();
                     break;
                 case VIEW_DETAILS_OPTION:
-                    _nextMenu = new ConsoleViewDetailsMenu();
+                    _nextMenu = new ConsoleViewDetailsMenu(_isGameOwner);
                     break;
                 default:
                     Console.WriteLine("That's not a valid option");

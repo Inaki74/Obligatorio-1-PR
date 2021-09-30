@@ -12,7 +12,6 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            // Delegar a ConnectMenu
             _nextMenu = new ConsoleConnectMenu();
             return false;
         }

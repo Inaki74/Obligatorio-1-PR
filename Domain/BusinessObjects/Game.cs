@@ -13,7 +13,7 @@ namespace Domain.BusinessObjects
         public string ESRB {get; set;}
         public string Synopsis {get; set;}
         public string CoverPath {get; set;}
-        public int OverallScore {get; set;}
+        public float OverallScore {get; set;}
         public int Id { get; set; }
 
         public Game()
