@@ -38,8 +38,7 @@ namespace ClientApplication
 
         private VaporProtocol _vaporProtocol;
         private IClientSession _clientSession;
-        private IClientCommandHandler _commandHandler;
-        
+
         public ClientHandler()
         {
             if(IClientHandler.Instance == null)
@@ -343,17 +342,6 @@ namespace ClientApplication
             }
 
             _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payloadString);
-        }
-
-        private List<string> GetOnlyTitles(List<Game> games)
-        {
-            List<string> ret = new List<string>();
-            foreach(Game game in games)
-            {
-                ret.Add(game.Title);
-            }
-
-            return ret;
         }
     }
 }

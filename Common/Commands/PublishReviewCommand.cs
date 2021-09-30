@@ -16,12 +16,9 @@ namespace Common.Commands
 
         public string ActionReq(byte[] payload)
         {
-            // Armado de juego
-            Review review = DisassembleReviewPayload(payload);
-
             IReviewLogic reviewLogic = new ReviewLogic();
+            Review review = DisassembleReviewPayload(payload);
             
-            // Response
             int statusCode = 0;
             string response = "";
             

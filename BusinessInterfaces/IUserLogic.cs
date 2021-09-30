@@ -7,7 +7,6 @@ namespace BusinessInterfaces
     {
         bool Login(User user);
         void Logout(User user);
-
-        List<User> GetAll();
+        
     }
 }

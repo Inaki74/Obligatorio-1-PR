@@ -7,7 +7,6 @@ namespace ClientApplication
     {
         private readonly string _username;
         public string Username => _username;
-        //public string gameSelected { get; set; }
         public int GameSelectedId { get; set; }
 
         public ClientSession(string username)

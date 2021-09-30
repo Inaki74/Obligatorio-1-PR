@@ -15,14 +15,14 @@ namespace Common.Commands
     public class GetGameScoreCommand : CommandBase, ICommand
     {
         public string Command => CommandConstants.COMMAND_GET_GAME_SCORE_CODE;
-
-        // Get reviews list
+        
         public string ActionReq(byte[] payload)
         {
             int statusCode = 0;
             string response = "";
 
             IReviewLogic reviewLogic = new ReviewLogic();
+
             //Decode query
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
             Game game = gameNTO.Decode(Encoding.UTF8.GetString(payload));
@@ -33,10 +33,10 @@ namespace Common.Commands
             reviewListNTO.Load(gameReviewList);
             response = reviewListNTO.Encode();
 
+
             return statusCode.ToString() + response;
         }
-
-        // Decode games list
+        
         public VaporStatusResponse ActionRes(byte[] reqPayload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(reqPayload);

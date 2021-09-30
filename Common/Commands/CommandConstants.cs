@@ -8,15 +8,15 @@
         public const string COMMAND_PUBLISH_GAME_CODE = "04";
         public const string COMMAND_PUBLISH_REVIEW_CODE = "05";
         public const string COMMAND_SELECT_GAME_CODE = "06"; 
-        public const string COMMAND_SEARCH_GAMES_CODE =  "08";
-        public const string COMMAND_MODIFY_GAME_CODE = "09";
-        public const string COMMAND_DELETE_GAME_CODE = "10";
-        public const string COMMAND_GET_GAME_SCORE_CODE = "14";
-        public const string COMMAND_CHECKOWNERSHIP_GAME_CODE = "15";
-        public const string COMMAND_VIEW_REVIEW_CODE = "16";
-        public const string COMMAND_VIEW_DETAILS_CODE = "17";
-        public const string COMMAND_DOWNLOAD_COVER_CODE = "18";
-        public const string COMMAND_EXIT_CODE = "20";
+        public const string COMMAND_SEARCH_GAMES_CODE =  "07";
+        public const string COMMAND_MODIFY_GAME_CODE = "08";
+        public const string COMMAND_DELETE_GAME_CODE = "09";
+        public const string COMMAND_GET_GAME_SCORE_CODE = "10";
+        public const string COMMAND_CHECKOWNERSHIP_GAME_CODE = "11";
+        public const string COMMAND_VIEW_REVIEW_CODE = "12";
+        public const string COMMAND_VIEW_DETAILS_CODE = "13";
+        public const string COMMAND_DOWNLOAD_COVER_CODE = "14";
+        public const string COMMAND_EXIT_CODE = "15";
     }
 }
 

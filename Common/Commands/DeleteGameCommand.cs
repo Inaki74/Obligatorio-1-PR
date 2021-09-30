@@ -37,6 +37,7 @@ namespace Common.Commands
             statusCode = StatusCodeConstants.OK;
             response = "Game deleted successfully.";
 
+
             return statusCode.ToString() + response;
         }
 
