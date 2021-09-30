@@ -18,29 +18,21 @@ namespace Common.Commands
             GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
             int statusCode = 0;
             string response = "";
-            try
+            
+            GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+            IGameLogic gameLogic = new GameLogic();
+            bool gameSuccesfullyAcquired = gameLogic.AcquireGame(query);
+            if (gameSuccesfullyAcquired)
             {
-                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
-                IGameLogic gameLogic = new GameLogic();
-                bool gameSuccesfullyAcquired = gameLogic.AcquireGame(query);
-                if (gameSuccesfullyAcquired)
-                {
-                    statusCode = StatusCodeConstants.OK;
-                    response = "Game acquired succesfully";
-                }
-                else
-                {
-                    statusCode = StatusCodeConstants.ERROR_SERVER;
-                    response = "Something went wrong!";
-                }
-                return statusCode.ToString() + response;
+                statusCode = StatusCodeConstants.OK;
+                response = "Game acquired succesfully";
             }
-            catch (Exception e)
+            else
             {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = "No puede adquirir el juego";
-                return statusCode.ToString() + response;
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                response = "Something went wrong!";
             }
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)
