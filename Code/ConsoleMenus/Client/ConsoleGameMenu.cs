@@ -73,7 +73,7 @@ namespace ConsoleMenus.Client
                     _nextMenu = new ConsoleModifyGameMenu();
                     break;
                 case VIEW_REVIEW_OPTION:
-                    _nextMenu = new ConsoleViewReviewMenu();
+                    _nextMenu = new ConsoleViewReviewMenu(_isGameOwner);
                     break;
                 case ACQUIRE_GAME_OPTION:
                     _nextMenu = new ConsoleAcquireGameMenu(_isGameOwner);

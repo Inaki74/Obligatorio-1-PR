@@ -30,6 +30,5 @@ namespace Common.Protocol
         public const int LIST_ELEMENTS_MAXSIZE = 1;
 
         public const int GAME_INPUTS_FIXED_SIZE = 4;
-        public const int GAMES_MAX_AMOUNT_FIXED_SIZE = 32; // TODO: Remove.
     }
 }
