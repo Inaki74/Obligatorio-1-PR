@@ -20,7 +20,7 @@ namespace Common.Protocol.NTOs
 
         public User Decode(string toDecode)
         {
-            return new User(toDecode, -1);
+            return new User(toDecode, User.DEFAULT_USER_ID);
         }
     }
 }

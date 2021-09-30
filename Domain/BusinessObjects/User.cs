@@ -6,6 +6,7 @@ namespace Domain.BusinessObjects
     [Serializable]
     public class User
     {
+        public const int DEFAULT_USER_ID = -1;
         public string Username { get; set; }
         public bool LoggedIn { get; set; }
         public int ID {get; set;}

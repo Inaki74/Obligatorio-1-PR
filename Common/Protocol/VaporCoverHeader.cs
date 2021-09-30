@@ -29,8 +29,10 @@ namespace Common.Protocol
 
             Array.Copy(_fileNameLength, 0, packet, indexAcum, VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
             indexAcum += VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE;
+
             Array.Copy(_fileSize, 0, packet, indexAcum, VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
             indexAcum += VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE;
+
             Array.Copy(_fileName, 0, packet, indexAcum, _fileName.Length);
 
             return packet;

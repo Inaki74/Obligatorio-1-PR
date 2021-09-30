@@ -12,9 +12,9 @@ namespace Common.Protocol.NTOs
             GameSearchQuery query = new GameSearchQuery();
 
             int index = 0;
-            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_SCOREINPUT_FIXED_SIZE);
+            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_TITLE_MAXSIZE);
+            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_GENRE_MAXSIZE);
+            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_SINGULAR_SCORE_MAXSIZE);
             
             query.Title = title;
             query.Genre = genre;
@@ -31,11 +31,11 @@ namespace Common.Protocol.NTOs
 
             string input = "";
 
-            input += VaporProtocolHelper.FillNumber(title.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + title;
+            input += VaporProtocolHelper.FillNumber(title.Length,VaporProtocolSpecification.GAME_TITLE_MAXSIZE) + title;
 
-            input += VaporProtocolHelper.FillNumber(genre.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + genre;
+            input += VaporProtocolHelper.FillNumber(genre.Length,VaporProtocolSpecification.GAME_GENRE_MAXSIZE) + genre;
 
-            input += VaporProtocolHelper.FillNumber(score.Length,VaporProtocolSpecification.GAME_SCOREINPUT_FIXED_SIZE) + score;
+            input += VaporProtocolHelper.FillNumber(score.Length,VaporProtocolSpecification.GAME_SINGULAR_SCORE_MAXSIZE) + score;
 
             return input;
         }

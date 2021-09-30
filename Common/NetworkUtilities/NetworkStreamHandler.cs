@@ -39,7 +39,7 @@ namespace Common.NetworkUtilities
             return data;
         }
 
-        public void Write(byte[] packet)
+        public void Write(byte[] packet) //REQ015DOOM2
         {
             _stream.Write(packet, 0, packet.Length);
         }

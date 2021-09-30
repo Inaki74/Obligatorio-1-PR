@@ -30,17 +30,17 @@ namespace Common.Protocol.NTOs
             string input = "";
             string IdAsString = ID.ToString();
 
-            input += VaporProtocolHelper.FillNumber(IdAsString.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + IdAsString;
+            input += VaporProtocolHelper.FillNumber(IdAsString.Length,VaporProtocolSpecification.GAME_ID_MAXSIZE) + IdAsString;
 
-            input += VaporProtocolHelper.FillNumber(OwnerName.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + OwnerName;
+            input += VaporProtocolHelper.FillNumber(OwnerName.Length,VaporProtocolSpecification.USER_NAME_MAXSIZE) + OwnerName;
 
-            input += VaporProtocolHelper.FillNumber(Title.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Title;
+            input += VaporProtocolHelper.FillNumber(Title.Length,VaporProtocolSpecification.GAME_TITLE_MAXSIZE) + Title;
 
-            input += VaporProtocolHelper.FillNumber(Genre.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Genre;
+            input += VaporProtocolHelper.FillNumber(Genre.Length,VaporProtocolSpecification.GAME_GENRE_MAXSIZE) + Genre;
 
-            input += VaporProtocolHelper.FillNumber(ESRB.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + ESRB;
+            input += VaporProtocolHelper.FillNumber(ESRB.Length,VaporProtocolSpecification.GAME_ESRB_MAXSIZE) + ESRB;
 
-            input += VaporProtocolHelper.FillNumber(Synopsis.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Synopsis;
+            input += VaporProtocolHelper.FillNumber(Synopsis.Length,VaporProtocolSpecification.GAME_SYNOPSIS_MAXSIZE) + Synopsis;
 
             return input;
         }
@@ -55,12 +55,12 @@ namespace Common.Protocol.NTOs
             Game game = new Game();
 
             int index = 0;
-            int id = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
-            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
+            int id = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_ID_MAXSIZE));
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.USER_NAME_MAXSIZE);
+            string title = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_TITLE_MAXSIZE);
+            string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_GENRE_MAXSIZE);
+            string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_ESRB_MAXSIZE);
+            string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_SYNOPSIS_MAXSIZE);
             //string caratula = ExtractField(payloadAsString, ref index);
 
             game.Id = id;

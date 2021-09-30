@@ -19,7 +19,7 @@ namespace Common.Protocol.NTOs
            _reviewListNTO.Load(Reviews);
             string input = _gameNTO.Encode();
             input += _reviewListNTO.Encode();
-            input += VaporProtocolHelper.FillNumber(Score.ToString().Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Score;
+            input += VaporProtocolHelper.FillNumber(Score.ToString().Length,VaporProtocolSpecification.GAME_AVERAGE_SCORE_MAXSIZE) + Score;
             return input;
         }
 
@@ -43,7 +43,7 @@ namespace Common.Protocol.NTOs
             restOfData = restOfData.Substring(reviewLength, restOfData.Length - reviewLength);
             
             int index = 0;
-            decodedQuery.Score = float.Parse(NetworkTransferHelperMethods.ExtractGameField(restOfData,ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
+            decodedQuery.Score = float.Parse(NetworkTransferHelperMethods.ExtractGameField(restOfData,ref index, VaporProtocolSpecification.GAME_AVERAGE_SCORE_MAXSIZE));
             
             return decodedQuery;
         }

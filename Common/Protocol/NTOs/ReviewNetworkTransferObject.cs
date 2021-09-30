@@ -29,15 +29,15 @@ namespace Common.Protocol.NTOs
             string gameIdAsString = Gameid.ToString();
 
             //TODO: Is VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE adequate for everything? If so, is it a good name?
-            input += VaporProtocolHelper.FillNumber(Username.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Username;
+            input += VaporProtocolHelper.FillNumber(Username.Length,VaporProtocolSpecification.USER_NAME_MAXSIZE) + Username;
 
-            input += VaporProtocolHelper.FillNumber(gameIdAsString.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + gameIdAsString;
+            input += VaporProtocolHelper.FillNumber(gameIdAsString.Length,VaporProtocolSpecification.GAME_ID_MAXSIZE) + gameIdAsString;
 
-            input += VaporProtocolHelper.FillNumber(Gametitle.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Gametitle;
+            input += VaporProtocolHelper.FillNumber(Gametitle.Length,VaporProtocolSpecification.GAME_TITLE_MAXSIZE) + Gametitle;
 
-            input += VaporProtocolHelper.FillNumber(Description.Length,VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + Description;
+            input += VaporProtocolHelper.FillNumber(Description.Length,VaporProtocolSpecification.REVIEW_DESCRIPTION_MAXSIZE) + Description;
 
-            input += Score.Length.ToString() + Score;
+            input += VaporProtocolHelper.FillNumber(Score.Length,VaporProtocolSpecification.GAME_SINGULAR_SCORE_MAXSIZE) + Score;
 
             return input;
         }
@@ -47,13 +47,13 @@ namespace Common.Protocol.NTOs
             Review review = new Review();
 
             int index = 0;
-            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            int gameid = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE));
-            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string description = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE);
-            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, 1);
+            string username = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.USER_NAME_MAXSIZE);
+            int gameid = int.Parse(NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_ID_MAXSIZE));
+            string gamename = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_TITLE_MAXSIZE);
+            string description = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.REVIEW_DESCRIPTION_MAXSIZE);
+            string score = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_SINGULAR_SCORE_MAXSIZE);
 
-            User dummyUser = new User(username, -1);
+            User dummyUser = new User(username, User.DEFAULT_USER_ID);
             Game dummyGame = new Game();
             
             dummyGame.Id = gameid;
