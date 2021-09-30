@@ -13,6 +13,6 @@ namespace Exceptions.ConnectionExceptions
         }
         private string _innerMessage = "";
 
-        public override string Message => $"Something went wrong when reading from network stream. Inner exception: {_innerMessage}";
+        public override string Message => $"Something went wrong when reading from network stream.";
     }
 }
