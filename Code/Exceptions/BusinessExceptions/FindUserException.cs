@@ -13,6 +13,6 @@ namespace Exceptions.BusinessExceptions
 
         private string _innerMessage = "";
 
-        public override string Message => $"That user doesn't exist! Inner exception: {_innerMessage}";
+        public override string Message => $"That user doesn't exist!";
     }
 }

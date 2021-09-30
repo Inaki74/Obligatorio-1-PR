@@ -43,7 +43,9 @@ namespace Common.Protocol.NTOs
             restOfData = restOfData.Substring(reviewLength, restOfData.Length - reviewLength);
             
             int index = 0;
-            decodedQuery.Score = float.Parse(NetworkTransferHelperMethods.ExtractGameField(restOfData,ref index, VaporProtocolSpecification.GAME_AVERAGE_SCORE_MAXSIZE));
+            string GameField = NetworkTransferHelperMethods.ExtractGameField(restOfData, ref index,
+                VaporProtocolSpecification.GAME_AVERAGE_SCORE_MAXSIZE);
+            decodedQuery.Score = float.Parse(GameField);
             
             return decodedQuery;
         }

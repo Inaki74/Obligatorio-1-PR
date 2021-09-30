@@ -52,7 +52,19 @@ namespace DataAccess
 
         public Review GetCopyId(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Review review = InMemoryDatabase.Instance.Reviews.GetCopyOfInternalList().First(r => r.ID == id);
+                return review;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindReviewException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindReviewException(ioe.Message);
+            }
         }
 
         public List<Review> GetAll()
@@ -62,7 +74,9 @@ namespace DataAccess
 
         public void Update(Review elem)
         {
-            throw new NotImplementedException();
+            Review oldReview = GetCopyId(elem.ID);
+            InMemoryDatabase.Instance.Reviews.Remove(oldReview);
+            InMemoryDatabase.Instance.Reviews.Add(elem);
         }
     }
 }

@@ -47,11 +47,6 @@ namespace Common.Protocol.NTOs
 
         public Game Decode(string toDecode)
         {
-            //Desarmar payload en un juego. Agregarlo a la lista.
-            // Payload = 
-            //  Cada field:
-            //        XXXX XXXX... - Largo Info
-            // Orden: Titulo -> Genero -> Esrb -> Synopsis -> Caratula
             Game game = new Game();
 
             int index = 0;
@@ -61,7 +56,6 @@ namespace Common.Protocol.NTOs
             string genre = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_GENRE_MAXSIZE);
             string esrb = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_ESRB_MAXSIZE);
             string synopsis = NetworkTransferHelperMethods.ExtractGameField(toDecode, ref index, VaporProtocolSpecification.GAME_SYNOPSIS_MAXSIZE);
-            //string caratula = ExtractField(payloadAsString, ref index);
 
             game.Id = id;
             game.Owner = new User(username, -1);
@@ -69,7 +63,6 @@ namespace Common.Protocol.NTOs
             game.Genre = genre;
             game.ESRB = esrb;
             game.Synopsis = synopsis;
-            // caratula
 
             return game;
         }

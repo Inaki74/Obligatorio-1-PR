@@ -6,7 +6,7 @@ namespace Common.Protocol
     {
         public static long GetFileParts(long fileSize)
         {
-            double division = fileSize / VaporProtocolSpecification.MAX_PACKET_SIZE;
+            double division = (double)fileSize / VaporProtocolSpecification.MAX_PACKET_SIZE;
             return (long)Math.Ceiling(division);
         }
 

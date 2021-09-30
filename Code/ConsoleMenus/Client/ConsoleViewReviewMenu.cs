@@ -11,6 +11,13 @@ namespace ConsoleMenus.Client
     {
         public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer => false;
+
+        private bool _isOwner;
+
+        public ConsoleViewReviewMenu(bool isOwner)
+        {
+            this._isOwner = isOwner;
+        }
         public void PrintMenu()
         {
             Console.WriteLine("Please enter the review author: ");
@@ -30,7 +37,7 @@ namespace ConsoleMenus.Client
             {
                 Console.WriteLine(response.Message);
             }
-            _nextMenu = new ConsoleMainMenu();
+            _nextMenu = new ConsoleGameMenu(_isOwner);
             
             return false;
         }

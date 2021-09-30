@@ -78,6 +78,15 @@ namespace Business
             }
         }
 
+        public void BulkUpdate(List<Review> reviewList)
+        {
+            foreach (Review review in reviewList)
+            {
+                _reviewDataAccess.Update(review);
+            }
+        }
+        
+
         public List<Review> GetReviews(Game game)
         {
             List<Review> allReviews = _reviewDataAccess.GetAll();

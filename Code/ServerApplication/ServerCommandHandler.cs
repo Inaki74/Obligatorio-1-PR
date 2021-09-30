@@ -23,13 +23,13 @@ namespace ServerApplication
             }
             catch(BusinessException be)
             {
-                int statusCode = StatusCodeConstants.ERROR_CLIENT;
+                int statusCode = StatusCodeConstants.ERROR_SERVER;
                 response = statusCode.ToString() + be.Message;
             }
-            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
+            catch(Exception e)
             {
                 int statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = statusCode.ToString() + $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
+                response = statusCode.ToString() + $"Something went wrong server-side: {e.Message}";
             }
 
             CommandResponse commandResponse = new CommandResponse(response, command.Command);

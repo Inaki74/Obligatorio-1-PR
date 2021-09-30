@@ -17,7 +17,7 @@ namespace ConsoleMenus.Client
 
         public ConsoleViewDetailsMenu(bool isOwner)
         {
-            this._isOwner = _isOwner;
+            this._isOwner = isOwner;
         }
         public void PrintMenu()
         {
@@ -36,7 +36,7 @@ namespace ConsoleMenus.Client
                 
                 ShowGameDetails(game);
                 ShowReviews(reviewList);
-                _nextMenu = new ConsoleDownloadCoverMenu();
+                _nextMenu = new ConsoleDownloadCoverMenu(_isOwner);
             }
             else
             {
@@ -50,15 +50,16 @@ namespace ConsoleMenus.Client
         private void ShowGameDetails(Game game)
         {
             Console.WriteLine($"Game: {game.Title}");
-            Console.WriteLine($"Score: {game.OverallScore}");
-            Console.WriteLine($"Synopsis: {game.Synopsis}");
+            Console.WriteLine($"Genre: {game.Genre}");
             Console.WriteLine($"ESRB: {game.ESRB}");
+            Console.WriteLine($"Synopsis: {game.Synopsis}");
+            Console.WriteLine($"Score: {game.OverallScore}");
             Console.WriteLine($"Owner: {game.Owner.Username}");
-            Console.WriteLine($"--- Game reviews ---");
         }
 
         private void ShowReviews(List<Review> reviewList)
         {
+            Console.WriteLine($"--- Game reviews ---");
             foreach (Review review in reviewList)
             {
                 Console.WriteLine($"Score: {review.Score}");
