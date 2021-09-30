@@ -33,8 +33,19 @@ namespace DataAccess
 
         public User GetCopy(string id)
         {
-            User user = Database.Instance.Users.GetCopyOfInternalList().FirstOrDefault(u => u.Username == id);
-            return user;
+            try
+            {
+                User user = Database.Instance.Users.GetCopyOfInternalList().First(u => u.Username == id);
+                return user;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException();
+            }
         }
 
         public User GetCopyId(int id)
@@ -64,9 +75,20 @@ namespace DataAccess
 
         public void Update(User elem)
         {
-            User oldUser = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
-            Database.Instance.Users.Remove(oldUser);
-            Database.Instance.Users.Add(elem);
+            try
+            {
+                User oldUser = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
+                Database.Instance.Users.Remove(oldUser);
+                Database.Instance.Users.Add(elem);
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException();
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException();
+            }
         }
     }
 }

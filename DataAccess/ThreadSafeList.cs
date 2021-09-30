@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -33,7 +34,19 @@ namespace DataAccess
         {
             lock (_lock)
             {
-                return _internalList.First(t => t.Equals(toGet));
+                try
+                {
+                    T element = _internalList.First(t => t.Equals(toGet));
+                    return element;
+                }
+                catch(ArgumentNullException ane)
+                {
+                    throw new FindException();
+                }
+                catch(InvalidOperationException ioe)
+                {
+                    throw new FindException();
+                }
             }  
         }
 

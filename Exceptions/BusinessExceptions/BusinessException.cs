@@ -6,6 +6,6 @@ namespace Exceptions.BusinessExceptions
     {
         public BusinessException() {}
 
-        public override string Message => base.Message;
+        public override string Message => "Something went wrong on business level.";
     }
 }
