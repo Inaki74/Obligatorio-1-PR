@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Threading;
+using Business;
+using BusinessInterfaces;
 using Common.Commands;
 using Common.Configuration;
 using Common.Configuration.Interfaces;
@@ -118,13 +120,12 @@ namespace ServerApplication
             int threadId = _currentThreadId;
             _currentThreadId++;
             _clientConnections.Add(new ClientCommandExecutionStatus(threadId));
-
+            string username = "";
             try
             {
                 INetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
                 VaporProtocol vp = new VaporProtocol(streamHandler);
                 IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
-
                 bool connected = true;
 
                 while (connected && _serverRunning)
@@ -132,7 +133,7 @@ namespace ServerApplication
                     VaporProcessedPacket processedPacket = vp.ReceiveCommand();
                     SetStatusOfExecuting(true, threadId);
 
-                    ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected);
+                    ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected, ref username);
 
                     SetStatusOfExecuting(false, threadId);
                 }
@@ -143,12 +144,13 @@ namespace ServerApplication
             catch (EndpointClosedByServerSocketException ecserv)
             {
             }
-            catch(SocketException e)
+            catch (SocketException e)
             {
                 Console.WriteLine($"Something went wrong: {e.Message}");
             }
             finally
             {
+                LogoutUserInException(username);
                 SetStatusOfExecuting(false, threadId);
             }
         }
@@ -184,7 +186,7 @@ namespace ServerApplication
         }
 
 
-        public void ProcessCommand(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, ref bool connected)
+        private void ProcessCommand(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, ref bool connected, ref string username)
         {
             CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
             vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
@@ -202,6 +204,11 @@ namespace ServerApplication
             if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
             {
                 connected = false;
+            }
+
+            if (response.Command == CommandConstants.COMMAND_LOGIN_CODE)
+            {
+                username = response.Response;
             }
         }
         
@@ -239,5 +246,14 @@ namespace ServerApplication
                 vp.SendCoverFailed();
             }
         }
+
+        private void LogoutUserInException(string username)
+        {
+            IUserLogic userLogic = new UserLogic();
+            User userDummy = new User(username,User.DEFAULT_USER_ID);
+            userLogic.Logout(userDummy);
+        }
+
+        
     }
 }
