@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using Database;
 using System.Linq;
 using Domain.BusinessObjects;
 using Exceptions.BusinessExceptions;
@@ -21,12 +21,12 @@ namespace DataAccess
 
         public void Add(Game elem)
         {
-            Database.Instance.Games.Add(elem);
+            InMemoryDatabase.Instance.Games.Add(elem);
         }
 
         public void Delete(Game elem)
         {
-            bool existed = Database.Instance.Games.Remove(elem);
+            bool existed = InMemoryDatabase.Instance.Games.Remove(elem);
 
             if(!existed)
             {
@@ -37,14 +37,14 @@ namespace DataAccess
         public Game Get(string id)
         {
             Game dummyGame = GetCopy(id);
-            Game game = Database.Instance.Games.Get(dummyGame);
+            Game game = InMemoryDatabase.Instance.Games.Get(dummyGame);
             return game;
         }
 
         public Game Get(int id)
         {
             Game dummyGame = GetCopyId(id);
-            Game game = Database.Instance.Games.Get(dummyGame);
+            Game game = InMemoryDatabase.Instance.Games.Get(dummyGame);
             return game;
         }
 
@@ -52,7 +52,7 @@ namespace DataAccess
         {
             try
             {
-                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Title == title);
+                Game game = InMemoryDatabase.Instance.Games.GetCopyOfInternalList().First(g => g.Title == title);
                 return game;
             }
             catch(ArgumentNullException ane)
@@ -69,7 +69,7 @@ namespace DataAccess
         {
             try
             {
-                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Id == id);
+                Game game = InMemoryDatabase.Instance.Games.GetCopyOfInternalList().First(g => g.Id == id);
                 return game;
             }
             catch(ArgumentNullException ane)
@@ -84,14 +84,14 @@ namespace DataAccess
 
         public List<Game> GetAll()
         {
-            return Database.Instance.Games.GetCopyOfInternalList();
+            return InMemoryDatabase.Instance.Games.GetCopyOfInternalList();
         }
 
         public void Update(Game elem)
         {
             Game oldGame = GetCopyId(elem.Id);
-            Database.Instance.Games.Remove(oldGame);
-            Database.Instance.Games.Add(elem);
+            InMemoryDatabase.Instance.Games.Remove(oldGame);
+            InMemoryDatabase.Instance.Games.Add(elem);
         }
     }
 }

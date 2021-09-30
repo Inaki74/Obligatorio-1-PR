@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
 using Domain.BusinessObjects;
 using Exceptions.BusinessExceptions;
 
-namespace DataAccess
+namespace Database
 {
     public class ThreadSafeList<T>
     {

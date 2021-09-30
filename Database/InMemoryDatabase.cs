@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using Domain.BusinessObjects;
 
-namespace DataAccess
+namespace Database
 {
-    public class Database
+    public class InMemoryDatabase
     {
-        private static Database _instance = null;
+        private static InMemoryDatabase _instance = null;
         private static readonly object _instanceLock = new object();
 
-        private Database(){}
-        public static Database Instance
+        private InMemoryDatabase(){}
+        public static InMemoryDatabase Instance
         {
             get
             {
@@ -19,7 +19,7 @@ namespace DataAccess
                     {
                         if(_instance == null)
                         {
-                            _instance = new Database();
+                            _instance = new InMemoryDatabase();
                         }
                     }
                 }

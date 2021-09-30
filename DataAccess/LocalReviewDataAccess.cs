@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Linq;
+using Database;
 using Domain.BusinessObjects;
 using Exceptions.BusinessExceptions;
 
@@ -21,12 +22,12 @@ namespace DataAccess
 
         public void Add(Review elem)
         {
-            Database.Instance.Reviews.Add(elem);
+            InMemoryDatabase.Instance.Reviews.Add(elem);
         }
 
         public void Delete(Review elem)
         {
-            bool existed = Database.Instance.Reviews.Remove(elem);
+            bool existed = InMemoryDatabase.Instance.Reviews.Remove(elem);
 
             if(!existed)
             {
@@ -56,7 +57,7 @@ namespace DataAccess
 
         public List<Review> GetAll()
         {
-            return Database.Instance.Reviews.GetCopyOfInternalList();
+            return InMemoryDatabase.Instance.Reviews.GetCopyOfInternalList();
         }
 
         public void Update(Review elem)

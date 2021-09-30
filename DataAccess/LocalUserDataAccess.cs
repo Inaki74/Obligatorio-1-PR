@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Domain.BusinessObjects;
 using System.Linq;
+using Database;
 using Exceptions.BusinessExceptions;
 
 namespace DataAccess
@@ -22,7 +23,7 @@ namespace DataAccess
         public User Get(string id)
         {
             User dummyUser = GetCopy(id);
-            User user = Database.Instance.Users.Get(dummyUser);
+            User user = InMemoryDatabase.Instance.Users.Get(dummyUser);
             return user;
         }
 
@@ -35,7 +36,7 @@ namespace DataAccess
         {
             try
             {
-                User user = Database.Instance.Users.GetCopyOfInternalList().First(u => u.Username == id);
+                User user = InMemoryDatabase.Instance.Users.GetCopyOfInternalList().First(u => u.Username == id);
                 return user;
             }
             catch(ArgumentNullException ane)
@@ -55,17 +56,17 @@ namespace DataAccess
 
         public List<User> GetAll()
         {
-            return Database.Instance.Users.GetCopyOfInternalList();
+            return InMemoryDatabase.Instance.Users.GetCopyOfInternalList();
         }
 
         public void Add(User elem)
         {
-            Database.Instance.Users.Add(elem);
+            InMemoryDatabase.Instance.Users.Add(elem);
         }
 
         public void Delete(User elem)
         {
-            bool existed = Database.Instance.Users.Remove(elem);
+            bool existed = InMemoryDatabase.Instance.Users.Remove(elem);
 
             if(!existed)
             {
@@ -77,9 +78,9 @@ namespace DataAccess
         {
             try
             {
-                User oldUser = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
-                Database.Instance.Users.Remove(oldUser);
-                Database.Instance.Users.Add(elem);
+                User oldUser = InMemoryDatabase.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
+                InMemoryDatabase.Instance.Users.Remove(oldUser);
+                InMemoryDatabase.Instance.Users.Add(elem);
             }
             catch(ArgumentNullException ane)
             {
