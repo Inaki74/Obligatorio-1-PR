@@ -15,6 +15,11 @@ namespace Business
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
         public int AddGame(Game game)
         {
+            if(string.IsNullOrEmpty(game.Title))
+            {
+                throw new GameKeyFormatException();
+            }
+
             bool exists = GetAllGames().Exists(g => game.Equals(g));
             if (!exists)
             {
@@ -69,11 +74,11 @@ namespace Business
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindGameException();
+                throw new FindGameException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindGameException();
+                throw new FindGameException(ioe.Message);
             }
         }
 
@@ -84,16 +89,16 @@ namespace Business
 
             try
             {
-                Game found = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+                Game found = GetAllGames().First(g => g.Equals(dummyGame));
                 return found.Id;
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindGameException();
+                throw new FindGameException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindGameException();
+                throw new FindGameException(ioe.Message);
             }
         }
         
@@ -118,11 +123,11 @@ namespace Business
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindGameException();
+                throw new FindGameException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindGameException();
+                throw new FindGameException(ioe.Message);
             }
         }
 

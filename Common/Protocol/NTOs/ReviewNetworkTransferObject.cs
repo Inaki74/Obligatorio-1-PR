@@ -23,12 +23,9 @@ namespace Common.Protocol.NTOs
 
         public string Encode()
         {
-            // Order
-            // User->Game->description->score
             string input = "";
             string gameIdAsString = Gameid.ToString();
 
-            //TODO: Is VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE adequate for everything? If so, is it a good name?
             input += VaporProtocolHelper.FillNumber(Username.Length,VaporProtocolSpecification.USER_NAME_MAXSIZE) + Username;
 
             input += VaporProtocolHelper.FillNumber(gameIdAsString.Length,VaporProtocolSpecification.GAME_ID_MAXSIZE) + gameIdAsString;

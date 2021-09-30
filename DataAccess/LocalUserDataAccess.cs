@@ -40,11 +40,11 @@ namespace DataAccess
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindUserException();
+                throw new FindUserException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindUserException();
+                throw new FindUserException(ioe.Message);
             }
         }
 
@@ -83,11 +83,11 @@ namespace DataAccess
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindUserException();
+                throw new FindUserException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindUserException();
+                throw new FindUserException(ioe.Message);
             }
         }
     }

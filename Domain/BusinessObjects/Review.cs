@@ -5,6 +5,7 @@ namespace Domain.BusinessObjects
     [Serializable]
     public class Review
     {
+        public const int MAX_SCORE = 5;
         public int ID {get; set;}
         public User ReviewPublisher {get; set;}
         public Game Game {get; set;}

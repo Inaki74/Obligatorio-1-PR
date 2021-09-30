@@ -22,11 +22,15 @@ namespace Common.FileSystemUtilities
                         var read = fs.Read(data, bytesRead, length - bytesRead);
                         if (read == 0)
                         {
-                            throw new FileReadingException();
+                            throw new FileReadingException();   
                         }
                         bytesRead += read;
                     }
                 }
+            }
+            catch(FileReadingException fre)
+            {
+                throw new FileReadingException(fre.Message);
             }
             catch(Exception e)
             {

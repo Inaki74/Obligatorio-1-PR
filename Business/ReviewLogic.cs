@@ -69,11 +69,11 @@ namespace Business
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindReviewException();
+                throw new FindReviewException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindReviewException();
+                throw new FindReviewException(ioe.Message);
             }
         }
 

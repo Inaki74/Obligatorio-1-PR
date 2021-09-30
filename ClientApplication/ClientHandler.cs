@@ -70,10 +70,9 @@ namespace ClientApplication
                 _tcpClient.Connect(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
             }
-            //TODO: ACTUALLY HANDLE EXCEPTIONS!!!
             catch(Exception e)
             {
-                Console.WriteLine($"An unexpected error ocurred {e.Message}");
+                Console.WriteLine($"Couldn't connecto to server: {e.Message}");
                 return false;
             }
             
@@ -92,14 +91,15 @@ namespace ClientApplication
             }
             catch(FileReadingException fre)
             {
+                _vaporProtocol.SendCoverFailed();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
             catch(EndpointClosedByServerSocketException ecserv)
             {
                 response.Code = StatusCodeConstants.ERROR_SERVER;
-                response.Message = ecserv.Message + "Lowered connection.";
-                _tcpClient.Close();
+                response.Message = ecserv.Message;
+                throw new ExitException();
             }
             
             
@@ -130,14 +130,15 @@ namespace ClientApplication
             }
             catch(FileReadingException fre)
             {
+                _vaporProtocol.SendCoverFailed();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
             catch(EndpointClosedByServerSocketException ecserv)
             {
                 response.Code = StatusCodeConstants.ERROR_SERVER;
-                response.Message = ecserv.Message + "Lowered connection.";
-                _tcpClient.Close();
+                response.Message = ecserv.Message;
+                throw new ExitException();
             }
             
             return response.Message;
@@ -320,8 +321,8 @@ namespace ClientApplication
             catch(EndpointClosedByServerSocketException ecserv)
             {
                 response.Code = StatusCodeConstants.ERROR_SERVER;
-                response.Message = ecserv.Message + "Lowered connection.";
-                _tcpClient.Close();
+                response.Message = ecserv.Message;
+                throw new ExitException();
             }
 
             return response;

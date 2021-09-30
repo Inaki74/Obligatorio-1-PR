@@ -46,9 +46,6 @@ namespace DataAccess
 
         public Review GetCopy(string title)
         {
-            //Review game = Database.Instance.Reviews.GetInternalList().FirstOrDefault(g => g.Title == title);
-            //return game;
-
             throw new NotImplementedException();
         }
 

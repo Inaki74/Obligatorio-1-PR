@@ -6,6 +6,8 @@ namespace Common.Protocol
 {
     public class VaporCoverHeader : IVaporHeader
     {
+        public const string SUCCESS_COVER = "Y";
+        public const string FAILED_COVER = "N";
         public byte[] FileNameLength => _fileNameLength;
         public byte[] FileName => _fileName;
         public byte[] FileSize => _fileSize;
@@ -27,6 +29,9 @@ namespace Common.Protocol
 
             int indexAcum = 0;
 
+            Array.Copy(Encoding.UTF8.GetBytes(SUCCESS_COVER), 0, packet, indexAcum, VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
+            indexAcum += VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE;
+
             Array.Copy(_fileNameLength, 0, packet, indexAcum, VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
             indexAcum += VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE;
 
@@ -40,7 +45,7 @@ namespace Common.Protocol
 
         public int GetLength()
         {
-            return VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE + VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE + _fileName.Length;
+            return VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE + VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE + VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE + _fileName.Length;
         }
     }
 }

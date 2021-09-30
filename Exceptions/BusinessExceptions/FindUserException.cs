@@ -6,6 +6,13 @@ namespace Exceptions.BusinessExceptions
     {
         public FindUserException() {}
 
-        public override string Message => "That user doesn't exist!";
+        public FindUserException(string message) 
+        {
+            _innerMessage = message;
+        }
+
+        private string _innerMessage = "";
+
+        public override string Message => $"That user doesn't exist! Inner exception: {_innerMessage}";
     }
 }

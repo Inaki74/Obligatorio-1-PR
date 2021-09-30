@@ -53,6 +53,10 @@ namespace Common.NetworkUtilities
             {
                 throw new EndpointClosedByServerSocketException();
             }
+            catch(IOException e)
+            {
+                throw new EndpointClosedByServerSocketException();
+            }
         }
     }
 }

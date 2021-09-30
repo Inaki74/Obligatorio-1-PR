@@ -50,8 +50,19 @@ namespace DataAccess
 
         public Game GetCopy(string title)
         {
-            Game game = Database.Instance.Games.GetCopyOfInternalList().FirstOrDefault(g => g.Title == title);
-            return game;
+            try
+            {
+                Game game = Database.Instance.Games.GetCopyOfInternalList().First(g => g.Title == title);
+                return game;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
 
         public Game GetCopyId(int id)
@@ -63,11 +74,11 @@ namespace DataAccess
             }
             catch(ArgumentNullException ane)
             {
-                throw new FindGameException();
+                throw new FindGameException(ane.Message);
             }
             catch(InvalidOperationException ioe)
             {
-                throw new FindGameException();
+                throw new FindGameException(ioe.Message);
             }
         }
 
