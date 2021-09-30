@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleMenusInterfaces\ConsoleMenusInterfaces.csproj" />
+    <ProjectReference Include="..\ClientApplicationInterfaces\ClientApplicationInterfaces.csproj" />
+    <ProjectReference Include="..\ServerApplicationInterfaces\ServerApplicationInterfaces.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>
