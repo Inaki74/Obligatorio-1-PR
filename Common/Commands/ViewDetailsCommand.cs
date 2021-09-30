@@ -22,20 +22,21 @@ namespace Common.Commands
             IReviewLogic reviewLogic = new ReviewLogic();
             GameNetworkTransferObject queryDummy = new GameNetworkTransferObject();
             GameDetailsNetworkTransferObject detailsDummy = new GameDetailsNetworkTransferObject();
-
+            
             DetailsQuery query = new DetailsQuery();
-                Game gameDummy = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game gameDummy = queryDummy.Decode(gameString);
                 
-                query.Game = gameLogic.GetGame(gameDummy.Id);
-                query.Reviews = reviewLogic.GetReviews(query.Game);
-                query.Score = reviewLogic.GetGameScore(query.Game);
+            query.Game = gameLogic.GetGame(gameDummy.Id);
+            query.Reviews = reviewLogic.GetReviews(query.Game);
+            query.Score = reviewLogic.GetGameScore(query.Game);
                 
-                detailsDummy.Load(query);
-                response = detailsDummy.Encode();
+            detailsDummy.Load(query);
+            response = detailsDummy.Encode();
                 
-                statusCode = StatusCodeConstants.OK;
+            statusCode = StatusCodeConstants.OK;
                 
-                return statusCode.ToString() + response;
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

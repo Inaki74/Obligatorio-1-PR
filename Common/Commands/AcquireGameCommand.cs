@@ -16,11 +16,13 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
+            IGameLogic gameLogic = new GameLogic();
+            
             int statusCode = 0;
             string response = "";
-            
-            GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
-            IGameLogic gameLogic = new GameLogic();
+
+            string queryString = Encoding.UTF8.GetString(payload);
+            GameUserRelationQuery query = queryDummy.Decode(queryString);
             gameLogic.AcquireGame(query);
 
             statusCode = StatusCodeConstants.OK;

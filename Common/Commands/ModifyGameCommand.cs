@@ -13,12 +13,16 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_MODIFY_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
-            Game game = DisassembleGamePayload(payload);
             IGameLogic gameLogic = new GameLogic();
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            
             int statusCode = 0;
             string response = "";
             
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game game = gameNTO.Decode(gameString);
             gameLogic.ModifyGame(game);
+            
             statusCode = StatusCodeConstants.OK;
             response = "Game modified!";
 
@@ -32,13 +36,5 @@ namespace Common.Commands
             return statusMessage;
         }
         
-        private Game DisassembleGamePayload(byte[] payload)
-        {
-            string payloadAsString = Encoding.UTF8.GetString(payload);
-
-            GameNetworkTransferObject game = new GameNetworkTransferObject();
-
-            return game.Decode(payloadAsString);
-        }
     }
 }

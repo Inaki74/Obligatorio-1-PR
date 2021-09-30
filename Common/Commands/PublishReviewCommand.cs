@@ -16,14 +16,16 @@ namespace Common.Commands
 
         public string ActionReq(byte[] payload)
         {
+            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
             IReviewLogic reviewLogic = new ReviewLogic();
-            Review review = DisassembleReviewPayload(payload);
-            
+
             int statusCode = 0;
             string response = "";
             
+            string payloadAsString = Encoding.UTF8.GetString(payload);
+            Review review = reviewNTO.Decode(payloadAsString);
+            
             bool existed = reviewLogic.Exists(review);
-
             reviewLogic.AddReview(review);
 
             if(!existed)
@@ -46,14 +48,6 @@ namespace Common.Commands
 
             return statusMessage;
         }
-
-        private Review DisassembleReviewPayload(byte[] payload)
-        {
-            string payloadAsString = Encoding.UTF8.GetString(payload);
-
-            ReviewNetworkTransferObject review = new ReviewNetworkTransferObject();
-
-            return review.Decode(payloadAsString);
-        }
+        
     }
 }

@@ -14,16 +14,20 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_DOWNLOAD_COVER_CODE;
         public string ActionReq(byte[] payload)
         {
-            IGameLogic gameLogic = new GameLogic();
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            IGameLogic gameLogic = new GameLogic();
+            
             int statusCode = 0;
             string response = "";
-
-            Game gameDummy = DisassembleGamePayload(payload);
+            
+            string payloadAsString = Encoding.UTF8.GetString(payload);
+            Game gameDummy = gameNTO.Decode(payloadAsString);
             Game realGame = gameLogic.GetGame(gameDummy.Id);
+            
             gameNTO.Load(realGame);
-            statusCode = StatusCodeConstants.OK;
             response = gameNTO.Encode();
+            
+            statusCode = StatusCodeConstants.OK;
 
             return statusCode.ToString() + response;
         }
@@ -35,13 +39,5 @@ namespace Common.Commands
             return statusMessage;
         }
         
-        private Game DisassembleGamePayload(byte[] payload)
-        {
-            string payloadAsString = Encoding.UTF8.GetString(payload);
-
-            GameNetworkTransferObject game = new GameNetworkTransferObject();
-
-            return game.Decode(payloadAsString);
-        }
     }
 }

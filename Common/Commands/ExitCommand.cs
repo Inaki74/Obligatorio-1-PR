@@ -15,11 +15,16 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
+            UserLogic userLogic = new UserLogic();
+            
             int statusCode = 0;
             string response = "";
-            UserLogic userLogic = new UserLogic();
-            User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+
+            string userString = Encoding.UTF8.GetString(payload);
+            User user = userDummy.Decode(userString);
+            
             userLogic.Logout(user);
+            
             statusCode = StatusCodeConstants.OK;
             response = "Logged out.";
 
