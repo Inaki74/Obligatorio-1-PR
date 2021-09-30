@@ -25,12 +25,20 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
             
-            reviewLogic.Exists(review);
+            bool existed = reviewLogic.Exists(review);
 
             reviewLogic.AddReview(review);
 
-            statusCode = StatusCodeConstants.OK;
-            response = "Review published!";
+            if(!existed)
+            {
+                statusCode = StatusCodeConstants.OK;
+                response = "Review published!";
+            }
+            else
+            {
+                statusCode = StatusCodeConstants.INFO;
+                response = "You already had a review for this game, it was replaced with the new one.";
+            }
         
             return statusCode.ToString() + response;
         }
