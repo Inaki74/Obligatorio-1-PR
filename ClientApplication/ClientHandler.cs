@@ -15,6 +15,7 @@ using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
 using Common.Configuration;
 using System.Collections.Generic;
+using Exceptions;
 
 namespace ClientApplication
 {
@@ -84,9 +85,15 @@ namespace ClientApplication
             SendCommand<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
             VaporStatusResponse response = ExecuteCommand();
 
-            // Enviar caratula si corresponde
-            // TODO: Agregar un try/catch.
-            _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+            try
+            {
+                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+            }
+            catch(FileReadingException fre)
+            {
+                response.Message = fre.Message;
+                response.Code = StatusCodeConstants.ERROR_CLIENT;
+            }
             
             return response;
         }
@@ -111,8 +118,15 @@ namespace ClientApplication
             SendCommand<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
             VaporStatusResponse response = ExecuteCommand();
 
-            // Enviar caratula si corresponde
-            _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+            try
+            {
+                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+            }
+            catch(FileReadingException fre)
+            {
+                response.Message = fre.Message;
+                response.Code = StatusCodeConstants.ERROR_CLIENT;
+            }
             
             return response.Message;
         }
@@ -195,7 +209,15 @@ namespace ClientApplication
             SendCommand<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game);
             VaporStatusResponse response = ExecuteCommand();
 
-            _vaporProtocol.ReceiveCover(path);
+            try
+            {
+                _vaporProtocol.ReceiveCover(path);
+            }
+            catch(FileWritingException fwe)
+            {
+                response.Message = fwe.Message;
+                response.Code = StatusCodeConstants.ERROR_CLIENT;
+            }
             
             return response;
         }
