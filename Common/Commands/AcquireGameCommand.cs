@@ -21,17 +21,11 @@ namespace Common.Commands
             
             GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
             IGameLogic gameLogic = new GameLogic();
-            bool gameSuccesfullyAcquired = gameLogic.AcquireGame(query);
-            if (gameSuccesfullyAcquired)
-            {
-                statusCode = StatusCodeConstants.OK;
-                response = "Game acquired succesfully";
-            }
-            else
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = "Something went wrong!";
-            }
+            gameLogic.AcquireGame(query);
+
+            statusCode = StatusCodeConstants.OK;
+            response = "Game acquired succesfully";
+
             return statusCode.ToString() + response;
         }
 

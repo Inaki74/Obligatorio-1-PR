@@ -21,18 +21,13 @@ namespace Common.Commands
 
             // TODO: Throw exception if game not found
             game.Id = gameLogic.GetGameId(game.Title);
+            
             Game gameSelected = gameLogic.SelectGame(game.Id);
-            if (gameSelected != null)
-            {
-                statusCode = StatusCodeConstants.OK;
-                string idAsString = gameSelected.Id.ToString();
-                response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
-            }
-            else
-            {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = "Couldn't select game. Game doesn't exist.";
-            }
+            statusCode = StatusCodeConstants.OK;
+
+            string idAsString = gameSelected.Id.ToString();
+            response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
+
             return statusCode.ToString() + response;
         }
 
