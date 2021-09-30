@@ -19,6 +19,7 @@ namespace ConsoleMenus.Client
         {
             Console.WriteLine("Looking for game...");
             VaporStatusResponse response = IClientHandler.Instance.SelectGame(answer);
+            
             if (response.Code == StatusCodeConstants.OK)
             {
                 VaporStatusResponse isOwnerResponse = IClientHandler.Instance.CheckIsOwner();

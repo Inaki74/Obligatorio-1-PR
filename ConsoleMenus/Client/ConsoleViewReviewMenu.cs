@@ -24,10 +24,7 @@ namespace ConsoleMenus.Client
             if(response.Code == StatusCodeConstants.OK)
             {
                 Review review = response.Review;
-                Console.WriteLine($"Game: {review.Game.Title}");
-                Console.WriteLine($"Score: {review.Score}");
-                Console.WriteLine($"Description: {review.Description}");
-                Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
+                ShowReview(review);
             }
             else
             {
@@ -36,6 +33,14 @@ namespace ConsoleMenus.Client
             _nextMenu = new ConsoleMainMenu();
             
             return false;
+        }
+
+        private void ShowReview(Review review)
+        {
+            Console.WriteLine($"Game: {review.Game.Title}");
+            Console.WriteLine($"Score: {review.Score}");
+            Console.WriteLine($"Description: {review.Description}");
+            Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
         }
 
         

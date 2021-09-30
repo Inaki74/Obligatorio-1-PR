@@ -20,24 +20,25 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            IFileStreamHandler fileStreamHandler = new FileStreamHandler();
+            IGameLogic gameLogic = new GameLogic(); 
+            
             int statusCode = 0;
             string response = "";
             
-            IFileStreamHandler fileStreamHandler = new FileStreamHandler();
-                
-            Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-            IGameLogic gameLogic = new GameLogic(); 
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game game = gameDummy.Decode(gameString);
             gameLogic.DeleteGame(game);
             
-            //Deleting image from server
-            IPathHandler pathHandler = new PathHandler();
             IConfigurationHandler configurationHandler = new ConfigurationHandler();
+            IPathHandler pathHandler = new PathHandler();
+            
             string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
             fileStreamHandler.Delete(path);
+            
             statusCode = StatusCodeConstants.OK;
             response = "Game deleted successfully.";
-
-
+            
             return statusCode.ToString() + response;
         }
 

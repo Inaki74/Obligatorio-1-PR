@@ -22,17 +22,17 @@ namespace Common.Commands
             string response = "";
 
             IReviewLogic reviewLogic = new ReviewLogic();
-
-            //Decode query
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-            Game game = gameNTO.Decode(Encoding.UTF8.GetString(payload));
+            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(reviewNTO);
 
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game game = gameNTO.Decode(gameString);
             List<Review> gameReviewList = reviewLogic.GetReviews(game);
-            statusCode = StatusCodeConstants.OK;
-            ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
             reviewListNTO.Load(gameReviewList);
             response = reviewListNTO.Encode();
 
+            statusCode = StatusCodeConstants.OK;
 
             return statusCode.ToString() + response;
         }
@@ -41,10 +41,11 @@ namespace Common.Commands
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(reqPayload);
 
+            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(reviewNTO);
+            
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
-                
                 statusMessage.ReviewsList = reviewListNTO.Decode(statusMessage.Message);
 
                 if(statusMessage.ReviewsList.Count != 0)

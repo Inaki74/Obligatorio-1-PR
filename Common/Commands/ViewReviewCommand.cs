@@ -15,24 +15,23 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_VIEW_REVIEW_CODE;
         public string ActionReq(byte[] payload)
         {
+            GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
+            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            IReviewLogic reviewLogic = new ReviewLogic();
+            
             int statusCode = 0;
             string response = "";
 
-            GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
-
-            IReviewLogic reviewLogic = new ReviewLogic();
-            
-            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            string queryString = Encoding.UTF8.GetString(payload);
+            GameUserRelationQuery query = queryDummy.Decode(queryString);
+            Review review = reviewLogic.GetReview(query);
                 
-             GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
-             Review review = reviewLogic.GetReview(query);
+            reviewNTO.Load(review);
+            response = reviewNTO.Encode();
                 
-             reviewNTO.Load(review);
-             response = reviewNTO.Encode();
+            statusCode = StatusCodeConstants.OK;
                 
-             statusCode = StatusCodeConstants.OK;
-                
-             return statusCode.ToString() + response;
+            return statusCode.ToString() + response;
 
         }
 

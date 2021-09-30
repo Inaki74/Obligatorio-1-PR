@@ -44,7 +44,7 @@ namespace ConsoleMenus.Client
                     _nextMenu = this;
                     break;
             }
-
+            
             return false;
         }
 

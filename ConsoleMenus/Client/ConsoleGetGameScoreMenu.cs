@@ -22,10 +22,8 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            // Conseguir la lista
             VaporStatusResponse response = IClientHandler.Instance.GetGameScore();
-
-            // Imprimirla
+            
             if(response.Code == StatusCodeConstants.OK)
             {
                 bool listIsEmpty = response.ReviewsList.Count == 0;
@@ -41,10 +39,7 @@ namespace ConsoleMenus.Client
                     Console.WriteLine("CALCULATED FROM REVIEWS FROM:\n");
                 }
 
-                foreach(Review review in response.ReviewsList)
-                {
-                    Console.WriteLine($"   {review.ReviewPublisher.Username}");
-                }
+                ShowReviews(response.ReviewsList);
                 Console.WriteLine("");
             }
             else
@@ -60,6 +55,14 @@ namespace ConsoleMenus.Client
         public void PrintMenu()
         {
             Console.WriteLine("Fetching game reviews ...");
+        }
+
+        private void ShowReviews(List<Review> reviewsList)
+        {
+            foreach(Review review in reviewsList)
+            {
+                Console.WriteLine($"  {review.ReviewPublisher.Username}");
+            }
         }
     }
 }

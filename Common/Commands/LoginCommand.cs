@@ -17,13 +17,15 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             UserNetworkTransferObject userDummy = new UserNetworkTransferObject();
-            int statusCode = 0;
-            string response = "";
-
             UserLogic userLogic = new UserLogic();
-            User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+
+            string userString = Encoding.UTF8.GetString(payload);
+            User user = userDummy.Decode(userString);
             bool userExisted = userLogic.Login(user);
 
+            int statusCode = 0;
+            string response = "";
+            
             if(userExisted)
             {
                 statusCode = StatusCodeConstants.OK;

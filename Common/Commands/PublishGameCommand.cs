@@ -17,56 +17,37 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             IGameLogic gameLogic = new GameLogic();
-            Game game = DisassembleGamePayload(payload);
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game game = gameNTO.Decode(gameString);
             
             int statusCode = 0;
             string response = "";
             
             int id = gameLogic.AddGame(game);
-            statusCode = StatusCodeConstants.OK;
-
-            response = EncodeGameResponse(id);
+            game.Id = id;
+            gameNTO.Load(game);
+            response = gameNTO.Encode();
         
+            statusCode = StatusCodeConstants.OK;
+            
             return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);
-
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
-                statusMessage.SelectedGameId = DecodeGameIdResponse(statusMessage.Message);
+                Game game = gameNTO.Decode(statusMessage.Message);
+                statusMessage.SelectedGameId = game.Id;
             }
             
             return statusMessage;
         }
 
-        private Game DisassembleGamePayload(byte[] payload)
-        {
-            string payloadAsString = Encoding.UTF8.GetString(payload);
-
-            GameNetworkTransferObject game = new GameNetworkTransferObject();
-
-            return game.Decode(payloadAsString);
-        }
-
-        private string EncodeGameResponse(int id)
-        {
-            Game dummyGame = new Game();
-            dummyGame.Id = id;
-
-            GameNetworkTransferObject gameDummyResponse = new GameNetworkTransferObject();
-            gameDummyResponse.Load(dummyGame);
-
-            return gameDummyResponse.Encode();
-        }
-
-        private int DecodeGameIdResponse(string payload)
-        {
-            GameNetworkTransferObject gameDummyResponse = new GameNetworkTransferObject();
-
-            return gameDummyResponse.Decode(payload).Id;
-        }
     }
 }

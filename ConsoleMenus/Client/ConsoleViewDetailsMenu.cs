@@ -12,6 +12,13 @@ namespace ConsoleMenus.Client
     {
         public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer => false;
+
+        private bool _isOwner;
+
+        public ConsoleViewDetailsMenu(bool isOwner)
+        {
+            this._isOwner = _isOwner;
+        }
         public void PrintMenu()
         {
             Console.WriteLine("Fetching game details... ");
@@ -25,25 +32,32 @@ namespace ConsoleMenus.Client
             {
                 List<Review> reviewList = response.ReviewsList;
                 Game game = response.Game;
-                Console.WriteLine($"Game: {game.Title}");
-                Console.WriteLine($"Score: {response.GameScore}");
-                Console.WriteLine($"Synopsis: {game.Synopsis}");
-                Console.WriteLine($"ESRB: {game.ESRB}");
-                Console.WriteLine($"Owner: {game.Owner.Username}");
-                Console.WriteLine($"--- Game reviews ---");
-                showReviews(reviewList);
+                game.OverallScore = response.GameScore;
+                
+                ShowGameDetails(game);
+                ShowReviews(reviewList);
                 _nextMenu = new ConsoleDownloadCoverMenu();
             }
             else
             {
                 Console.WriteLine(response.Message);
-                _nextMenu = new ConsoleMainMenu();
+                _nextMenu = new ConsoleGameMenu(_isOwner);
             }
 
             return false;
         }
 
-        private void showReviews(List<Review> reviewList)
+        private void ShowGameDetails(Game game)
+        {
+            Console.WriteLine($"Game: {game.Title}");
+            Console.WriteLine($"Score: {game.OverallScore}");
+            Console.WriteLine($"Synopsis: {game.Synopsis}");
+            Console.WriteLine($"ESRB: {game.ESRB}");
+            Console.WriteLine($"Owner: {game.Owner.Username}");
+            Console.WriteLine($"--- Game reviews ---");
+        }
+
+        private void ShowReviews(List<Review> reviewList)
         {
             foreach (Review review in reviewList)
             {

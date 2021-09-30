@@ -14,21 +14,22 @@ namespace Common.Commands
         public string ActionReq(byte[] payload)
         {
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
+            IGameLogic gameLogic = new GameLogic(); 
             
             int statusCode = 0;
             string response = "";
 
-            Game game = gameDummy.Decode(Encoding.UTF8.GetString(payload));
-            IGameLogic gameLogic = new GameLogic(); 
-
+            string gameString = Encoding.UTF8.GetString(payload);
+            Game game = gameDummy.Decode(gameString);
             game.Id = gameLogic.GetGameId(game.Title);
-            
             Game gameSelected = gameLogic.SelectGame(game.Id);
-            statusCode = StatusCodeConstants.OK;
-
+            
             string idAsString = gameSelected.Id.ToString();
-            response = VaporProtocolHelper.FillNumber(idAsString.Length, VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE) + idAsString;
-
+            int gameInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+            
+            response = VaporProtocolHelper.FillNumber(idAsString.Length, gameInputFixedSize) + idAsString;
+            statusCode = StatusCodeConstants.OK;
+            
             return statusCode.ToString() + response;
         }
 
@@ -40,8 +41,8 @@ namespace Common.Commands
             {
                 int dummy = 0;
                 int gameInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-                string GameFiled = NetworkTransferHelperMethods.ExtractGameField(statusMessage.Message, ref dummy, gameInputFixedSize);
-                int id = int.Parse(GameFiled);
+                string GameField = NetworkTransferHelperMethods.ExtractGameField(statusMessage.Message, ref dummy, gameInputFixedSize);
+                int id = int.Parse(GameField);
 
                 statusMessage.SelectedGameId = id;
             }

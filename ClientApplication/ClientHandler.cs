@@ -218,6 +218,11 @@ namespace ClientApplication
             {
                 _vaporProtocol.ReceiveCover(path);
             }
+            catch (CoverNotReceivedException cre)
+            {
+                response.Message = cre.Message;
+                response.Code = StatusCodeConstants.ERROR_STREAM;
+            }
             catch(FileWritingException fwe)
             {
                 response.Message = fwe.Message;

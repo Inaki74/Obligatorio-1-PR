@@ -14,10 +14,10 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            Review review = GetReviewInput();
             ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            
+            Review review = GetReviewInput();
             reviewNTO.Load(review);
-
             string response = IClientHandler.Instance.PublishReview(reviewNTO);
 
             _nextMenu = new ConsoleGameMenu(false);

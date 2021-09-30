@@ -18,10 +18,6 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            // Titulo juego, genero juego, ESRB, sinopsis, caratula, con separadores.
-            // DOOM 1994 Mature Shooter Un juego en donde matas bichos.
-            // 12007JamesBond
-            // Escribir juego
             GameNetworkTransferObject input = GetGame();
 
             VaporStatusResponse response = IClientHandler.Instance.PublishGame(input);

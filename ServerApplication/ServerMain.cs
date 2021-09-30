@@ -23,8 +23,6 @@ namespace ServerApplication
             {
                 consoleManager.ExecuteMenu();
             }
-
-            Console.WriteLine("Main closing.");
         }
 
         

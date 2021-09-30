@@ -16,14 +16,11 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            // Conseguir la lista
             VaporStatusResponse response = IClientHandler.Instance.GetGames();
-
-            // Imprimirla
+            
             if(response.Code == StatusCodeConstants.OK)
             {
                 bool listIsEmpty = response.GamesList.Count == 0;
-
                 if(!listIsEmpty)
                 {
                     Console.WriteLine("GAMES FOUND:\n");
@@ -32,11 +29,8 @@ namespace ConsoleMenus.Client
                 { 
                     Console.WriteLine("No games were found.");
                 }
-                
-                foreach(Game game in response.GamesList)
-                {
-                    Console.WriteLine($"   {game.Title}");
-                }
+
+                ShowGameList(response.GamesList);
                 Console.WriteLine("");
             }
             else
@@ -52,6 +46,14 @@ namespace ConsoleMenus.Client
         public void PrintMenu()
         {
             Console.WriteLine("Fetching all games ...");
+        }
+
+        private void ShowGameList(List<Game> gameList)
+        {
+            foreach(Game game in gameList)
+            {
+                Console.WriteLine($"  {game.Title}");
+            }
         }
     }
 }

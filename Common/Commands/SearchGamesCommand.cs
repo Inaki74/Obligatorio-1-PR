@@ -20,14 +20,14 @@ namespace Common.Commands
         {
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
             ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(gameNTO);
+            GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
             IGameLogic gameLogic = new GameLogic();
 
             int statusCode = 0;
             string response = "";
 
-
-            GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
-            GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
+            string queryString = Encoding.UTF8.GetString(payload);
+            GameSearchQuery query = queryNTO.Decode(queryString);
 
             List<Game> coincidences = gameLogic.SearchGames(query);
             listNTO.Load(coincidences);

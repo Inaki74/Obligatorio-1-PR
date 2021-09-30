@@ -20,16 +20,15 @@ namespace Common.Commands
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
-
-            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(new GameNetworkTransferObject());
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(gameNTO);
             
-
-             List<Game> allGames = gameLogic.GetAllGames();
-             statusCode = StatusCodeConstants.OK;
-             listNTO.Load(allGames);
-             response = listNTO.Encode();
-
-
+            List<Game> allGames = gameLogic.GetAllGames();
+            listNTO.Load(allGames);
+            response = listNTO.Encode();
+             
+            statusCode = StatusCodeConstants.OK;
+             
             return statusCode.ToString() + response;
         }
         
@@ -37,7 +36,10 @@ namespace Common.Commands
         public VaporStatusResponse ActionRes(byte[] payload)
         {
             VaporStatusResponse statusMessage = ParseStatusResponse(payload);
-            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(new GameNetworkTransferObject());
+         
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            ListNetworkTransferObject<Game> listNTO = new ListNetworkTransferObject<Game>(gameNTO);
+            
             if(statusMessage.Code == StatusCodeConstants.OK)
             {
                 statusMessage.GamesList = listNTO.Decode(statusMessage.Message);

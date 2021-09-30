@@ -18,12 +18,11 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            // Intentar login
             Console.WriteLine($"Attempting to login with {answer}");
 
             UserNetworkTransferObject user = new UserNetworkTransferObject();
+            
             user.Username = answer;
-
             VaporStatusResponse response = IClientHandler.Instance.Login(user);
 
             switch(response.Code)

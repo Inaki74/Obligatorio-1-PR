@@ -36,8 +36,10 @@ namespace ServerApplication
         private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly TcpListener _tcpServerListener;
+        
         private List<TcpClient> _tcpClients = new List<TcpClient>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
+        
         private int _currentThreadId = 0;
         private bool _serverRunning;
 
@@ -73,11 +75,9 @@ namespace ServerApplication
         public void CloseServer()
         {
             _serverRunning = false;
-            // Wait for all clients to finish their command executions.
             if (!AllClientsFinishedExecuting())
             { 
-                Console.WriteLine("Waiting for clients to finish their commands..."); 
-                // Give Clients 5 seconds to finish executions
+                Console.WriteLine("Waiting for clients to finish their commands...");
                 System.Threading.Thread.Sleep(MAX_SECONDS_WASTED);
             }
             foreach (TcpClient client in _tcpClients)
@@ -104,6 +104,7 @@ namespace ServerApplication
             }
             
             _tcpServerListener.Stop();
+            Console.WriteLine("Server closed!");
         }
 
         private void StartClientThread(TcpClient acceptedTcpClient)
@@ -129,62 +130,18 @@ namespace ServerApplication
                 while (connected && _serverRunning)
                 {
                     VaporProcessedPacket processedPacket = vp.ReceiveCommand();
-
                     SetStatusOfExecuting(true, threadId);
 
-                    CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-                    
-                    vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
-
-                    if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
-                    {
-                        string path = _configurationHandler.GetPathFromAppSettings();
-                        try
-                        {
-                            vp.ReceiveCover(path);
-                        }
-                        catch(FileWritingException fwe)
-                        {
-                            Console.WriteLine(fwe.Message);
-                            Console.WriteLine("Cover wasn't received.");
-                        }
-                    }
-
-                    if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
-                    {
-                        string encodedGame = ExtractEncodedGame(response.Response);
-                        GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-                        Game gameDummy = gameNTO.Decode(encodedGame);
-
-                        IPathHandler pathHandler = new PathHandler();
-                        string path = pathHandler.AppendPath(_configurationHandler.GetPathFromAppSettings(),$"{gameDummy.Id}.png");
-
-                        try
-                        {
-                            vp.SendCover(gameDummy.Title + "-COVER" , path);
-                        }
-                        catch(FileReadingException fre)
-                        {
-                            Console.WriteLine(fre.Message);
-                            Console.WriteLine("Cover wasn't sent.");
-                        }
-                    }
-
-                    if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
-                    {
-                        connected = false;
-                    }
+                    ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected);
 
                     SetStatusOfExecuting(false, threadId);
                 }
             }
             catch (EndpointClosedSocketException ecsock)
             {
-                Console.WriteLine(ecsock.Message);
             }
             catch (EndpointClosedByServerSocketException ecserv)
             {
-                Console.WriteLine(ecserv.Message);
             }
             catch(SocketException e)
             {
@@ -218,10 +175,69 @@ namespace ServerApplication
         {
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
+            
             IPEndPoint clientIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), 0);
             IPEndPoint serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
+            
             TcpClient fakeTCPClient = new TcpClient(clientIpEndPoint);
             fakeTCPClient.Connect(serverIpEndPoint);
+        }
+
+
+        public void ProcessCommand(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, ref bool connected)
+        {
+            CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
+            vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
+
+            if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
+            {
+                RecieveClientGameCover(vp);
+            }
+                    
+            if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
+            {
+                SendClientGameCover(vp, response);
+            }
+                    
+            if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
+            {
+                connected = false;
+            }
+        }
+        
+        
+        private void RecieveClientGameCover(VaporProtocol vp)
+        {
+            string path = _configurationHandler.GetPathFromAppSettings();
+            try
+            {
+                vp.ReceiveCover(path);
+            }
+            catch (CoverNotReceivedException cre)
+            {
+            }
+            catch(FileWritingException fwe)
+            {
+            }
+        }
+
+        private void SendClientGameCover(VaporProtocol vp, CommandResponse response)
+        {
+            string encodedGame = ExtractEncodedGame(response.Response);
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            Game gameDummy = gameNTO.Decode(encodedGame);
+
+            IPathHandler pathHandler = new PathHandler();
+            string path = pathHandler.AppendPath(_configurationHandler.GetPathFromAppSettings(),$"{gameDummy.Id}.png");
+
+            try
+            {
+                vp.SendCover(gameDummy.Title + "-COVER" , path);
+            }
+            catch(FileReadingException fre)
+            {
+                vp.SendCoverFailed();
+            }
         }
     }
 }
