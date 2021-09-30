@@ -21,18 +21,10 @@ namespace Common.Commands
             int statusCode = 0;
             string response = "";
             
-            try
-            {
-                gameLogic.ModifyGame(game);
-                statusCode = StatusCodeConstants.OK;
-                response = "Game modified!";
-            }
-            catch (Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_CLIENT;
-                response = $"Something went wrong when modifying your game: {e.Message}";
-            }
-        
+            gameLogic.ModifyGame(game);
+            statusCode = StatusCodeConstants.OK;
+            response = "Game modified!";
+
             return statusCode.ToString() + response;
         }
 

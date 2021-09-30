@@ -8,6 +8,7 @@ using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.HelperObjects;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace Common.Commands
 {
@@ -22,24 +23,15 @@ namespace Common.Commands
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
-            try
-            {
-                //Decode query
-                GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
-                GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
+            //Decode query
+            GameSearchQueryNetworkTransferObject queryNTO = new GameSearchQueryNetworkTransferObject();
+            GameSearchQuery query = queryNTO.Decode(Encoding.UTF8.GetString(payload));
 
-                List<Game> coincidences = gameLogic.SearchGames(query);
-                statusCode = StatusCodeConstants.OK;
-                response = EncodeGameList(coincidences);
+            List<Game> coincidences = gameLogic.SearchGames(query);
+            statusCode = StatusCodeConstants.OK;
+            response = EncodeGameList(coincidences);
 
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
-                return statusCode.ToString() + response;
-            }
+            return statusCode.ToString() + response;
         }
 
         // Decode games list

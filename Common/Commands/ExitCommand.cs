@@ -20,18 +20,10 @@ namespace Common.Commands
             string response = "";
 
             UserLogic userLogic = new UserLogic();
-            try
-            {
-                User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
-                userLogic.Logout(user);
-                statusCode = StatusCodeConstants.OK;
-                response = "Logged out.";
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Logged out but something went wrong server-side: {e.Message}";
-            }
+            User user = userDummy.Decode(Encoding.UTF8.GetString(payload));
+            userLogic.Logout(user);
+            statusCode = StatusCodeConstants.OK;
+            response = "Logged out.";
 
             return statusCode.ToString() + response;
         }

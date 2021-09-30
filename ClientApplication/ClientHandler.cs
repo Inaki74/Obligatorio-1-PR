@@ -298,11 +298,6 @@ namespace ClientApplication
                 response.Code = StatusCodeConstants.ERROR_SERVER;
                 response.Message = ecserv.Message + "Lowered connection.";
             }
-            catch(BusinessException be)
-            {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
-                response.Message = be.Message;
-            }
 
             _tcpClient.Close();
 
@@ -327,11 +322,6 @@ namespace ClientApplication
                 response.Code = StatusCodeConstants.ERROR_SERVER;
                 response.Message = ecserv.Message + "Lowered connection.";
                 _tcpClient.Close();
-            }
-            catch(BusinessException be)
-            {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
-                response.Message = be.Message;
             }
 
             return response;

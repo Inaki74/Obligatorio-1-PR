@@ -23,26 +23,17 @@ namespace Common.Commands
             string response = "";
 
             IReviewLogic reviewLogic = new ReviewLogic();
-            try
-            {
-                //Decode query
-                GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
-                Game game = gameNTO.Decode(Encoding.UTF8.GetString(payload));
+            //Decode query
+            GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
+            Game game = gameNTO.Decode(Encoding.UTF8.GetString(payload));
 
-                List<Review> gameReviewList = reviewLogic.GetReviews(game);
-                statusCode = StatusCodeConstants.OK;
-                ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
-                reviewListNTO.Load(gameReviewList);
-                response = reviewListNTO.Encode();
+            List<Review> gameReviewList = reviewLogic.GetReviews(game);
+            statusCode = StatusCodeConstants.OK;
+            ListNetworkTransferObject<Review> reviewListNTO = new ListNetworkTransferObject<Review>(new ReviewNetworkTransferObject());
+            reviewListNTO.Load(gameReviewList);
+            response = reviewListNTO.Encode();
 
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e) //TODO: Ver posibles errores del parte del cliente.
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message} + {e.StackTrace}";
-                return statusCode.ToString() + response;
-            }
+            return statusCode.ToString() + response;
         }
 
         // Decode games list
