@@ -17,6 +17,7 @@ using Common.Configuration;
 using System.Collections.Generic;
 using Exceptions;
 using Exceptions.ConnectionExceptions;
+using Exceptions.BusinessExceptions;
 
 namespace ClientApplication
 {
@@ -94,6 +95,13 @@ namespace ClientApplication
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
+            catch(EndpointClosedByServerSocketException ecserv)
+            {
+                response.Code = StatusCodeConstants.ERROR_SERVER;
+                response.Message = ecserv.Message + "Lowered connection.";
+                _tcpClient.Close();
+            }
+            
             
             return response;
         }
@@ -124,6 +132,12 @@ namespace ClientApplication
             {
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
+            }
+            catch(EndpointClosedByServerSocketException ecserv)
+            {
+                response.Code = StatusCodeConstants.ERROR_SERVER;
+                response.Message = ecserv.Message + "Lowered connection.";
+                _tcpClient.Close();
             }
             
             return response.Message;
@@ -209,6 +223,11 @@ namespace ClientApplication
                 response.Message = fwe.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
+            catch(NetworkReadException nre)
+            {
+                response.Code = StatusCodeConstants.ERROR_STREAM;
+                response.Message = nre.Message;
+            }
             
             return response;
         }
@@ -271,13 +290,18 @@ namespace ClientApplication
             }
             catch(NetworkReadException nre)
             {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Code = StatusCodeConstants.ERROR_STREAM;
                 response.Message = nre.Message + "Exited application anyways.";
             }
             catch(EndpointClosedByServerSocketException ecserv)
             {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Code = StatusCodeConstants.ERROR_SERVER;
                 response.Message = ecserv.Message + "Lowered connection.";
+            }
+            catch(BusinessException be)
+            {
+                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Message = be.Message;
             }
 
             _tcpClient.Close();
@@ -295,14 +319,19 @@ namespace ClientApplication
             }
             catch(NetworkReadException nre)
             {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Code = StatusCodeConstants.ERROR_STREAM;
                 response.Message = nre.Message;
             }
             catch(EndpointClosedByServerSocketException ecserv)
             {
-                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Code = StatusCodeConstants.ERROR_SERVER;
                 response.Message = ecserv.Message + "Lowered connection.";
                 _tcpClient.Close();
+            }
+            catch(BusinessException be)
+            {
+                response.Code = StatusCodeConstants.ERROR_CLIENT;
+                response.Message = be.Message;
             }
 
             return response;
