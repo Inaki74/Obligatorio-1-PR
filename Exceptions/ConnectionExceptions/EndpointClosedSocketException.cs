@@ -3,7 +3,7 @@ using System.Net.Sockets;
 
 namespace Exceptions.ConnectionExceptions
 {
-    public class EndpointClosedSocketException : SocketException
+    public class EndpointClosedSocketException : ConnectionSocketException
     {
         public EndpointClosedSocketException()
         {

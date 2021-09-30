@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Common.FileSystemUtilities.Interfaces;
+using Exceptions;
 
 namespace Common.FileSystemUtilities
 {
@@ -18,7 +19,7 @@ namespace Common.FileSystemUtilities
                 return new FileInfo(path).Name;
             }
 
-            throw new Exception("No such path.");
+            throw new FileReadingException();
         }
 
         public long GetFileSize(string path)
@@ -28,7 +29,7 @@ namespace Common.FileSystemUtilities
                 return new FileInfo(path).Length;
             }
 
-            throw new Exception("No such path.");
+            throw new FileReadingException();
         }
 
     }

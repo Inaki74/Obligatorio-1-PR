@@ -20,22 +20,13 @@ namespace Common.Commands
 
             IReviewLogic reviewLogic = new ReviewLogic();
             GameUserRelationQueryNetworkTransferObject queryDummy = new GameUserRelationQueryNetworkTransferObject();
-            try
-            {
-                GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
-                Review review = reviewLogic.GetReview(query);
-                ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
-                reviewNTO.Load(review);
-                statusCode = StatusCodeConstants.OK;
-                response = reviewNTO.Encode();
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message}";
-                return statusCode.ToString() + response;
-            }
+            GameUserRelationQuery query = queryDummy.Decode(Encoding.UTF8.GetString(payload));
+            Review review = reviewLogic.GetReview(query);
+            ReviewNetworkTransferObject reviewNTO = new ReviewNetworkTransferObject();
+            reviewNTO.Load(review);
+            statusCode = StatusCodeConstants.OK;
+            response = reviewNTO.Encode();
+            return statusCode.ToString() + response;
         }
 
         public VaporStatusResponse ActionRes(byte[] reqPayload)

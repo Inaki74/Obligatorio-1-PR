@@ -22,20 +22,11 @@ namespace Common.Commands
             string response = "";
 
             IGameLogic gameLogic = new GameLogic();
-            try
-            {
-                List<Game> allGames = gameLogic.GetAllGames();
-                statusCode = StatusCodeConstants.OK;
-                response = EncodeGameList(allGames);
+            List<Game> allGames = gameLogic.GetAllGames();
+            statusCode = StatusCodeConstants.OK;
+            response = EncodeGameList(allGames);
 
-                return statusCode.ToString() + response;
-            }
-            catch(Exception e)
-            {
-                statusCode = StatusCodeConstants.ERROR_SERVER;
-                response = $"Something went wrong server-side: {e.Message}";
-                return statusCode.ToString() + response;
-            }
+            return statusCode.ToString() + response;
         }
 
         // Lo que hace el cliente.

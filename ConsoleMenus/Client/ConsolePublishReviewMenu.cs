@@ -72,8 +72,7 @@ namespace ConsoleMenus.Client
             try
             {
                 int parsedScore = int.Parse(score);
-                int MAXSCORE = 5; // TODO: Make it a constant somewhere.
-                for(int i = 1; i <= MAXSCORE; i++)
+                for(int i = 1; i <= Review.MAX_SCORE; i++)
                 {
                     if(parsedScore == i)
                     {

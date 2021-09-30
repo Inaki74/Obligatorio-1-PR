@@ -4,6 +4,8 @@ using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using System;
+using Exceptions.BusinessExceptions;
 
 namespace Business
 {
@@ -59,9 +61,20 @@ namespace Business
             Game game = _gameDataAccess.Get(reviewDummy.Gameid);
             User owner = _userDataAccess.Get(reviewDummy.Username);
             List<Review> gameReviews = GetReviews(game);
-            Review gameUserReview = gameReviews.FirstOrDefault(r => r.ReviewPublisher.Equals(owner));
 
-            return gameUserReview;
+            try
+            {
+                Review gameUserReview = gameReviews.First(r => r.ReviewPublisher.Equals(owner));
+                return gameUserReview;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindReviewException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindReviewException(ioe.Message);
+            }
         }
 
         public List<Review> GetReviews(Game game)

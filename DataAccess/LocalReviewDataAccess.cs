@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Linq;
 using Domain.BusinessObjects;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -25,7 +26,12 @@ namespace DataAccess
 
         public void Delete(Review elem)
         {
-            Database.Instance.Reviews.Remove(elem);
+            bool existed = Database.Instance.Reviews.Remove(elem);
+
+            if(!existed)
+            {
+                throw new FindReviewException();
+            }
         }
 
         public Review Get(string id)
@@ -40,9 +46,6 @@ namespace DataAccess
 
         public Review GetCopy(string title)
         {
-            //Review game = Database.Instance.Reviews.GetInternalList().FirstOrDefault(g => g.Title == title);
-            //return game;
-
             throw new NotImplementedException();
         }
 

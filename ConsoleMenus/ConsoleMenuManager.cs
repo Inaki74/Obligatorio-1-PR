@@ -2,6 +2,7 @@ using ConsoleMenusInterfaces;
 using System;
 using ConsoleMenus.Client;
 using ConsoleMenus.Server;
+using Exceptions.ConnectionExceptions;
 
 namespace ConsoleMenus
 {
@@ -45,9 +46,9 @@ namespace ConsoleMenus
                 _currentMenu = _currentMenu.NextMenu;
                 _exit = exit;
             }
-            catch(Exception e)
+            catch(ExitException e)
             {
-                Console.WriteLine($"An error ocurred: {e}");
+                Console.WriteLine(e.Message);
                 _currentMenu = new ConsoleExitMenu();
                 _currentMenu.PrintMenu();
                 _exit = true;

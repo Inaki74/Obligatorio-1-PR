@@ -25,7 +25,15 @@ namespace ConsoleMenus.Client
                 Console.WriteLine("Where do you want to download the image? (path)");
                 string path = Console.ReadLine();
                 VaporStatusResponse response = IClientHandler.Instance.DownloadGameCover(path);
-                Console.WriteLine("Cover downloaded succesfully");
+                
+                if(response.Code == StatusCodeConstants.OK)
+                {
+                    Console.WriteLine("Cover downloaded succesfully");
+                }
+                else
+                {
+                    Console.WriteLine(response.Message);
+                }
             }
             
             _nextMenu = new ConsoleMainMenu();

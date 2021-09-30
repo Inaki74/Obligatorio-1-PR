@@ -4,6 +4,7 @@ using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using Exceptions.BusinessExceptions;
 
 namespace Business
 {
@@ -14,8 +15,13 @@ namespace Business
         public bool Login(User dummyUser)
         {
             string username = dummyUser.Username;
-            User user = _userDataAccess.GetCopy(username);
-            if (user == null)
+            User user = new User("", User.DEFAULT_USER_ID);
+
+            try
+            {
+                user = _userDataAccess.GetCopy(username);
+            }
+            catch(FindUserException fue)
             {
                 AddUser(username);
                 Login(dummyUser);
@@ -29,7 +35,7 @@ namespace Business
             }
             else
             {
-                throw new Exception("User already logged in!");
+                throw new UserLoggedException();
             }
             
             return true;

@@ -48,6 +48,11 @@ namespace Common.Protocol
             _networkStreamHandler.Write(header.Create());
         }
 
+        public void SendCoverFailed()
+        {
+            _networkStreamHandler.Write(Encoding.UTF8.GetBytes(VaporCoverHeader.FAILED_COVER));
+        }
+
         public void SendCover(string gameTitle, string localPath)
         {
             // largoNombreFile tamañoFile NombreFile
@@ -63,6 +68,13 @@ namespace Common.Protocol
 
         public void ReceiveCover(string targetDirectoryPath)
         {
+            byte[] isGoodCover = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
+            string isGoodCoverString = Encoding.UTF8.GetString(isGoodCover);
+            if(isGoodCoverString == VaporCoverHeader.FAILED_COVER)
+            {
+                return;
+            }
+
             // Recibe header
             byte[] fileNameLength = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
             byte[] fileSize = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);

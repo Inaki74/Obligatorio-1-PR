@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Domain.BusinessObjects;
 using System.Linq;
+using Exceptions.BusinessExceptions;
 
 namespace DataAccess
 {
@@ -32,8 +33,19 @@ namespace DataAccess
 
         public User GetCopy(string id)
         {
-            User user = Database.Instance.Users.GetCopyOfInternalList().FirstOrDefault(u => u.Username == id);
-            return user;
+            try
+            {
+                User user = Database.Instance.Users.GetCopyOfInternalList().First(u => u.Username == id);
+                return user;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException(ioe.Message);
+            }
         }
 
         public User GetCopyId(int id)
@@ -53,14 +65,30 @@ namespace DataAccess
 
         public void Delete(User elem)
         {
-            Database.Instance.Users.Remove(elem);
+            bool existed = Database.Instance.Users.Remove(elem);
+
+            if(!existed)
+            {
+                throw new FindUserException();
+            }
         }
 
         public void Update(User elem)
         {
-            User oldUser = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
-            Database.Instance.Users.Remove(oldUser);
-            Database.Instance.Users.Add(elem);
+            try
+            {
+                User oldUser = Database.Instance.Users.GetCopyOfInternalList().First(u => u.ID == elem.ID);
+                Database.Instance.Users.Remove(oldUser);
+                Database.Instance.Users.Add(elem);
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException(ioe.Message);
+            }
         }
     }
 }

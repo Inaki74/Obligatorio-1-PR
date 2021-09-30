@@ -9,6 +9,7 @@ namespace Common.Protocol
         public const int LENGTH_FIXED_SIZE = 4;
 
         // FILE PROTOCOL
+        public const int COVER_CONFIRM_FIXED_SIZE = 1;
         public const int COVER_FILENAMELENGTH_FIXED_SIZE = 4;
         public const int COVER_FILESIZE_FIXED_SIZE = 8;
 

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Common.FileSystemUtilities.Interfaces;
+using Exceptions;
 
 namespace Common.FileSystemUtilities
 {
@@ -10,19 +11,30 @@ namespace Common.FileSystemUtilities
         {
             var data = new byte[length];
 
-            using (var fs = new FileStream(path, FileMode.Open))
+            try
             {
-                fs.Position = offset;
-                var bytesRead = 0;
-                while (bytesRead < length)
+                using (var fs = new FileStream(path, FileMode.Open))
                 {
-                    var read = fs.Read(data, bytesRead, length - bytesRead);
-                    if (read == 0)
+                    fs.Position = offset;
+                    var bytesRead = 0;
+                    while (bytesRead < length)
                     {
-                        throw new Exception("Could not read file");
+                        var read = fs.Read(data, bytesRead, length - bytesRead);
+                        if (read == 0)
+                        {
+                            throw new FileReadingException();   
+                        }
+                        bytesRead += read;
                     }
-                    bytesRead += read;
                 }
+            }
+            catch(FileReadingException fre)
+            {
+                throw new FileReadingException(fre.Message);
+            }
+            catch(Exception e)
+            {
+                throw new FileReadingException(e.Message);
             }
 
             return data;
@@ -30,37 +42,51 @@ namespace Common.FileSystemUtilities
 
         public void Delete(string path)
         {
-            if (File.Exists(path)) File.Delete(path);
+            try
+            {
+                if (File.Exists(path)) File.Delete(path);
+            }
+            catch(Exception e)
+            {
+                throw new FileReadingException(e.Message);
+            }
         }
 
         public void Write(byte[] data, string fileName, bool firstPart)
         {
-            if (File.Exists(fileName))
+            try
             {
-                if (firstPart)
+                if (File.Exists(fileName))
                 {
-                    File.Delete(fileName);
+                    if (firstPart)
+                    {
+                        File.Delete(fileName);
+                        using (var fs = new FileStream(fileName, FileMode.Create))
+                        {
+                            fs.Write(data, 0, data.Length);
+                        }
+                    }
+                    else
+                    {
+                        using (var fs = new FileStream(fileName, FileMode.Append))
+                        {
+                            fs.Write(data, 0, data.Length);
+                        }
+                    }
+                }
+                else
+                {
+                    System.IO.FileInfo file = new System.IO.FileInfo(fileName);
+                    file.Directory.Create();
                     using (var fs = new FileStream(fileName, FileMode.Create))
                     {
                         fs.Write(data, 0, data.Length);
                     }
                 }
-                else
-                {
-                    using (var fs = new FileStream(fileName, FileMode.Append))
-                    {
-                        fs.Write(data, 0, data.Length);
-                    }
-                }
             }
-            else
+            catch(Exception e)
             {
-                System.IO.FileInfo file = new System.IO.FileInfo(fileName);
-                file.Directory.Create();
-                using (var fs = new FileStream(fileName, FileMode.Create))
-                {
-                    fs.Write(data, 0, data.Length);
-                }
+                throw new FileWritingException(e.Message);
             }
         }
     }

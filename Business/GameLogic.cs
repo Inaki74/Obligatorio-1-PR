@@ -5,6 +5,7 @@ using BusinessInterfaces;
 using DataAccess;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using Exceptions.BusinessExceptions;
 
 namespace Business
 {
@@ -14,6 +15,11 @@ namespace Business
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
         public int AddGame(Game game)
         {
+            if(string.IsNullOrEmpty(game.Title))
+            {
+                throw new GameKeyFormatException();
+            }
+
             bool exists = GetAllGames().Exists(g => game.Equals(g));
             if (!exists)
             {
@@ -24,7 +30,7 @@ namespace Business
                 return game.Id;
             }
             
-            throw new Exception("Game already exists!");
+            throw new GameAlreadyExistsException();
         }
 
         public void ModifyGame(Game game)
@@ -60,15 +66,40 @@ namespace Business
             Game dummyGame = new Game();
             dummyGame.Title = "";
             dummyGame.Id = id;
-            return GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
+            
+            try
+            {
+                Game found = GetAllGames().First(g => g.Equals(dummyGame));
+                return found;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
 
         public int GetGameId(string title)
         {
             Game dummyGame = new Game();
             dummyGame.Title = title;
-            Game found = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
-            return found.Id;
+
+            try
+            {
+                Game found = GetAllGames().First(g => g.Equals(dummyGame));
+                return found.Id;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
         
         public List<Game> SearchGames(GameSearchQuery query)
@@ -78,22 +109,26 @@ namespace Business
             return FilterGames(allGames, query);
         }
 
-        public bool AcquireGame(GameUserRelationQuery query)
+        public void AcquireGame(GameUserRelationQuery query)
         {
-            //TODO: Is this thread safe? Check.
             Game dummyGame = new Game();
             dummyGame.Id = query.Gameid;
-            Game realGame = GetAllGames().FirstOrDefault(g => g.Equals(dummyGame));
-            bool gameAcquired = false;
-            if (realGame != null)
+
+            try
             {
+                Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
                 User user = _userDataAccess.Get(query.Username);
                 user.ownedGames.Add(realGame);
                 _userDataAccess.Update(user);
-                gameAcquired = true;
             }
-
-            return gameAcquired;
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
         }
 
         public bool CheckIsOwner(GameUserRelationQuery query)
