@@ -10,8 +10,15 @@ namespace ConsoleMenus.Client
     {
         public IConsoleMenu NextMenu => _nextMenu;
         public bool RequiresAnswer => true;
-        
+
+        private bool _isOwner;
+
         private const string YES_RESPONSE = "y";
+
+        public ConsoleDownloadCoverMenu(bool isOwner)
+        {
+            _isOwner = isOwner;
+        }
         public void PrintMenu()
         {
             Console.WriteLine("Want to download Cover? ");
@@ -38,7 +45,7 @@ namespace ConsoleMenus.Client
                 }
             }
             
-            _nextMenu = new ConsoleMainMenu();
+            _nextMenu = new ConsoleGameMenu(_isOwner);
             return false;
         }
     }

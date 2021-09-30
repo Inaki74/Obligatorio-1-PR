@@ -38,7 +38,7 @@ namespace Business
         {
             Game oldGame = _gameDataAccess.GetCopyId(game.Id);
             Game finalGame = GetFinalGame(game, oldGame);
-            
+
             List<User> userList = _userDataAccess.GetAll();
             foreach (User user in userList)
             {
@@ -49,6 +49,14 @@ namespace Business
                     _userDataAccess.Update(user);
                 }
             }
+            
+            IReviewLogic reviewLogic = new ReviewLogic();
+            List<Review> gameReviews = reviewLogic.GetReviews(oldGame);
+            foreach (Review review in gameReviews)
+            {
+                review.Game = finalGame;
+            }
+            reviewLogic.BulkUpdate(gameReviews);
             
             _gameDataAccess.Update(finalGame);
         }

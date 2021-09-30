@@ -14,5 +14,7 @@ namespace BusinessInterfaces
         float GetGameScore(Game game);
         float GetGameScore(List<Review> reviewList);
         Review GetReview(GameUserRelationQuery reviewDummy);
+        void BulkUpdate(List<Review> reviewList);
+        
     }
 }
