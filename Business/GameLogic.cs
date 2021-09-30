@@ -23,7 +23,8 @@ namespace Business
             bool exists = GetAllGames().Exists(g => game.Equals(g));
             if (!exists)
             {
-                User realOwner = _userDataAccess.Get(game.Owner.Username);
+                string username = game.Owner.Username;
+                User realOwner = _userDataAccess.Get(username);
                 game.Owner = realOwner;
                 game.Id = LocalGameDataAccess.CurrentId;
                 _gameDataAccess.Add(game);

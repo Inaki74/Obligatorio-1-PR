@@ -24,6 +24,7 @@ namespace Business
 
             User actualUser = _userDataAccess.Get(review.ReviewPublisher.Username);
             Game actualGame = _gameDataAccess.Get(review.Game.Id);
+            
             review.ReviewPublisher = actualUser;
             review.Game = actualGame;
 
