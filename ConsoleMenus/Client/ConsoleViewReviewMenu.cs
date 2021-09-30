@@ -1,5 +1,6 @@
 ﻿using System;
 using ClientApplicationInterfaces;
+using Common;
 using Common.Protocol;
 using ConsoleMenusInterfaces;
 using Domain.BusinessObjects;
@@ -17,16 +18,22 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            
-                string username = Console.ReadLine();
-                VaporStatusResponse response = IClientHandler.Instance.GetGameReview(username);
+            string username = Console.ReadLine();
+            VaporStatusResponse response = IClientHandler.Instance.GetGameReview(username);
+
+            if(response.Code == StatusCodeConstants.OK)
+            {
                 Review review = response.Review;
                 Console.WriteLine($"Game: {review.Game.Title}");
                 Console.WriteLine($"Score: {review.Score}");
                 Console.WriteLine($"Description: {review.Description}");
                 Console.WriteLine($"Publisher: {review.ReviewPublisher.Username}");
-                _nextMenu = new ConsoleMainMenu();
-            
+            }
+            else
+            {
+                Console.WriteLine(response.Message);
+            }
+            _nextMenu = new ConsoleMainMenu();
             
             return false;
         }
