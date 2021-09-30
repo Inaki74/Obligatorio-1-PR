@@ -22,15 +22,9 @@ namespace Common.Protocol
             _fileInformation = new FileInformationHandler();
         }
 
-        // Devolver lo que recibio procesado.
+
         public VaporProcessedPacket ReceiveCommand()
         {
-            // Cuando server recibe mensaje:
-                // Server sabe que:
-                //  primero viene REQ/RES
-                //  luego viene CMD
-                //  luego viene LARGO
-                //  finalmente PAYLOAD
 
             byte[] req = _networkStreamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
             byte[] cmd = _networkStreamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
@@ -56,14 +50,10 @@ namespace Common.Protocol
 
         public void SendCover(string gameTitle, string localPath)
         {
-            // largoNombreFile tamañoFile NombreFile
-            // Ej: 4 doom 32678
-            // Envia header
             long fileSize = _fileInformation.GetFileSize(localPath);
 
             IVaporHeader header = new VaporCoverHeader(gameTitle, fileSize);
             _networkStreamHandler.Write(header.Create());
-            // Envia imagen
             SendImage(fileSize, localPath);
         }
 
@@ -75,8 +65,7 @@ namespace Common.Protocol
             {
                 throw new CoverNotReceivedException();
             }
-
-            // Recibe header
+            
             byte[] fileNameLength = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
             byte[] fileSize = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
             byte[] fileName = _networkStreamHandler.Read(BitConverter.ToInt32(fileNameLength));
@@ -84,8 +73,7 @@ namespace Common.Protocol
             long fileSizeDecoded = BitConverter.ToInt64(fileSize);
             string fileNameDecoded = Encoding.UTF8.GetString(fileName);
             string path = _pathHandler.AppendPath(targetDirectoryPath, fileNameDecoded + ".png");
-
-            // Recibir imagen
+            
             ReceiveImage(fileSizeDecoded, path);
         }
 

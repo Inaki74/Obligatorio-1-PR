@@ -29,7 +29,7 @@ namespace Common.Commands
             if(userExisted)
             {
                 statusCode = StatusCodeConstants.OK;
-                response = "Logged in!";
+                response = user.Username;
             }
             else
             {

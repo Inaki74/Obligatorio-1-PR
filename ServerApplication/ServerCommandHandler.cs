@@ -11,8 +11,6 @@ namespace ServerApplication
 {
     public class ServerCommandHandler :CommandHandler, IServerCommandHandler
     {
-        //Get command type and payload from menus input
-        //Call ActionReq for desired command with payload as parameterxw
         public CommandResponse ExecuteCommand(VaporProcessedPacket packet)
         {
             ICommand command = DecideCommand(packet.Command);
