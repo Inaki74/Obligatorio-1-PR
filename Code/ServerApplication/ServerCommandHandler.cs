@@ -23,7 +23,7 @@ namespace ServerApplication
             }
             catch(BusinessException be)
             {
-                int statusCode = StatusCodeConstants.ERROR_SERVER;
+                int statusCode = StatusCodeConstants.ERROR_CLIENT;
                 response = statusCode.ToString() + be.Message;
             }
             catch(Exception e)
