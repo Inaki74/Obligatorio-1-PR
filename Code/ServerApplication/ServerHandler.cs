@@ -140,17 +140,19 @@ namespace ServerApplication
             }
             catch (EndpointClosedSocketException ecsock)
             {
+                LogoutUserInException(username);
             }
             catch (EndpointClosedByServerSocketException ecserv)
             {
+                LogoutUserInException(username);
             }
             catch (SocketException e)
             {
+                LogoutUserInException(username);
                 Console.WriteLine($"Something went wrong: {e.Message}");
             }
             finally
             {
-                LogoutUserInException(username);
                 SetStatusOfExecuting(false, threadId);
             }
         }
