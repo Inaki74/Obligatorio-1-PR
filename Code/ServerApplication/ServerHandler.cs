@@ -123,7 +123,7 @@ namespace ServerApplication
             string username = "";
             try
             {
-                INetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
+                IStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
                 VaporProtocol vp = new VaporProtocol(streamHandler);
                 IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
                 bool connected = true;

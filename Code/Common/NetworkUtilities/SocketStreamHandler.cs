@@ -6,12 +6,12 @@ using Exceptions.ConnectionExceptions;
 
 namespace Common.NetworkUtilities
 {
-    public class NetworkStreamHandler : IStreamHandler
+    public class SocketStreamHandler : IStreamHandler
     {
-        private readonly NetworkStream _stream;
-        public NetworkStreamHandler(NetworkStream stream)
+        private readonly Socket _socket;
+        public SocketStreamHandler(Socket socket)
         {
-            _stream = stream;
+            _socket = socket;
         }
 
         public byte[] Read(int length)
@@ -22,7 +22,7 @@ namespace Common.NetworkUtilities
             {
                 try
                 {
-                    var received = _stream.Read(data, dataReceived, length - dataReceived);
+                    var received = _socket.Receive(data, dataReceived, length - dataReceived, SocketFlags.None); //Truncated?
                     if (received == 0)
                     {
                         throw new EndpointClosedSocketException();
@@ -47,7 +47,7 @@ namespace Common.NetworkUtilities
         {
             try
             {
-                _stream.Write(packet, 0, packet.Length);
+                _socket.Send(packet, 0, packet.Length, SocketFlags.None);
             }
             catch(SocketException se)
             {

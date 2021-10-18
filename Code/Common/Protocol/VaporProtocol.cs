@@ -10,13 +10,13 @@ namespace Common.Protocol
 {
     public class VaporProtocol
     {
-        private readonly INetworkStreamHandler _networkStreamHandler;
+        private readonly IStreamHandler _streamHandler;
         private readonly IPathHandler _pathHandler;
         private readonly IFileStreamHandler _fileStreamHandler;
         private readonly IFileInformationHandler _fileInformation;
-        public VaporProtocol(INetworkStreamHandler streamHandler)
+        public VaporProtocol(IStreamHandler streamHandler)
         {
-            _networkStreamHandler = streamHandler;
+            _streamHandler = streamHandler;
             _pathHandler = new PathHandler();
             _fileStreamHandler = new FileStreamHandler();
             _fileInformation = new FileInformationHandler();
@@ -26,10 +26,10 @@ namespace Common.Protocol
         public VaporProcessedPacket ReceiveCommand()
         {
 
-            byte[] req = _networkStreamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
-            byte[] cmd = _networkStreamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
-            byte[] length = _networkStreamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
-            byte[] payload = _networkStreamHandler.Read(BitConverter.ToInt32(length));
+            byte[] req = _streamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
+            byte[] cmd = _streamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
+            byte[] length = _streamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
+            byte[] payload = _streamHandler.Read(BitConverter.ToInt32(length));
 
             VaporProcessedPacket processedPacket = new VaporProcessedPacket(req, cmd, length, payload);
 
@@ -40,12 +40,12 @@ namespace Common.Protocol
         {
             IVaporHeader header = new VaporCommandHeader(request, command, data);
 
-            _networkStreamHandler.Write(header.Create());
+            _streamHandler.Write(header.Create());
         }
 
         public void SendCoverFailed()
         {
-            _networkStreamHandler.Write(Encoding.UTF8.GetBytes(VaporCoverHeader.FAILED_COVER));
+            _streamHandler.Write(Encoding.UTF8.GetBytes(VaporCoverHeader.FAILED_COVER));
         }
 
         public void SendCover(string gameTitle, string localPath)
@@ -53,22 +53,22 @@ namespace Common.Protocol
             long fileSize = _fileInformation.GetFileSize(localPath);
 
             IVaporHeader header = new VaporCoverHeader(gameTitle, fileSize);
-            _networkStreamHandler.Write(header.Create());
+            _streamHandler.Write(header.Create());
             SendImage(fileSize, localPath);
         }
 
         public void ReceiveCover(string targetDirectoryPath)
         {
-            byte[] isGoodCover = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
+            byte[] isGoodCover = _streamHandler.Read(VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
             string isGoodCoverString = Encoding.UTF8.GetString(isGoodCover);
             if(isGoodCoverString == VaporCoverHeader.FAILED_COVER)
             {
                 throw new CoverNotReceivedException();
             }
             
-            byte[] fileNameLength = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
-            byte[] fileSize = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
-            byte[] fileName = _networkStreamHandler.Read(BitConverter.ToInt32(fileNameLength));
+            byte[] fileNameLength = _streamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
+            byte[] fileSize = _streamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
+            byte[] fileName = _streamHandler.Read(BitConverter.ToInt32(fileNameLength));
 
             long fileSizeDecoded = BitConverter.ToInt64(fileSize);
             string fileNameDecoded = Encoding.UTF8.GetString(fileName);
@@ -90,12 +90,12 @@ namespace Common.Protocol
                 if (currentPart == parts)
                 {
                     var lastPartSize = (int)(fileSize - offset);
-                    data = _networkStreamHandler.Read(lastPartSize);
+                    data = _streamHandler.Read(lastPartSize);
                     offset += lastPartSize;
                 }
                 else
                 {
-                    data = _networkStreamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
+                    data = _streamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
 
@@ -127,7 +127,7 @@ namespace Common.Protocol
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
 
-                _networkStreamHandler.Write(data);
+                _streamHandler.Write(data);
                 currentPart++;
             }
         }
