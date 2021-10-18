@@ -88,7 +88,7 @@ namespace ServerApplication
             }
             foreach (Socket client in _clientSockets)
             {
-                client.Shutdown(SocketShutdown.Both); 
+                client.Shutdown(SocketShutdown.Both); //Close connection gracefully?
                 client.Close();
             }
             FakeTcpConnection();
