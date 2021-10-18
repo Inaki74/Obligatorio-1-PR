@@ -29,13 +29,13 @@ namespace Common.Commands
             if(userExisted)
             {
                 statusCode = StatusCodeConstants.OK;
-                response = user.Username;
             }
             else
             {
                 statusCode = StatusCodeConstants.INFO;
-                response = "User didn't exist, created new user.";
             }
+            
+            response = user.Username;
 
             return statusCode.ToString() + response;
         }

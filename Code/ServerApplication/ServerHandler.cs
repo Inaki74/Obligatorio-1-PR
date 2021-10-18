@@ -210,10 +210,16 @@ namespace ServerApplication
 
             if (response.Command == CommandConstants.COMMAND_LOGIN_CODE)
             {
-                username = response.Response;
+                string responseWithoutStatusCode = RemoveStatusCode(response.Response);
+                username = responseWithoutStatusCode;
             }
         }
-        
+        private string RemoveStatusCode(string response)
+        {
+            int statusCodeFixedSize = VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE;
+            string message = response.Substring(statusCodeFixedSize, response.Length-statusCodeFixedSize);
+            return message;
+        }
         
         private void RecieveClientGameCover(VaporProtocol vp)
         {
