@@ -34,7 +34,7 @@ namespace ClientApplication
         private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _clientIpEndPoint;
         private readonly IPEndPoint _serverIpEndPoint;
-        private readonly TcpClient _tcpClient;
+        private readonly Socket _clientSocket;
 
         private VaporProtocol _vaporProtocol;
         private IClientSession _clientSession;
@@ -59,15 +59,17 @@ namespace ClientApplication
 
             _clientIpEndPoint = new IPEndPoint(IPAddress.Parse(clientIp), clientPort);
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
-            _tcpClient = new TcpClient(_clientIpEndPoint);
+            _clientSocket = new Socket(AddressFamily.InterNetwork,
+                                       SocketType.Stream,
+                                       ProtocolType.Tcp);
         }
 
         public bool ConnectToServer()
         {
             try
             {
-                _tcpClient.Connect(_serverIpEndPoint);
-                _vaporProtocol = new VaporProtocol(new NetworkStreamHandler(_tcpClient.GetStream()));
+                _clientSocket.Connect(_serverIpEndPoint);
+                _vaporProtocol = new VaporProtocol(new SocketStreamHandler(_clientSocket));
             }
             catch(Exception e)
             {
@@ -304,7 +306,8 @@ namespace ClientApplication
                 response.Message = ecserv.Message + "Lowered connection.";
             }
 
-            _tcpClient.Close();
+            _clientSocket.Shutdown(SocketShutdown.Both); 
+            _clientSocket.Close();
 
             return response.Message;
         }

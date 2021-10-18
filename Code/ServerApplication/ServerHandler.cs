@@ -37,9 +37,9 @@ namespace ServerApplication
 
         private readonly IConfigurationHandler _configurationHandler;
         private readonly IPEndPoint _serverIpEndPoint;
-        private readonly TcpListener _tcpServerListener;
+        private readonly Socket _serverSocket;
         
-        private List<TcpClient> _tcpClients = new List<TcpClient>();
+        private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
         
         private int _currentThreadId = 0;
@@ -62,12 +62,16 @@ namespace ServerApplication
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
             
             _serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
-            _tcpServerListener = new TcpListener(_serverIpEndPoint);
+            _serverSocket = new Socket(AddressFamily.InterNetwork,
+                                       SocketType.Stream,
+                                       ProtocolType.Tcp);
+
+            _serverSocket.Bind(_serverIpEndPoint);
         }
 
         public bool StartServer()
         {
-            _tcpServerListener.Start(100);
+            _serverSocket.Listen(100);
 
             _serverRunning = true;
 
@@ -82,8 +86,9 @@ namespace ServerApplication
                 Console.WriteLine("Waiting for clients to finish their commands...");
                 System.Threading.Thread.Sleep(MAX_SECONDS_WASTED);
             }
-            foreach (TcpClient client in _tcpClients)
+            foreach (Socket client in _clientSockets)
             {
+                client.Shutdown(SocketShutdown.Both); //Close connection gracefully?
                 client.Close();
             }
             FakeTcpConnection();
@@ -99,23 +104,33 @@ namespace ServerApplication
         {
             while(_serverRunning)
             {
-                var foundClient = _tcpServerListener.AcceptTcpClient();
-                StartClientThread(foundClient);
+                var foundClient = _serverSocket.Accept();
 
-                _tcpClients.Add(foundClient);
+                if(_serverRunning)
+                {
+                    StartClientThread(foundClient);
+
+                    _clientSockets.Add(foundClient);
+                }
+                else
+                {
+                    foundClient.Shutdown(SocketShutdown.Both); 
+                    foundClient.Close();
+                }
+                
             }
             
-            _tcpServerListener.Stop();
+            _serverSocket.Close();
             Console.WriteLine("Server closed!");
         }
 
-        private void StartClientThread(TcpClient acceptedTcpClient)
+        private void StartClientThread(Socket acceptedClientSocket)
         {
-            var clientThread = new Thread(() => HandleClient(acceptedTcpClient));
+            var clientThread = new Thread(() => HandleClient(acceptedClientSocket));
             clientThread.Start();
         }
         
-        private void HandleClient(TcpClient acceptedTcpClient)
+        private void HandleClient(Socket acceptedClientSocket)
         {
             int threadId = _currentThreadId;
             _currentThreadId++;
@@ -123,7 +138,7 @@ namespace ServerApplication
             string username = "";
             try
             {
-                INetworkStreamHandler streamHandler = new NetworkStreamHandler(acceptedTcpClient.GetStream());
+                IStreamHandler streamHandler = new SocketStreamHandler(acceptedClientSocket);
                 VaporProtocol vp = new VaporProtocol(streamHandler);
                 IServerCommandHandler serverCommandHandler = new ServerCommandHandler();
                 bool connected = true;
@@ -183,8 +198,10 @@ namespace ServerApplication
             IPEndPoint clientIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), 0);
             IPEndPoint serverIpEndPoint = new IPEndPoint(IPAddress.Parse(serverIp), serverPort);
             
-            TcpClient fakeTCPClient = new TcpClient(clientIpEndPoint);
-            fakeTCPClient.Connect(serverIpEndPoint);
+            Socket fakeSocket = new Socket(AddressFamily.InterNetwork,
+                                       SocketType.Stream,
+                                       ProtocolType.Tcp);
+            fakeSocket.Connect(serverIpEndPoint);
         }
 
 
