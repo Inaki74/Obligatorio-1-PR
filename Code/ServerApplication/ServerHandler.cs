@@ -20,6 +20,7 @@ using Domain.BusinessObjects;
 using Exceptions.ConnectionExceptions;
 using ServerApplicationInterfaces;
 using Exceptions;
+using System.Threading.Tasks;
 
 namespace ServerApplication
 {
@@ -42,7 +43,7 @@ namespace ServerApplication
         private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
         
-        private int _currentThreadId = 0;
+        private int _currentTaskId = 0;
         private bool _serverRunning;
 
         public ServerHandler()
@@ -94,21 +95,20 @@ namespace ServerApplication
             FakeTcpConnection();
         }
 
-        public void StartClientListeningThread()
+        public async Task StartClientListeningTask()
         {
-            var clientListeningThread = new Thread(() => ListenForClients());
-            clientListeningThread.Start();
+            await Task.Run(async() => await ListenForClients());
         }
 
-        private void ListenForClients()
+        private async Task ListenForClients()
         {
             while(_serverRunning)
             {
-                var foundClient = _serverSocket.Accept();
+                var foundClient = await _serverSocket.AcceptAsync();
 
                 if(_serverRunning)
                 {
-                    StartClientThread(foundClient);
+                    await Task.Run(async() => await StartClientTask(foundClient));
 
                     _clientSockets.Add(foundClient);
                 }
@@ -124,17 +124,16 @@ namespace ServerApplication
             Console.WriteLine("Server closed!");
         }
 
-        private void StartClientThread(Socket acceptedClientSocket)
+        private async Task StartClientTask(Socket acceptedClientSocket)
         {
-            var clientThread = new Thread(() => HandleClient(acceptedClientSocket));
-            clientThread.Start();
+            await Task.Run(async() => await HandleClient(acceptedClientSocket));
         }
         
-        private void HandleClient(Socket acceptedClientSocket)
+        private async Task HandleClient(Socket acceptedClientSocket)
         {
-            int threadId = _currentThreadId;
-            _currentThreadId++;
-            _clientConnections.Add(new ClientCommandExecutionStatus(threadId));
+            int taskId = _currentTaskId;
+            _currentTaskId++;
+            _clientConnections.Add(new ClientCommandExecutionStatus(taskId));
             string username = "";
             try
             {
@@ -146,11 +145,11 @@ namespace ServerApplication
                 while (connected && _serverRunning)
                 {
                     VaporProcessedPacket processedPacket = vp.ReceiveCommand();
-                    SetStatusOfExecuting(true, threadId);
+                    SetStatusOfExecuting(true, taskId);
 
                     ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected, ref username);
 
-                    SetStatusOfExecuting(false, threadId);
+                    SetStatusOfExecuting(false, taskId);
                 }
             }
             catch (EndpointClosedSocketException ecsock)
@@ -168,7 +167,7 @@ namespace ServerApplication
             }
             finally
             {
-                SetStatusOfExecuting(false, threadId);
+                SetStatusOfExecuting(false, taskId);
             }
         }
         

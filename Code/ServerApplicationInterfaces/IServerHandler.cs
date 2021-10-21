@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace ServerApplicationInterfaces
 {
@@ -8,7 +9,7 @@ namespace ServerApplicationInterfaces
 
         bool StartServer();
 
-        void StartClientListeningThread();
+        Task StartClientListeningTask();
 
         void CloseServer();
     }
