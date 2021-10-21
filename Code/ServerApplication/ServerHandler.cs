@@ -97,7 +97,7 @@ namespace ServerApplication
 
         public async Task StartClientListeningTask()
         {
-            await Task.Run(async() => await ListenForClients());
+            await Task.Run(async() => await ListenForClients().ConfigureAwait(false));
         }
 
         private async Task ListenForClients()
@@ -108,7 +108,7 @@ namespace ServerApplication
 
                 if(_serverRunning)
                 {
-                    await Task.Run(async() => await StartClientTask(foundClient));
+                    await Task.Run(async() => await StartClientTask(foundClient).ConfigureAwait(false));
 
                     _clientSockets.Add(foundClient);
                 }
@@ -126,7 +126,7 @@ namespace ServerApplication
 
         private async Task StartClientTask(Socket acceptedClientSocket)
         {
-            await Task.Run(async() => await HandleClient(acceptedClientSocket));
+            await Task.Run(async() => await HandleClient(acceptedClientSocket).ConfigureAwait(false));
         }
         
         private async Task HandleClient(Socket acceptedClientSocket)
