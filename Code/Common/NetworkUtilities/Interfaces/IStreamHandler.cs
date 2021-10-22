@@ -1,10 +1,11 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Common.NetworkUtilities.Interfaces
 {
     public interface IStreamHandler
     {
-        byte[] Read(int length);
-        void Write(byte[] info);
+        Task<byte[]> ReadAsync(int length);
+        Task WriteAsync(byte[] info);
     }
 }

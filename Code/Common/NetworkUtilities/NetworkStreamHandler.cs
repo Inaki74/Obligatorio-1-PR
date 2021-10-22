@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using Common.NetworkUtilities.Interfaces;
 using Exceptions.ConnectionExceptions;
 
@@ -14,7 +15,7 @@ namespace Common.NetworkUtilities
             _stream = stream;
         }
 
-        public byte[] Read(int length)
+        public async Task<byte[]> ReadAsync(int length)
         {
             int dataReceived = 0;
             var data = new byte[length];
@@ -22,7 +23,7 @@ namespace Common.NetworkUtilities
             {
                 try
                 {
-                    var received = _stream.Read(data, dataReceived, length - dataReceived);
+                    var received = await _stream.ReadAsync(data, dataReceived, length - dataReceived);
                     if (received == 0)
                     {
                         throw new EndpointClosedSocketException();
@@ -43,11 +44,11 @@ namespace Common.NetworkUtilities
             return data;
         }
 
-        public void Write(byte[] packet)
+        public async Task WriteAsync(byte[] packet)
         {
             try
             {
-                _stream.Write(packet, 0, packet.Length);
+                await _stream.WriteAsync(packet, 0, packet.Length);
             }
             catch(SocketException se)
             {
