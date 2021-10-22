@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Common.FileSystemUtilities.Interfaces;
 using Exceptions;
 
@@ -7,7 +8,7 @@ namespace Common.FileSystemUtilities
 {
     public class FileStreamHandler : IFileStreamHandler
     {
-        public byte[] Read(string path, long offset, int length)
+        public async Task<byte[]> ReadAsync(string path, long offset, int length)
         {
             var data = new byte[length];
 
@@ -19,7 +20,7 @@ namespace Common.FileSystemUtilities
                     var bytesRead = 0;
                     while (bytesRead < length)
                     {
-                        var read = fs.Read(data, bytesRead, length - bytesRead);
+                        var read = await fs.ReadAsync(data, bytesRead, length - bytesRead).ConfigureAwait(false);
                         if (read == 0)
                         {
                             throw new FileReadingException();   
@@ -52,7 +53,7 @@ namespace Common.FileSystemUtilities
             }
         }
 
-        public void Write(byte[] data, string fileName, bool firstPart)
+        public async Task WriteAsync(byte[] data, string fileName, bool firstPart)
         {
             try
             {
@@ -63,14 +64,14 @@ namespace Common.FileSystemUtilities
                         File.Delete(fileName);
                         using (var fs = new FileStream(fileName, FileMode.Create))
                         {
-                            fs.Write(data, 0, data.Length);
+                            await fs.WriteAsync(data, 0, data.Length);
                         }
                     }
                     else
                     {
                         using (var fs = new FileStream(fileName, FileMode.Append))
                         {
-                            fs.Write(data, 0, data.Length);
+                            await fs.WriteAsync(data, 0, data.Length);
                         }
                     }
                 }
@@ -80,7 +81,7 @@ namespace Common.FileSystemUtilities
                     file.Directory.Create();
                     using (var fs = new FileStream(fileName, FileMode.Create))
                     {
-                        fs.Write(data, 0, data.Length);
+                        await fs.WriteAsync(data, 0, data.Length);
                     }
                 }
             }
