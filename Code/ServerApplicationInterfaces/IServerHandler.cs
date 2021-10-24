@@ -9,8 +9,8 @@ namespace ServerApplicationInterfaces
 
         bool StartServer();
 
-        Task StartClientListeningTask();
+        void StartClientListeningTask();
 
-        void CloseServer();
+        void StartCloseServerTask();
     }
 }

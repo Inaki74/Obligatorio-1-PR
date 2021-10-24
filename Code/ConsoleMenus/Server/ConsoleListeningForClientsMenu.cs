@@ -12,7 +12,7 @@ namespace ConsoleMenus.Server
 
         public bool Action(string answer)
         {
-            IServerHandler.Instance.StartClientListeningThread();
+            IServerHandler.Instance.StartClientListeningTask();
             
             _nextMenu = new ConsoleServerMainMenu();
 
