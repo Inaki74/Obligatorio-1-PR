@@ -144,10 +144,13 @@ namespace ServerApplication
 
                 while (connected && _serverRunning)
                 {
-                    VaporProcessedPacket processedPacket = vp.ReceiveCommand();
+                    VaporProcessedPacket processedPacket = await vp.ReceiveCommandAsync();
                     SetStatusOfExecuting(true, taskId);
 
-                    ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected, ref username);
+                    ProcessCommandPair pair = await ProcessCommandAsync(vp, processedPacket, serverCommandHandler, connected, username);
+
+                    connected = pair.Connected;
+                    username = pair.Username;
 
                     SetStatusOfExecuting(false, taskId);
                 }
@@ -204,19 +207,19 @@ namespace ServerApplication
         }
 
 
-        private void ProcessCommand(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, ref bool connected, ref string username)
+        private async Task<ProcessCommandPair> ProcessCommandAsync(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, bool connected, string username)
         {
             CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-            vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
+            await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
 
             if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
             {
-                RecieveClientGameCover(vp);
+                RecieveClientGameCoverAsync(vp);
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
-                SendClientGameCover(vp, response);
+                SendClientGameCoverAsync(vp, response);
             }
                     
             if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
@@ -229,6 +232,8 @@ namespace ServerApplication
                 string responseWithoutStatusCode = RemoveStatusCode(response.Response);
                 username = responseWithoutStatusCode;
             }
+
+            return new ProcessCommandPair(username, connected);
         }
         private string RemoveStatusCode(string response)
         {
@@ -237,12 +242,12 @@ namespace ServerApplication
             return message;
         }
         
-        private void RecieveClientGameCover(VaporProtocol vp)
+        private async Task RecieveClientGameCoverAsync(VaporProtocol vp)
         {
             string path = _configurationHandler.GetPathFromAppSettings();
             try
             {
-                vp.ReceiveCover(path);
+                await vp.ReceiveCoverAsync(path);
             }
             catch (CoverNotReceivedException cre)
             {
@@ -252,7 +257,7 @@ namespace ServerApplication
             }
         }
 
-        private void SendClientGameCover(VaporProtocol vp, CommandResponse response)
+        private async Task SendClientGameCoverAsync(VaporProtocol vp, CommandResponse response)
         {
             string encodedGame = ExtractEncodedGame(response.Response);
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
@@ -263,11 +268,11 @@ namespace ServerApplication
 
             try
             {
-                vp.SendCover(gameDummy.Title + "-COVER" , path);
+                await vp.SendCoverAsync(gameDummy.Title + "-COVER" , path);
             }
             catch(FileReadingException fre)
             {
-                vp.SendCoverFailed();
+                await vp.SendCoverFailedAsync();
             }
         }
 
