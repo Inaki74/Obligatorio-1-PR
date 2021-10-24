@@ -79,7 +79,12 @@ namespace ServerApplication
             return true; 
         }
 
-        public void CloseServer()
+        public void StartCloseServerTask()
+        {
+            Task.Run(async() => await CloseServerAsync().ConfigureAwait(false));
+        }
+
+        private async Task CloseServerAsync()
         {
             _serverRunning = false;
             if (!AllClientsFinishedExecuting())
@@ -92,15 +97,15 @@ namespace ServerApplication
                 client.Shutdown(SocketShutdown.Both); //Close connection gracefully?
                 client.Close();
             }
-            FakeTcpConnection();
+            await FakeTcpConnectionAsync().ConfigureAwait(false);
         }
 
-        public async Task StartClientListeningTask()
+        public void StartClientListeningTask()
         {
-            await Task.Run(async() => await ListenForClients().ConfigureAwait(false));
+            Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false));
         }
 
-        private async Task ListenForClients()
+        private async Task ListenForClientsAsync()
         {
             while(_serverRunning)
             {
@@ -192,7 +197,7 @@ namespace ServerApplication
             connection.ExecutingCommand = isExecuting;
         }
 
-        private void FakeTcpConnection()
+        private async Task FakeTcpConnectionAsync()
         {
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -203,7 +208,7 @@ namespace ServerApplication
             Socket fakeSocket = new Socket(AddressFamily.InterNetwork,
                                        SocketType.Stream,
                                        ProtocolType.Tcp);
-            fakeSocket.Connect(serverIpEndPoint);
+            await fakeSocket.ConnectAsync(serverIpEndPoint);
         }
 
 
