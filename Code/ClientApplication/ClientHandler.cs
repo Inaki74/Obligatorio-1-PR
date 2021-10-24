@@ -15,6 +15,7 @@ using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
 using Common.Configuration;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Exceptions;
 using Exceptions.ConnectionExceptions;
 using Exceptions.BusinessExceptions;
@@ -88,11 +89,11 @@ namespace ClientApplication
 
             try
             {
-                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+                _vaporProtocol.SendCoverAsync(response.SelectedGameId.ToString(), game.CoverPath);
             }
             catch(FileReadingException fre)
             {
-                _vaporProtocol.SendCoverFailed();
+                _vaporProtocol.SendCoverFailedAsync();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
@@ -127,11 +128,11 @@ namespace ClientApplication
 
             try
             {
-                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+                _vaporProtocol.SendCoverAsync(response.SelectedGameId.ToString(), game.CoverPath);
             }
             catch(FileReadingException fre)
             {
-                _vaporProtocol.SendCoverFailed();
+                _vaporProtocol.SendCoverFailedAsync();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
@@ -218,7 +219,7 @@ namespace ClientApplication
 
             try
             {
-                _vaporProtocol.ReceiveCover(path);
+                _vaporProtocol.ReceiveCoverAsync(path);
             }
             catch (CoverNotReceivedException cre)
             {
@@ -336,9 +337,9 @@ namespace ClientApplication
         }
         private VaporStatusResponse ExecuteCommand()
         {
-            VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
+            Task<VaporProcessedPacket> vaporProcessedPacket = _vaporProtocol.ReceiveCommandAsync();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket.Result);
         }
 
         private void SendCommand<P>(string command, INetworkTransferObject<P> payload)
@@ -349,7 +350,7 @@ namespace ClientApplication
                 payloadString = payload.Encode();
             }
 
-            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payloadString);
+            _vaporProtocol.SendCommandAsync(ReqResHeader.REQ, command, payloadString);
         }
     }
 }
