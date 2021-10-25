@@ -24,7 +24,7 @@ namespace Common.NetworkUtilities
                 try
                 {
                     ArraySegment<byte> segment = new ArraySegment<byte>(data, dataReceived, length - dataReceived);
-
+                    
                     int received = await _socket.ReceiveAsync(segment, SocketFlags.None).ConfigureAwait(false); //Truncated?
                     if (received == 0)
                     {

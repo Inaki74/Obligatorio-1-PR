@@ -65,11 +65,11 @@ namespace ClientApplication
                                        ProtocolType.Tcp);
         }
 
-        public bool ConnectToServer()
+        public async Task<bool> ConnectToServerAsync()
         {
             try
             {
-                _clientSocket.Connect(_serverIpEndPoint);
+                await _clientSocket.ConnectAsync(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new SocketStreamHandler(_clientSocket));
             }
             catch(Exception e)

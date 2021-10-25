@@ -10,7 +10,7 @@ namespace ClientApplicationInterfaces
     {
         static IClientHandler Instance { get; set; }
 
-        bool ConnectToServer();
+        Task<bool> ConnectToServerAsync();
         Task<VaporStatusResponse> PublishGameAsync(GameNetworkTransferObject game);
 
         string DeleteGame();
