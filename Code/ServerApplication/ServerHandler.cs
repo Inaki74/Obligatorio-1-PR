@@ -113,7 +113,7 @@ namespace ServerApplication
 
                 if(_serverRunning)
                 {
-                    await Task.Run(async() => await StartClientTask(foundClient).ConfigureAwait(false));
+                    Task.Run(async() => await StartClientTask(foundClient).ConfigureAwait(false));
 
                     _clientSockets.Add(foundClient);
                 }
@@ -219,12 +219,12 @@ namespace ServerApplication
 
             if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
             {
-                RecieveClientGameCoverAsync(vp);
+                await RecieveClientGameCoverAsync(vp);
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
-                SendClientGameCoverAsync(vp, response);
+                await SendClientGameCoverAsync(vp, response);
             }
                     
             if (response.Command == CommandConstants.COMMAND_EXIT_CODE)

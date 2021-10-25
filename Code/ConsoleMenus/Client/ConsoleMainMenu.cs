@@ -24,7 +24,7 @@ namespace ConsoleMenus.Client
             switch(answer)
             {
                 case EXIT_OPTION:
-                    string response = IClientHandler.Instance.Exit();
+                    string response = IClientHandler.Instance.ExitAsync().Result;
                     Console.WriteLine(response);
                     return true;
                 case PUBLISH_GAME_OPTION:

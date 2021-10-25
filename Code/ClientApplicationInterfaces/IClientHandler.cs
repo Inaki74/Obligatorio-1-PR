@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 
@@ -10,11 +11,11 @@ namespace ClientApplicationInterfaces
         static IClientHandler Instance { get; set; }
 
         bool ConnectToServer();
-        VaporStatusResponse PublishGame(GameNetworkTransferObject game);
+        Task<VaporStatusResponse> PublishGameAsync(GameNetworkTransferObject game);
 
         string DeleteGame();
 
-        string ModifyGame(GameNetworkTransferObject game);
+        Task<string> ModifyGame(GameNetworkTransferObject game);
 
         string PublishReview(ReviewNetworkTransferObject game);
 
@@ -26,7 +27,7 @@ namespace ClientApplicationInterfaces
 
         VaporStatusResponse GetGameDetails();
 
-        VaporStatusResponse DownloadGameCover(string path);
+        Task<VaporStatusResponse> DownloadGameCover(string path);
 
         VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query);
 
@@ -38,6 +39,6 @@ namespace ClientApplicationInterfaces
         
         VaporStatusResponse AcquireGame();
 
-        string Exit();
+        Task<string> ExitAsync();
     }
 }

@@ -8,25 +8,25 @@ namespace Common.FileSystemUtilities
 {
     public class FileStreamHandler : IFileStreamHandler
     {
+
         public async Task<byte[]> ReadAsync(string path, long offset, int length)
         {
             var data = new byte[length];
 
             try
             {
-                using (var fs = new FileStream(path, FileMode.Open))
+                using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read,
+                    bufferSize: 4096, useAsync: true);
+                fs.Position = offset;
+                var bytesRead = 0;
+                while (bytesRead < length)
                 {
-                    fs.Position = offset;
-                    var bytesRead = 0;
-                    while (bytesRead < length)
+                    var read = await fs.ReadAsync(data, bytesRead, length - bytesRead);
+                    if (read == 0)
                     {
-                        var read = await fs.ReadAsync(data, bytesRead, length - bytesRead).ConfigureAwait(false);
-                        if (read == 0)
-                        {
-                            throw new FileReadingException();   
-                        }
-                        bytesRead += read;
+                        throw new FileReadingException();   
                     }
+                    bytesRead += read;
                 }
             }
             catch(FileReadingException fre)
