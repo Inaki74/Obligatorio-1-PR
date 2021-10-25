@@ -85,7 +85,7 @@ namespace ClientApplication
         {
             game.OwnerName = _clientSession.Username;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game).Result;
 
             try
             {
@@ -114,7 +114,7 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game).Result;
             
             return response.Message;
         }
@@ -124,7 +124,7 @@ namespace ClientApplication
             game.OwnerName = _clientSession.Username;
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game).Result;
 
             try
             {
@@ -151,7 +151,7 @@ namespace ClientApplication
             review.Username = _clientSession.Username;
             review.Gameid = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review).Result;
             
             return response.Message;
         }
@@ -165,14 +165,14 @@ namespace ClientApplication
             GameUserRelationQueryNetworkTransferObject queryNTO = new GameUserRelationQueryNetworkTransferObject();
             queryNTO.Load(query);
 
-            VaporStatusResponse response = TryCommandExecution<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO).Result;
 
             return response;
         }
 
         public VaporStatusResponse GetGames()
         {
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null).Result;
 
             return response;
         }
@@ -183,7 +183,7 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game).Result;
 
             return response;
         }
@@ -194,7 +194,7 @@ namespace ClientApplication
             review.Gameid = _clientSession.GameSelectedId;
             review.Username = username;
             
-            VaporStatusResponse response = TryCommandExecution<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review).Result;
             
             return response;
         }
@@ -205,7 +205,7 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
             
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_VIEW_DETAILS_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_VIEW_DETAILS_CODE, game).Result;
 
             return response;
         }
@@ -215,7 +215,7 @@ namespace ClientApplication
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
             game.ID = _clientSession.GameSelectedId;
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game).Result;
 
             try
             {
@@ -242,14 +242,14 @@ namespace ClientApplication
 
         public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
         {
-            VaporStatusResponse response = TryCommandExecution<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query).Result;
 
             return response;
         }
 
         public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse response = TryCommandExecution<User>(CommandConstants.COMMAND_LOGIN_CODE, user).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<User>(CommandConstants.COMMAND_LOGIN_CODE, user).Result;
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
@@ -264,7 +264,7 @@ namespace ClientApplication
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
             gameDummy.Title = game;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy).Result;
             
             if (response.Code == StatusCodeConstants.OK)
             {
@@ -280,7 +280,7 @@ namespace ClientApplication
             query.Gameid = _clientSession.GameSelectedId;
             query.Username = _clientSession.Username;
 
-            VaporStatusResponse response = TryCommandExecution<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query).Result;
+            VaporStatusResponse response = TryCommandExecutionAsync<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query).Result;
             
             return response;
         }
@@ -313,7 +313,7 @@ namespace ClientApplication
             return response.Message;
         }
 
-        private async  Task<VaporStatusResponse> TryCommandExecution<P>(string command, INetworkTransferObject<P> payload)
+        private async  Task<VaporStatusResponse> TryCommandExecutionAsync<P>(string command, INetworkTransferObject<P> payload)
         {
             VaporStatusResponse response = new VaporStatusResponse();
             try
