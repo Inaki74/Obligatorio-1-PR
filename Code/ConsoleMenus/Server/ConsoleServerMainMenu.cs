@@ -17,7 +17,7 @@ namespace ConsoleMenus.Server
             switch(answer)
             {
                 case EXIT_OPTION:
-                    IServerHandler.Instance.CloseServer();
+                    IServerHandler.Instance.StartCloseServerTask();
                     _nextMenu = new ConsoleExitMenu();
                     return true;
                 default:

@@ -7,12 +7,12 @@ using Exceptions.ConnectionExceptions;
 
 namespace Common.NetworkUtilities
 {
-    public class NetworkStreamHandler : IStreamHandler
+    public class SocketStreamHandler : IStreamHandler
     {
-        private readonly NetworkStream _stream;
-        public NetworkStreamHandler(NetworkStream stream)
+        private readonly Socket _socket;
+        public SocketStreamHandler(Socket socket)
         {
-            _stream = stream;
+            _socket = socket;
         }
 
         public async Task<byte[]> ReadAsync(int length)
@@ -23,7 +23,9 @@ namespace Common.NetworkUtilities
             {
                 try
                 {
-                    var received = await _stream.ReadAsync(data, dataReceived, length - dataReceived);
+                    ArraySegment<byte> segment = new ArraySegment<byte>(data, dataReceived, length - dataReceived);
+                    
+                    int received = await _socket.ReceiveAsync(segment, SocketFlags.None).ConfigureAwait(false); //Truncated?
                     if (received == 0)
                     {
                         throw new EndpointClosedSocketException();
@@ -48,7 +50,7 @@ namespace Common.NetworkUtilities
         {
             try
             {
-                await _stream.WriteAsync(packet, 0, packet.Length);
+                await _socket.SendAsync(packet, SocketFlags.None);
             }
             catch(SocketException se)
             {

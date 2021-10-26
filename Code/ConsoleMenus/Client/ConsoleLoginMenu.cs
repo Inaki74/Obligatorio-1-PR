@@ -33,7 +33,7 @@ namespace ConsoleMenus.Client
                     break;
                 case StatusCodeConstants.INFO:
                     _nextMenu = new ConsoleMainMenu();
-                    Console.WriteLine($"INFO: {response.Message}");
+                    Console.WriteLine($"INFO: User didn't exist, created new user.");
                     Console.WriteLine($"Welcome {answer}!");
                     break;
                 case StatusCodeConstants.ERROR_CLIENT:

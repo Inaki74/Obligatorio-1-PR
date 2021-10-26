@@ -19,7 +19,7 @@ namespace ConsoleMenus.Client
         {
             GameNetworkTransferObject input = GetModifiedGame();
 
-            string response = IClientHandler.Instance.ModifyGame(input);
+            string response = IClientHandler.Instance.ModifyGame(input).Result;
 
             _nextMenu = new ConsoleGameMenu(true);
             Console.WriteLine(response);

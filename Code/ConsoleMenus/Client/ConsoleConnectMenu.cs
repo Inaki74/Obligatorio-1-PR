@@ -13,7 +13,7 @@ namespace ConsoleMenus.Client
 
         public bool Action(string answer)
         {
-            bool connectedSuccess = IClientHandler.Instance.ConnectToServer();
+            bool connectedSuccess = IClientHandler.Instance.ConnectToServerAsync().Result;
 
             if(connectedSuccess)
             {

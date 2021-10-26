@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using Common.FileSystemUtilities;
 using Common.FileSystemUtilities.Interfaces;
 using Common.NetworkUtilities.Interfaces;
@@ -10,74 +11,72 @@ namespace Common.Protocol
 {
     public class VaporProtocol
     {
-        private readonly INetworkStreamHandler _networkStreamHandler;
+        private readonly IStreamHandler _streamHandler;
         private readonly IPathHandler _pathHandler;
         private readonly IFileStreamHandler _fileStreamHandler;
         private readonly IFileInformationHandler _fileInformation;
-        public VaporProtocol(INetworkStreamHandler streamHandler)
+        public VaporProtocol(IStreamHandler streamHandler)
         {
-            _networkStreamHandler = streamHandler;
+            _streamHandler = streamHandler;
             _pathHandler = new PathHandler();
             _fileStreamHandler = new FileStreamHandler();
             _fileInformation = new FileInformationHandler();
         }
 
-
-        public VaporProcessedPacket ReceiveCommand()
+        public async Task<VaporProcessedPacket> ReceiveCommandAsync()
         {
-
-            byte[] req = _networkStreamHandler.Read(VaporProtocolSpecification.REQ_FIXED_SIZE);
-            byte[] cmd = _networkStreamHandler.Read(VaporProtocolSpecification.CMD_FIXED_SIZE);
-            byte[] length = _networkStreamHandler.Read(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
-            byte[] payload = _networkStreamHandler.Read(BitConverter.ToInt32(length));
+            byte[] req = await _streamHandler.ReadAsync(VaporProtocolSpecification.REQ_FIXED_SIZE);
+            byte[] cmd = await _streamHandler.ReadAsync(VaporProtocolSpecification.CMD_FIXED_SIZE);
+            byte[] length = await _streamHandler.ReadAsync(VaporProtocolSpecification.LENGTH_FIXED_SIZE);
+            byte[] payload = await _streamHandler.ReadAsync(BitConverter.ToInt32(length));
 
             VaporProcessedPacket processedPacket = new VaporProcessedPacket(req, cmd, length, payload);
 
             return processedPacket;
         }
 
-        public void SendCommand(ReqResHeader request, string command, string data)
+        public async Task SendCommandAsync(ReqResHeader request, string command, string data)
         {
             IVaporHeader header = new VaporCommandHeader(request, command, data);
 
-            _networkStreamHandler.Write(header.Create());
+            await _streamHandler.WriteAsync(header.Create());
         }
 
-        public void SendCoverFailed()
+        public async Task SendCoverFailedAsync()
         {
-            _networkStreamHandler.Write(Encoding.UTF8.GetBytes(VaporCoverHeader.FAILED_COVER));
+            await _streamHandler.WriteAsync(Encoding.UTF8.GetBytes(VaporCoverHeader.FAILED_COVER));
         }
 
-        public void SendCover(string gameTitle, string localPath)
+        public async Task SendCoverAsync(string gameTitle, string localPath)
         {
             long fileSize = _fileInformation.GetFileSize(localPath);
 
             IVaporHeader header = new VaporCoverHeader(gameTitle, fileSize);
-            _networkStreamHandler.Write(header.Create());
-            SendImage(fileSize, localPath);
+            await _streamHandler.WriteAsync(header.Create());
+            await SendImageAsync(fileSize, localPath);
         }
 
-        public void ReceiveCover(string targetDirectoryPath)
+        public async Task ReceiveCoverAsync(string targetDirectoryPath)
         {
-            byte[] isGoodCover = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
+            byte[] isGoodCover = await _streamHandler.ReadAsync(VaporProtocolSpecification.COVER_CONFIRM_FIXED_SIZE);
             string isGoodCoverString = Encoding.UTF8.GetString(isGoodCover);
             if(isGoodCoverString == VaporCoverHeader.FAILED_COVER)
             {
                 throw new CoverNotReceivedException();
             }
             
-            byte[] fileNameLength = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
-            byte[] fileSize = _networkStreamHandler.Read(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
-            byte[] fileName = _networkStreamHandler.Read(BitConverter.ToInt32(fileNameLength));
+            byte[] fileNameLength = await _streamHandler.ReadAsync(VaporProtocolSpecification.COVER_FILENAMELENGTH_FIXED_SIZE);
+            byte[] fileSize = await _streamHandler.ReadAsync(VaporProtocolSpecification.COVER_FILESIZE_FIXED_SIZE);
+            byte[] fileName = await _streamHandler.ReadAsync(BitConverter.ToInt32(fileNameLength));
 
             long fileSizeDecoded = BitConverter.ToInt64(fileSize);
             string fileNameDecoded = Encoding.UTF8.GetString(fileName);
             string path = _pathHandler.AppendPath(targetDirectoryPath, fileNameDecoded + ".png");
             
-            ReceiveImage(fileSizeDecoded, path);
+            await ReceiveImageAsync(fileSizeDecoded, path);
         }
 
-        private void ReceiveImage(long fileSize, string path)
+        private async Task ReceiveImageAsync(long fileSize, string path)
         {
             long parts = VaporProtocolHelper.GetFileParts(fileSize);
 
@@ -90,22 +89,22 @@ namespace Common.Protocol
                 if (currentPart == parts)
                 {
                     var lastPartSize = (int)(fileSize - offset);
-                    data = _networkStreamHandler.Read(lastPartSize);
+                    data = await _streamHandler.ReadAsync(lastPartSize);
                     offset += lastPartSize;
                 }
                 else
                 {
-                    data = _networkStreamHandler.Read(VaporProtocolSpecification.MAX_PACKET_SIZE);
+                    data = await _streamHandler.ReadAsync(VaporProtocolSpecification.MAX_PACKET_SIZE);
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
 
                 bool isFirstPart = currentPart == 1;
-                _fileStreamHandler.Write(data, path, isFirstPart);
+                await _fileStreamHandler.WriteAsync(data, path, isFirstPart);
                 currentPart++;
             }
         }
 
-        private void SendImage(long fileSize, string path)
+        private async Task SendImageAsync(long fileSize, string path)
         {
             long parts = VaporProtocolHelper.GetFileParts(fileSize);
 
@@ -118,16 +117,16 @@ namespace Common.Protocol
                 if (currentPart == parts)
                 {
                     var lastPartSize = (int)(fileSize - offset);
-                    data = _fileStreamHandler.Read(path, offset, lastPartSize);
+                    data = await _fileStreamHandler.ReadAsync(path, offset, lastPartSize);
                     offset += lastPartSize;
                 }
                 else
                 {
-                    data = _fileStreamHandler.Read(path, offset, VaporProtocolSpecification.MAX_PACKET_SIZE);
+                    data = await _fileStreamHandler.ReadAsync(path, offset, VaporProtocolSpecification.MAX_PACKET_SIZE);
                     offset += VaporProtocolSpecification.MAX_PACKET_SIZE;
                 }
 
-                _networkStreamHandler.Write(data);
+                await _streamHandler.WriteAsync(data);
                 currentPart++;
             }
         }
