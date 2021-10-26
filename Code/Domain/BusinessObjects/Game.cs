@@ -1,6 +1,4 @@
 using System;
-using System.Threading;
-using Domain.HelperObjects;
 
 namespace Domain.BusinessObjects
 {

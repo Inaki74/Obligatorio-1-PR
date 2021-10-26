@@ -1,13 +1,5 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using Common;
-using ConsoleMenusFactory;
+﻿using ConsoleMenusFactory;
 using ConsoleMenusInterfaces;
-using System.Configuration;
-using Common.Configuration;
 
 namespace ServerApplication
 {
@@ -24,7 +16,5 @@ namespace ServerApplication
                 consoleManager.ExecuteMenu();
             }
         }
-
-        
     }
 }

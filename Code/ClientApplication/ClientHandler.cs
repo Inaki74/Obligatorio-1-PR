@@ -15,6 +15,7 @@ using Common.Protocol.NTOs;
 using Common.Configuration.Interfaces;
 using Common.Configuration;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Exceptions;
 using Exceptions.ConnectionExceptions;
 using Exceptions.BusinessExceptions;
@@ -64,11 +65,11 @@ namespace ClientApplication
                                        ProtocolType.Tcp);
         }
 
-        public bool ConnectToServer()
+        public async Task<bool> ConnectToServerAsync()
         {
             try
             {
-                _clientSocket.Connect(_serverIpEndPoint);
+                await _clientSocket.ConnectAsync(_serverIpEndPoint);
                 _vaporProtocol = new VaporProtocol(new SocketStreamHandler(_clientSocket));
             }
             catch(Exception e)
@@ -80,19 +81,19 @@ namespace ClientApplication
             return true;
         }
 
-        public VaporStatusResponse PublishGame(GameNetworkTransferObject game)
+        public async Task<VaporStatusResponse> PublishGameAsync(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_PUBLISH_GAME_CODE, game).Result;
 
             try
             {
-                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+                await _vaporProtocol.SendCoverAsync(response.SelectedGameId.ToString(), game.CoverPath);
             }
             catch(FileReadingException fre)
             {
-                _vaporProtocol.SendCoverFailed();
+                await _vaporProtocol.SendCoverFailedAsync();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
@@ -113,25 +114,25 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_DELETE_GAME_CODE, game).Result;
             
             return response.Message;
         }
 
-        public string ModifyGame(GameNetworkTransferObject game)
+        public async Task<string> ModifyGame(GameNetworkTransferObject game)
         {
             game.OwnerName = _clientSession.Username;
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_MODIFY_GAME_CODE, game).Result;
 
             try
             {
-                _vaporProtocol.SendCover(response.SelectedGameId.ToString(), game.CoverPath);
+                await _vaporProtocol.SendCoverAsync(response.SelectedGameId.ToString(), game.CoverPath);
             }
             catch(FileReadingException fre)
             {
-                _vaporProtocol.SendCoverFailed();
+                await _vaporProtocol.SendCoverFailedAsync();
                 response.Message = fre.Message;
                 response.Code = StatusCodeConstants.ERROR_CLIENT;
             }
@@ -150,7 +151,7 @@ namespace ClientApplication
             review.Username = _clientSession.Username;
             review.Gameid = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review);
+            VaporStatusResponse response = TryCommandExecutionAsync<Review>(CommandConstants.COMMAND_PUBLISH_REVIEW_CODE, review).Result;
             
             return response.Message;
         }
@@ -164,14 +165,14 @@ namespace ClientApplication
             GameUserRelationQueryNetworkTransferObject queryNTO = new GameUserRelationQueryNetworkTransferObject();
             queryNTO.Load(query);
 
-            VaporStatusResponse response = TryCommandExecution<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO);
+            VaporStatusResponse response = TryCommandExecutionAsync<GameUserRelationQuery>(CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE, queryNTO).Result;
 
             return response;
         }
 
         public VaporStatusResponse GetGames()
         {
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_GET_GAMES_CODE, null).Result;
 
             return response;
         }
@@ -182,7 +183,7 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_GET_GAME_SCORE_CODE, game).Result;
 
             return response;
         }
@@ -193,7 +194,7 @@ namespace ClientApplication
             review.Gameid = _clientSession.GameSelectedId;
             review.Username = username;
             
-            VaporStatusResponse response = TryCommandExecution<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review);
+            VaporStatusResponse response = TryCommandExecutionAsync<Review>(CommandConstants.COMMAND_VIEW_REVIEW_CODE, review).Result;
             
             return response;
         }
@@ -204,21 +205,21 @@ namespace ClientApplication
 
             game.ID = _clientSession.GameSelectedId;
             
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_VIEW_DETAILS_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_VIEW_DETAILS_CODE, game).Result;
 
             return response;
         }
 
-        public VaporStatusResponse DownloadGameCover(string path)
+        public async Task<VaporStatusResponse> DownloadGameCover(string path)
         {
             GameNetworkTransferObject game = new GameNetworkTransferObject();
 
             game.ID = _clientSession.GameSelectedId;
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_DOWNLOAD_COVER_CODE, game).Result;
 
             try
             {
-                _vaporProtocol.ReceiveCover(path);
+                await _vaporProtocol.ReceiveCoverAsync(path);
             }
             catch (CoverNotReceivedException cre)
             {
@@ -241,14 +242,14 @@ namespace ClientApplication
 
         public VaporStatusResponse SearchGames(GameSearchQueryNetworkTransferObject query)
         {
-            VaporStatusResponse response = TryCommandExecution<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query);
+            VaporStatusResponse response = TryCommandExecutionAsync<GameSearchQuery>(CommandConstants.COMMAND_SEARCH_GAMES_CODE, query).Result;
 
             return response;
         }
 
         public VaporStatusResponse Login(UserNetworkTransferObject user)
         {
-            VaporStatusResponse response = TryCommandExecution<User>(CommandConstants.COMMAND_LOGIN_CODE, user);
+            VaporStatusResponse response = TryCommandExecutionAsync<User>(CommandConstants.COMMAND_LOGIN_CODE, user).Result;
 
             if(response.Code == StatusCodeConstants.OK || response.Code == StatusCodeConstants.INFO)
             {
@@ -263,7 +264,7 @@ namespace ClientApplication
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
             gameDummy.Title = game;
 
-            VaporStatusResponse response = TryCommandExecution<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy);
+            VaporStatusResponse response = TryCommandExecutionAsync<Game>(CommandConstants.COMMAND_SELECT_GAME_CODE, gameDummy).Result;
             
             if (response.Code == StatusCodeConstants.OK)
             {
@@ -279,12 +280,12 @@ namespace ClientApplication
             query.Gameid = _clientSession.GameSelectedId;
             query.Username = _clientSession.Username;
 
-            VaporStatusResponse response = TryCommandExecution<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query);
+            VaporStatusResponse response = TryCommandExecutionAsync<GameUserRelationQuery>(CommandConstants.COMMAND_ACQUIRE_GAME_CODE, query).Result;
             
             return response;
         }
 
-        public string Exit()
+        public async Task<string> ExitAsync()
         {
             UserNetworkTransferObject user = new UserNetworkTransferObject();
             user.Username = _clientSession.Username;
@@ -292,7 +293,7 @@ namespace ClientApplication
             VaporStatusResponse response = new VaporStatusResponse();
             try
             {
-                SendCommand<User>(CommandConstants.COMMAND_EXIT_CODE, user);
+                await SendCommandAsync<User>(CommandConstants.COMMAND_EXIT_CODE, user);
                 response = ExecuteCommand();
             }
             catch(NetworkReadException nre)
@@ -312,12 +313,12 @@ namespace ClientApplication
             return response.Message;
         }
 
-        private VaporStatusResponse TryCommandExecution<P>(string command, INetworkTransferObject<P> payload)
+        private async  Task<VaporStatusResponse> TryCommandExecutionAsync<P>(string command, INetworkTransferObject<P> payload)
         {
             VaporStatusResponse response = new VaporStatusResponse();
             try
             {
-                SendCommand<P>(command, payload);
+                await SendCommandAsync<P>(command, payload);
                 response = ExecuteCommand();
             }
             catch(NetworkReadException nre)
@@ -336,12 +337,12 @@ namespace ClientApplication
         }
         private VaporStatusResponse ExecuteCommand()
         {
-            VaporProcessedPacket vaporProcessedPacket = _vaporProtocol.ReceiveCommand();
+            Task<VaporProcessedPacket> vaporProcessedPacket = _vaporProtocol.ReceiveCommandAsync();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket);
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket.Result);
         }
 
-        private void SendCommand<P>(string command, INetworkTransferObject<P> payload)
+        private async Task SendCommandAsync<P>(string command, INetworkTransferObject<P> payload)
         {
             string payloadString = "";
             if(payload != null)
@@ -349,7 +350,7 @@ namespace ClientApplication
                 payloadString = payload.Encode();
             }
 
-            _vaporProtocol.SendCommand(ReqResHeader.REQ, command, payloadString);
+            await _vaporProtocol.SendCommandAsync(ReqResHeader.REQ, command, payloadString);
         }
     }
 }

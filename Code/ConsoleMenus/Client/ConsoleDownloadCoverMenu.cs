@@ -33,7 +33,7 @@ namespace ConsoleMenus.Client
                 Console.WriteLine("Where do you want to download the image? (path)");
                 string path = Console.ReadLine();
                 
-                VaporStatusResponse response = IClientHandler.Instance.DownloadGameCover(path);
+                VaporStatusResponse response = IClientHandler.Instance.DownloadGameCover(path).Result;
                 
                 if(response.Code == StatusCodeConstants.OK)
                 {

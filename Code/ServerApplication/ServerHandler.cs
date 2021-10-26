@@ -20,6 +20,7 @@ using Domain.BusinessObjects;
 using Exceptions.ConnectionExceptions;
 using ServerApplicationInterfaces;
 using Exceptions;
+using System.Threading.Tasks;
 
 namespace ServerApplication
 {
@@ -42,7 +43,7 @@ namespace ServerApplication
         private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
         
-        private int _currentThreadId = 0;
+        private int _currentTaskId = 0;
         private bool _serverRunning;
 
         public ServerHandler()
@@ -78,7 +79,12 @@ namespace ServerApplication
             return true; 
         }
 
-        public void CloseServer()
+        public void StartCloseServerTask()
+        {
+            Task.Run(async() => await CloseServerAsync().ConfigureAwait(false));
+        }
+
+        private async Task CloseServerAsync()
         {
             _serverRunning = false;
             if (!AllClientsFinishedExecuting())
@@ -91,24 +97,23 @@ namespace ServerApplication
                 client.Shutdown(SocketShutdown.Both); //Close connection gracefully?
                 client.Close();
             }
-            FakeTcpConnection();
+            await FakeTcpConnectionAsync().ConfigureAwait(false);
         }
 
-        public void StartClientListeningThread()
+        public void StartClientListeningTask()
         {
-            var clientListeningThread = new Thread(() => ListenForClients());
-            clientListeningThread.Start();
+            Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false));
         }
 
-        private void ListenForClients()
+        private async Task ListenForClientsAsync()
         {
             while(_serverRunning)
             {
-                var foundClient = _serverSocket.Accept();
+                var foundClient = await _serverSocket.AcceptAsync();
 
                 if(_serverRunning)
                 {
-                    StartClientThread(foundClient);
+                    Task.Run(async() => await StartClientTask(foundClient).ConfigureAwait(false));
 
                     _clientSockets.Add(foundClient);
                 }
@@ -124,17 +129,16 @@ namespace ServerApplication
             Console.WriteLine("Server closed!");
         }
 
-        private void StartClientThread(Socket acceptedClientSocket)
+        private async Task StartClientTask(Socket acceptedClientSocket)
         {
-            var clientThread = new Thread(() => HandleClient(acceptedClientSocket));
-            clientThread.Start();
+            await Task.Run(async() => await HandleClient(acceptedClientSocket).ConfigureAwait(false));
         }
         
-        private void HandleClient(Socket acceptedClientSocket)
+        private async Task HandleClient(Socket acceptedClientSocket)
         {
-            int threadId = _currentThreadId;
-            _currentThreadId++;
-            _clientConnections.Add(new ClientCommandExecutionStatus(threadId));
+            int taskId = _currentTaskId;
+            _currentTaskId++;
+            _clientConnections.Add(new ClientCommandExecutionStatus(taskId));
             string username = "";
             try
             {
@@ -145,12 +149,15 @@ namespace ServerApplication
 
                 while (connected && _serverRunning)
                 {
-                    VaporProcessedPacket processedPacket = vp.ReceiveCommand();
-                    SetStatusOfExecuting(true, threadId);
+                    VaporProcessedPacket processedPacket = await vp.ReceiveCommandAsync();
+                    SetStatusOfExecuting(true, taskId);
 
-                    ProcessCommand(vp, processedPacket, serverCommandHandler, ref connected, ref username);
+                    ProcessCommandPair pair = await ProcessCommandAsync(vp, processedPacket, serverCommandHandler, connected, username);
 
-                    SetStatusOfExecuting(false, threadId);
+                    connected = pair.Connected;
+                    username = pair.Username;
+
+                    SetStatusOfExecuting(false, taskId);
                 }
             }
             catch (EndpointClosedSocketException ecsock)
@@ -168,7 +175,7 @@ namespace ServerApplication
             }
             finally
             {
-                SetStatusOfExecuting(false, threadId);
+                SetStatusOfExecuting(false, taskId);
             }
         }
         
@@ -190,7 +197,7 @@ namespace ServerApplication
             connection.ExecutingCommand = isExecuting;
         }
 
-        private void FakeTcpConnection()
+        private async Task FakeTcpConnectionAsync()
         {
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -201,23 +208,23 @@ namespace ServerApplication
             Socket fakeSocket = new Socket(AddressFamily.InterNetwork,
                                        SocketType.Stream,
                                        ProtocolType.Tcp);
-            fakeSocket.Connect(serverIpEndPoint);
+            await fakeSocket.ConnectAsync(serverIpEndPoint);
         }
 
 
-        private void ProcessCommand(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, ref bool connected, ref string username)
+        private async Task<ProcessCommandPair> ProcessCommandAsync(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, bool connected, string username)
         {
             CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
-            vp.SendCommand(ReqResHeader.RES, response.Command, response.Response);
+            await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
 
             if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
             {
-                RecieveClientGameCover(vp);
+                await RecieveClientGameCoverAsync(vp);
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
-                SendClientGameCover(vp, response);
+                await SendClientGameCoverAsync(vp, response);
             }
                     
             if (response.Command == CommandConstants.COMMAND_EXIT_CODE)
@@ -230,6 +237,8 @@ namespace ServerApplication
                 string responseWithoutStatusCode = RemoveStatusCode(response.Response);
                 username = responseWithoutStatusCode;
             }
+
+            return new ProcessCommandPair(username, connected);
         }
         private string RemoveStatusCode(string response)
         {
@@ -238,12 +247,12 @@ namespace ServerApplication
             return message;
         }
         
-        private void RecieveClientGameCover(VaporProtocol vp)
+        private async Task RecieveClientGameCoverAsync(VaporProtocol vp)
         {
             string path = _configurationHandler.GetPathFromAppSettings();
             try
             {
-                vp.ReceiveCover(path);
+                await vp.ReceiveCoverAsync(path);
             }
             catch (CoverNotReceivedException cre)
             {
@@ -253,7 +262,7 @@ namespace ServerApplication
             }
         }
 
-        private void SendClientGameCover(VaporProtocol vp, CommandResponse response)
+        private async Task SendClientGameCoverAsync(VaporProtocol vp, CommandResponse response)
         {
             string encodedGame = ExtractEncodedGame(response.Response);
             GameNetworkTransferObject gameNTO = new GameNetworkTransferObject();
@@ -264,11 +273,11 @@ namespace ServerApplication
 
             try
             {
-                vp.SendCover(gameDummy.Title + "-COVER" , path);
+                await vp.SendCoverAsync(gameDummy.Title + "-COVER" , path);
             }
             catch(FileReadingException fre)
             {
-                vp.SendCoverFailed();
+                await vp.SendCoverFailedAsync();
             }
         }
 

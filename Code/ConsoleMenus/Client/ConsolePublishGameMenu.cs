@@ -19,7 +19,7 @@ namespace ConsoleMenus.Client
         public bool Action(string answer)
         {
             GameNetworkTransferObject input = GetGame();
-            VaporStatusResponse response = IClientHandler.Instance.PublishGame(input);
+            VaporStatusResponse response = IClientHandler.Instance.PublishGameAsync(input).Result;
 
             _nextMenu = new ConsoleMainMenu();
 
