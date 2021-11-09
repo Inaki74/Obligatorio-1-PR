@@ -13,7 +13,7 @@ namespace Common.Configuration
         public const string OSX_SERVER_IMAGEPATH_KEY = "MacImagesPath";
         
         //RabbitMQ
-        public const string URI_KEY = "Uri";
+        public const string HOSTNAME_KEY = "HostName";
         public const string INFO_QUEUENAME_KEY = "InfoQueueName";
         public const string ERROR_QUEUENAME_KEY = "ErrorQueueName";
     }

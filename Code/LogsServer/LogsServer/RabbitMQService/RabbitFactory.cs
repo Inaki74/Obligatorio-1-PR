@@ -10,10 +10,9 @@ namespace RabbitMQService
         private static IConnection _connection;
         private static IModel _channel;
         
-        private static IMQStream CreateStream(string uri)
+        private static IMQStream CreateStream(string hostName)
         {
-            _factory = new ConnectionFactory{ DispatchConsumersAsync = true };
-            _factory.Uri = new Uri(uri);
+            _factory = new ConnectionFactory{ DispatchConsumersAsync = true, HostName = hostName};
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
 
