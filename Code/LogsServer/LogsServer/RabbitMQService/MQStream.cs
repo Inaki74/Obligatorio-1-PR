@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
@@ -19,7 +20,7 @@ namespace RabbitMQService
             throw new System.NotImplementedException();
         }
 
-        public Task ReceiveAsync()
+        public Task ReceiveAsync<T>(string algoquenosetodavia, Action<T> onReceive)
         {
             throw new System.NotImplementedException();
         }

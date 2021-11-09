@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 
 namespace RabbitMQService.Interfaces
@@ -6,6 +7,6 @@ namespace RabbitMQService.Interfaces
     {
         Task SendAsync<T>();
 
-        Task ReceiveAsync();
+        Task ReceiveAsync<T>(string algoquenosetodavia, Action<T> onReceive);
     }
 }

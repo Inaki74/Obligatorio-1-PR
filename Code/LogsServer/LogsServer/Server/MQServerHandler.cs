@@ -8,12 +8,17 @@ namespace Server
 {
     public class MQServerHandler : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<MQServerHandler> _logger;
         private readonly IMQStream _streamControl;
+        private readonly ILogLogic _logLogic;
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            
+            await _streamControl.ReceiveAsync("ayay ?", 
+                x => Task.Run(() => { _logLogic.Add(x), stoppingToken});
+            );
+
+
         }
         
     }
