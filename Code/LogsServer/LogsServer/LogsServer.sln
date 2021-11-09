@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# 
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{B7089688-8CAE-4E58-85A7-DADD2FE11F34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{96B0CABA-E61C-4C29-B5F0-8C0985EEEED4}"
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{91B917A0-97DB-4339-A972-5E78418F2240}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesFactory", "ServicesFactory\ServicesFactory.csproj", "{AB76BF70-4AF0-4AD7-B9D8-FF4A42CB60CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicInterfaces", "BusinessLogicInterfaces\BusinessLogicInterfaces.csproj", "{64785108-69B7-450F-8269-37A7949D9E44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,5 +57,9 @@ Global
 		{AB76BF70-4AF0-4AD7-B9D8-FF4A42CB60CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB76BF70-4AF0-4AD7-B9D8-FF4A42CB60CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB76BF70-4AF0-4AD7-B9D8-FF4A42CB60CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64785108-69B7-450F-8269-37A7949D9E44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64785108-69B7-450F-8269-37A7949D9E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64785108-69B7-450F-8269-37A7949D9E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64785108-69B7-450F-8269-37A7949D9E44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
