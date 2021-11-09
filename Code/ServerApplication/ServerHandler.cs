@@ -221,6 +221,14 @@ namespace ServerApplication
             {
                 await RecieveClientGameCoverAsync(vp);
             }
+
+            /*
+            if(response.Command == CommandConstants.SELECTGAME)
+            {
+                string responseWithoutStatusCode = RemoveStatusCode(response.Response);
+                diccionario[username] = responseWithoutStatusCode;
+            }
+            */
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
@@ -237,6 +245,9 @@ namespace ServerApplication
                 string responseWithoutStatusCode = RemoveStatusCode(response.Response);
                 username = responseWithoutStatusCode;
             }
+
+            // LogModel log = logsGenerator.CreateLog(username, gamename, Response (statuscode), message); <- Logs generator se encarga de crear los logs
+            // logsManager.Log(log); <- Logs manager se encarga de enviar el log
 
             return new ProcessCommandPair(username, connected);
         }
