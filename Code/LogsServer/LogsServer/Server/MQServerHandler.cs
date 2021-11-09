@@ -14,11 +14,13 @@ namespace Server
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _streamControl.ReceiveAsync("ayay ?", 
-                x => Task.Run(() => { _logLogic.Add(x), stoppingToken});
+            await _streamControl.ReceiveAsync<Log>("ayay ?", 
+                x => Task.Run(() => { _logLogic.Add(x); }, stoppingToken);
             );
 
-
+            await _streamControl.ReceiveAsync<Log>("ayay !", 
+                x => Task.Run(() => { _logLogic.Add(x); }, stoppingToken);
+            );
         }
         
     }
