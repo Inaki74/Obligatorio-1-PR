@@ -15,17 +15,17 @@ namespace DataAccess
         
         public List<Log> Get(string username)
         {
-            throw new System.NotImplementedException();
+            return LogDataAccessHelper.GetLogsFromDictionary(_database.InfoLogs[username]);
         }
 
         public List<Log> Get(string username, string gamename)
         {
-            throw new System.NotImplementedException();
+            return _database.InfoLogs[username][gamename];
         }
 
         public List<Log> GetAll()
         {
-            throw new System.NotImplementedException();
+            return LogDataAccessHelper.GetLogsFromConcurrentDictionary(_database.InfoLogs);
         }
     }
 }

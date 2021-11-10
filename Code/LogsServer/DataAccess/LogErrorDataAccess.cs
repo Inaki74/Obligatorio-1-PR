@@ -16,14 +16,7 @@ namespace DataAccess
 
         public List<Log> Get(string username)
         {
-            List<Log> finalList = new List<Log>();
-
-            foreach(KeyValuePair<string, List<Log>> gameLogs in _database.ErrorLogs[username])
-            {
-                finalList.Union(gameLogs.Value);
-            }
-
-            return finalList;
+            return LogDataAccessHelper.GetLogsFromDictionary(_database.ErrorLogs[username]);
         }
 
         public List<Log> Get(string username, string gamename)
@@ -33,19 +26,7 @@ namespace DataAccess
 
         public List<Log> GetAll()
         {
-            // Agarramos los values
-            // Por cada value, agarramos los values
-            List<Log> finalList = new List<Log>();
-
-            foreach(KeyValuePair<string, Dictionary<string, List<Log>>> userLogs in _database.ErrorLogs)
-            {
-                foreach(KeyValuePair<string, List<Log>> gameLogs in userLogs.Value)
-                {
-                    finalList.Union(gameLogs.Value);
-                }
-            }
-
-            return finalList;
+            return LogDataAccessHelper.GetLogsFromConcurrentDictionary(_database.ErrorLogs);
         }
     }
 }
