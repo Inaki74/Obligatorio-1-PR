@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 using Models;
 using RabbitMQService.Interfaces;
 using RabbitMQService;
-using Common.Configuration.Interfaces;
-using Common.Configuration;
+using Configuration;
+using Configuration.Interfaces;
 
 namespace Server
 {

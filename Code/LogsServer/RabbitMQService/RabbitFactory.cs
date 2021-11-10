@@ -1,5 +1,5 @@
 using System;
-using Common.Configuration.Interfaces;
+using Configuration.Interfaces;
 using RabbitMQ.Client;
 using RabbitMQService.Interfaces;
 

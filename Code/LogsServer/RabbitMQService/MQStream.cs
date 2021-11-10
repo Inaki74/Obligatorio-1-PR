@@ -6,8 +6,8 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQService.Interfaces;
 using Newtonsoft.Json;
-using Common.Configuration.Interfaces;
-using Common.Configuration;
+using Configuration;
+using Configuration.Interfaces;
 
 namespace RabbitMQService
 {

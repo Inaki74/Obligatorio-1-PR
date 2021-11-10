@@ -1,8 +1,8 @@
 ﻿using System;
 using BusinessLogic;
 using BusinessLogicInterfaces;
-using Common.Configuration;
-using Common.Configuration.Interfaces;
+using Configuration;
+using Configuration.Interfaces;
 using DataAccess;
 using DataAccess.Interface;
 using Database.Interface;
