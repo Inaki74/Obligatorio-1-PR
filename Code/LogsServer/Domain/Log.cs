@@ -4,12 +4,12 @@ namespace Domain
 {
     public class Log
     {
-        int Id {get;set;}
-        LogType LogType{get;set;}
-        string Username {get; set;}
-        string Gamename {get;set;}
-        string Description {get;set;}
-        DateTime Date {get;set;}
+        public int Id {get;set;}
+        public LogType LogType{get;set;}
+        public string Username {get; set;}
+        public string Gamename {get;set;}
+        public string Description {get;set;}
+        public DateTime Date {get;set;}
 
         public override bool Equals(object obj)
         {

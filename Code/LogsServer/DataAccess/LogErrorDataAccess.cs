@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using DataAccess.Interface;
 using Database.Interface;
 using Domain;
-using System.Linq;
 
 namespace DataAccess
 {
@@ -21,12 +20,17 @@ namespace DataAccess
 
         public List<Log> Get(string username, string gamename)
         {
+            if(string.IsNullOrEmpty(username))
+            {
+                return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.ErrorLogs, gamename);
+            }
+
             return _database.ErrorLogs[username][gamename];
         }
 
         public List<Log> GetAll()
         {
-            return LogDataAccessHelper.GetLogsFromConcurrentDictionary(_database.ErrorLogs);
+            return LogDataAccessHelper.GetUserLogsFromConcurrentDictionary(_database.ErrorLogs);
         }
     }
 }

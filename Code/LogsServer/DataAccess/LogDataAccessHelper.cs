@@ -20,13 +20,25 @@ namespace DataAccess
 
             return finalList;
         }
-        public static List<Log> GetLogsFromConcurrentDictionary(ConcurrentDictionary<string, Dictionary<string, List<Log>>> logs)
+        public static List<Log> GetUserLogsFromConcurrentDictionary(ConcurrentDictionary<string, Dictionary<string, List<Log>>> logs)
         {
             List<Log> finalList = new List<Log>();
 
             foreach(KeyValuePair<string, Dictionary<string, List<Log>>> userLogs in logs)
             {
                 finalList.Union(GetLogsFromDictionary(userLogs.Value));
+            }
+
+            return finalList;
+        }
+
+        public static List<Log> GetGameLogsFromConcurrentDictionary(ConcurrentDictionary<string, Dictionary<string, List<Log>>> logs, string gamename)
+        {
+            List<Log> finalList = new List<Log>();
+
+            foreach(KeyValuePair<string, Dictionary<string, List<Log>>> userLogs in logs)
+            {
+                finalList.Union(GetLogsFromDictionary(userLogs.Value).Where(l => l.Gamename == gamename));
             }
 
             return finalList;

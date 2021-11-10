@@ -20,12 +20,17 @@ namespace DataAccess
 
         public List<Log> Get(string username, string gamename)
         {
+            if(string.IsNullOrEmpty(username))
+            {
+                return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.ErrorLogs, gamename);
+            }
+
             return _database.InfoLogs[username][gamename];
         }
 
         public List<Log> GetAll()
         {
-            return LogDataAccessHelper.GetLogsFromConcurrentDictionary(_database.InfoLogs);
+            return LogDataAccessHelper.GetUserLogsFromConcurrentDictionary(_database.InfoLogs);
         }
     }
 }
