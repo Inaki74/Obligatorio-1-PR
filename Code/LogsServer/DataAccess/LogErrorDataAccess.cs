@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DataAccess.Interface;
 using Database.Interface;
@@ -7,6 +8,7 @@ namespace DataAccess
 {
     public class LogErrorDataAccess : ILogDataAccess<LogError>
     {
+        private const string NAME_IF_GAMENAME_EMPTY = "ErrorGameEmpty";
         private readonly IDatabase _database;
         public LogErrorDataAccess(IDatabase database)
         {
@@ -15,7 +17,7 @@ namespace DataAccess
 
         public bool Add(Log log)
         {
-            throw new System.NotImplementedException();
+            return LogDataAccessHelper.AddLogsToDictionary(_database.ErrorLogs, NAME_IF_GAMENAME_EMPTY, log);
         }
 
         public List<Log> Get(string username)

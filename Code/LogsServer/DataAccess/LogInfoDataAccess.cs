@@ -7,6 +7,7 @@ namespace DataAccess
 {
     public class LogInfoDataAccess : ILogDataAccess<LogInfo>
     {
+        private const string NAME_IF_GAMENAME_EMPTY = "InfoGameEmpty";
         private readonly IDatabase _database;
         public LogInfoDataAccess(IDatabase database)
         {
@@ -15,7 +16,7 @@ namespace DataAccess
 
         public bool Add(Log log)
         {
-            throw new System.NotImplementedException();
+            return LogDataAccessHelper.AddLogsToDictionary(_database.InfoLogs, NAME_IF_GAMENAME_EMPTY, log);
         }
 
         public List<Log> Get(string username)
