@@ -22,16 +22,31 @@ namespace RabbitMQService
             _configurationHandler = configurationHandler;
         }
         
-        public Task SendAsync<T>()
+        public async Task SendAsync<T>(string queueName, string routingKey, T toSend)
         {
-            throw new System.NotImplementedException();
+            await Task.Run(() =>
+            {
+                string exchangeName = _configurationHandler.GetField(ConfigurationConstants.EXCHANGENAME_KEY);
+
+                _channel.ExchangeDeclare(exchange: exchangeName, ExchangeType.Topic);
+                _channel.QueueDeclare(queueName, autoDelete:false, exclusive:false);
+                _channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
+
+                var properties = _channel.CreateBasicProperties();
+                properties.Persistent = false;
+
+                var output = JsonConvert.SerializeObject(toSend);
+                _channel.BasicPublish(exchangeName, queueName, null, Encoding.UTF8.GetBytes(output));
+            });
         }
 
-        public async Task ReceiveAsync<T>(string queue, string routingKey, Action<T> onReceive)
+        public async Task ReceiveAsync<T>(string queueName, string routingKey, Action<T> onReceive)
         {
-            _channel.ExchangeDeclare(exchange: _configurationHandler.GetField(ConfigurationConstants.EXCHANGENAME_KEY), ExchangeType.Topic);
-            _channel.QueueDeclare(queue, autoDelete:false, exclusive:false);
-            _channel.QueueBind(queue: queue, exchange: _configurationHandler.GetField(ConfigurationConstants.EXCHANGENAME_KEY), routingKey: routingKey);
+            string exchangeName = _configurationHandler.GetField(ConfigurationConstants.EXCHANGENAME_KEY);
+
+            _channel.ExchangeDeclare(exchange: exchangeName, ExchangeType.Topic);
+            _channel.QueueDeclare(queueName, autoDelete:false, exclusive:false);
+            _channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
             
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (s, e) =>
@@ -42,7 +57,8 @@ namespace RabbitMQService
                 onReceive(item);
                 await Task.Yield();
             };
-            _channel.BasicConsume(queue, true, consumer);
+            
+            _channel.BasicConsume(queueName, true, consumer);
             await Task.Yield();
         }
     }
