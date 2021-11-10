@@ -1,9 +1,9 @@
 using System;
-using Common.Configuration.Interfaces;
 using System.Configuration;
 using System.Runtime.InteropServices;
+using Configuration.Interfaces;
 
-namespace Common.Configuration
+namespace Configuration
 {
     public class ConfigurationHandler : IConfigurationHandler
     {

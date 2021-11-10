@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Configuration.Interfaces
+namespace Configuration.Interfaces
 {
     public interface IConfigurationHandler
     {

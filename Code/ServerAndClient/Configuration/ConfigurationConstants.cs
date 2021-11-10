@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Configuration
+namespace Configuration
 {
     public class ConfigurationConstants
     {
