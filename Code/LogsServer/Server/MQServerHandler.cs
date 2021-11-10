@@ -4,6 +4,7 @@ using BusinessLogicInterfaces;
 using Domain;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Models;
 using RabbitMQService.Interfaces;
 
 namespace Server
@@ -16,11 +17,11 @@ namespace Server
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _streamControl.ReceiveAsync<Log>("ayay ?", 
+            await _streamControl.ReceiveAsync<LogModel>("ayay ?", 
                 x => Task.Run(() => { _logLogic.Add(x); }, stoppingToken)
             );
 
-            await _streamControl.ReceiveAsync<Log>("ayay !", 
+            await _streamControl.ReceiveAsync<LogModel>("ayay !", 
                 x => Task.Run(() => { _logLogic.Add(x); }, stoppingToken)
             );
         }

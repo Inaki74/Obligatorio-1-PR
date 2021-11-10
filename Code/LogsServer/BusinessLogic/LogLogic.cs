@@ -4,19 +4,28 @@ using BusinessLogicInterfaces;
 using DataAccess.Interface;
 using Domain;
 using System.Linq;
+using Models;
+
 namespace BusinessLogic
 {
     public class LogLogic : ILogLogic
     {
-        private readonly ILogDataAccess _dataAccess;
-        public LogLogic(ILogDataAccess dataAccess)
+        private readonly ILogDataAccess<LogError> _errorDataAccess;
+        private readonly ILogDataAccess<LogInfo> _infoDataAccess;
+        public LogLogic(ILogDataAccess<LogError> errorDataAccess, ILogDataAccess<LogInfo> infoDataAccess)
         {
-            _dataAccess = dataAccess;
+            _errorDataAccess = errorDataAccess;
+            _infoDataAccess = infoDataAccess;
         }
 
-        public bool Add(Log log)
+        public bool Add(LogModel log)
         {
-            //return _dataAccess.Add(log);
+            if(log.LogType == LogType.INFO)
+            {
+                return _infoDataAccess.Add(log.ToLog());
+            }
+
+            return _errorDataAccess.Add(log.ToLog());
         }
 
         public List<Log> Get(string username = "", string gamename = "", DateTime? date = null)
@@ -36,22 +45,22 @@ namespace BusinessLogic
         {
             if(String.IsNullOrEmpty(username) && String.IsNullOrEmpty(gamename))
             {
-                return _dataAccess.GetAll();
+                return _errorDataAccess.GetAll().Union(_infoDataAccess.GetAll()).ToList();
             }
 
             if(!String.IsNullOrEmpty(username) && String.IsNullOrEmpty(gamename))
             {
-                return _dataAccess.Get(username);
+                return _errorDataAccess.Get(username).Union(_infoDataAccess.Get(username)).ToList();
             }
 
             if(String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(gamename))
             {
-                return _dataAccess.Get("", gamename);
+                return _errorDataAccess.Get("", gamename).Union(_infoDataAccess.Get("", gamename)).ToList();
             }
 
             if(!String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(gamename))
             {
-                return _dataAccess.Get(username, gamename);
+                return _errorDataAccess.Get(username, gamename).Union(_infoDataAccess.Get(username, gamename)).ToList();
             }
 
             return null;

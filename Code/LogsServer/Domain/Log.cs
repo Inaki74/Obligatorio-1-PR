@@ -5,7 +5,6 @@ namespace Domain
     public class Log
     {
         public int Id {get;set;}
-        public LogType LogType{get;set;}
         public string Username {get; set;}
         public string Gamename {get;set;}
         public string Description {get;set;}

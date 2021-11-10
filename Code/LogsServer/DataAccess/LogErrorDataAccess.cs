@@ -5,12 +5,17 @@ using Domain;
 
 namespace DataAccess
 {
-    public class LogErrorDataAccess : ILogDataAccess
+    public class LogErrorDataAccess : ILogDataAccess<LogError>
     {
         private readonly IDatabase _database;
         public LogErrorDataAccess(IDatabase database)
         {
             _database = database;
+        }
+
+        public bool Add(Log log)
+        {
+            throw new System.NotImplementedException();
         }
 
         public List<Log> Get(string username)

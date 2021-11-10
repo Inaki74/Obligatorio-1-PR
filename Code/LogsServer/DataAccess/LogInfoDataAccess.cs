@@ -5,14 +5,19 @@ using Domain;
 
 namespace DataAccess
 {
-    public class LogInfoDataAccess : ILogDataAccess
+    public class LogInfoDataAccess : ILogDataAccess<LogInfo>
     {
         private readonly IDatabase _database;
         public LogInfoDataAccess(IDatabase database)
         {
             _database = database;
         }
-        
+
+        public bool Add(Log log)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<Log> Get(string username)
         {
             return LogDataAccessHelper.GetLogsFromDictionary(_database.InfoLogs[username]);

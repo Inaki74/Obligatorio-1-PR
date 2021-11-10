@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicInterfaces", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\ServerAndClient\Common\Common.csproj", "{376D19F7-655B-41B2-9981-1BF91210C70A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{A6B4A069-92E4-4D7E-A75E-94B03465E07C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,5 +67,9 @@ Global
 		{376D19F7-655B-41B2-9981-1BF91210C70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{376D19F7-655B-41B2-9981-1BF91210C70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{376D19F7-655B-41B2-9981-1BF91210C70A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6B4A069-92E4-4D7E-A75E-94B03465E07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B4A069-92E4-4D7E-A75E-94B03465E07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6B4A069-92E4-4D7E-A75E-94B03465E07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6B4A069-92E4-4D7E-A75E-94B03465E07C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
