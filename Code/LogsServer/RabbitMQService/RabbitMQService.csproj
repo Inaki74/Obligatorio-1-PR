@@ -10,7 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\ServerAndClient\Common\Common.csproj" />
+      <ProjectReference Include="..\..\ServerAndClient\Configuration\Configuration.csproj" />
     </ItemGroup>
 
 </Project>

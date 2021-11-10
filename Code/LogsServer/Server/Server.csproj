@@ -15,7 +15,6 @@
       <ProjectReference Include="..\RabbitMQService\RabbitMQService.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
       <ProjectReference Include="..\ServicesFactory\ServicesFactory.csproj" />
-      <ProjectReference Include="..\..\ServerAndClient\Common\Common.csproj" />
     </ItemGroup>
 
 </Project>
