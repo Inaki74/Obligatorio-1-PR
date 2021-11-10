@@ -7,6 +7,6 @@ namespace RabbitMQService.Interfaces
     {
         Task SendAsync<T>();
 
-        Task ReceiveAsync<T>(string algoquenosetodavia, Action<T> onReceive);
+        Task ReceiveAsync<T>(string queueName, string routingKey, Action<T> onReceive);
     }
 }

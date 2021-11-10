@@ -1,4 +1,5 @@
 using System;
+using Common.Configuration.Interfaces;
 using RabbitMQ.Client;
 using RabbitMQService.Interfaces;
 
@@ -10,13 +11,13 @@ namespace RabbitMQService
         private static IConnection _connection;
         private static IModel _channel;
         
-        private static IMQStream CreateStream(string hostName)
+        public static IMQStream CreateStream(string hostName, IConfigurationHandler configurationHandler)
         {
             _factory = new ConnectionFactory{ DispatchConsumersAsync = true, HostName = hostName};
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
 
-            return new MQStream(_channel);
+            return new MQStream(_channel, configurationHandler);
         }
         
         
