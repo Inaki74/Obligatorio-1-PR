@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-#
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{B7089688-8CAE-4E58-85A7-DADD2FE11F34}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQService", "RabbitMQService\RabbitMQService.csproj", "{96B0CABA-E61C-4C29-B5F0-8C0985EEEED4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\Common\Common.csproj", "{BB6E490A-7795-42F3-AD49-10FD1AEAEA1C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{66D7CAB0-427E-4AF3-AB4A-AF6D8C7F5496}"
 EndProject
@@ -18,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicesFactory", "ServicesFactory\ServicesFactory.csproj", "{AB76BF70-4AF0-4AD7-B9D8-FF4A42CB60CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicInterfaces", "BusinessLogicInterfaces\BusinessLogicInterfaces.csproj", "{64785108-69B7-450F-8269-37A7949D9E44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\ServerAndClient\Common\Common.csproj", "{376D19F7-655B-41B2-9981-1BF91210C70A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,5 +61,9 @@ Global
 		{64785108-69B7-450F-8269-37A7949D9E44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64785108-69B7-450F-8269-37A7949D9E44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64785108-69B7-450F-8269-37A7949D9E44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{376D19F7-655B-41B2-9981-1BF91210C70A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{376D19F7-655B-41B2-9981-1BF91210C70A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{376D19F7-655B-41B2-9981-1BF91210C70A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{376D19F7-655B-41B2-9981-1BF91210C70A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
