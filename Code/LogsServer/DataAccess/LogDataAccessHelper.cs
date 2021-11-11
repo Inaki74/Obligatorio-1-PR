@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccess.Interface;
 using Database.Interface;
-using Domain;
+using ServerDomain;
 
 namespace DataAccess
 {

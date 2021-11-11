@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Domain;
+using ServerDomain;
 
 namespace Database.Interface
 {

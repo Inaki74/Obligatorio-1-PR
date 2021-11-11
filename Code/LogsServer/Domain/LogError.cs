@@ -1,4 +1,4 @@
-namespace Domain
+namespace ServerDomain
 {
     public class LogError : Log {}
 }

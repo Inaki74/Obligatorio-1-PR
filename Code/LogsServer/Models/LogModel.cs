@@ -1,5 +1,4 @@
 ﻿using System;
-using Domain;
 
 namespace Models
 {
@@ -11,27 +10,5 @@ namespace Models
         public string Gamename {get;set;}
         public string Description {get;set;}
         public DateTime Date {get;set;}
-
-        public Log ToLog()
-        {
-            Log ret;
-
-            if(LogType == LogType.INFO)
-            {
-                ret = new LogInfo();
-            }
-            else
-            {
-                ret = new LogError();
-            }
-
-            ret.Date = Date;
-            ret.Description = Description;
-            ret.Gamename = Gamename;
-            ret.Id = Id;
-            ret.Username = Username;
-
-            return ret;
-        }
     }
 }

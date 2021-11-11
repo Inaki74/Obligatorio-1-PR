@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using BusinessLogicInterfaces;
 using DataAccess.Interface;
-using Domain;
+using ServerDomain;
 using System.Linq;
 using Models;
 
@@ -22,10 +22,10 @@ namespace BusinessLogic
         {
             if(log.LogType == LogType.INFO)
             {
-                return _infoDataAccess.Add(log.ToLog());
+                return _infoDataAccess.Add(ToLog(log));
             }
 
-            return _errorDataAccess.Add(log.ToLog());
+            return _errorDataAccess.Add(ToLog(log));
         }
 
         public List<Log> Get(string username = "", string gamename = "", DateTime? date = null)
@@ -64,6 +64,28 @@ namespace BusinessLogic
             }
 
             return null;
+        }
+
+        private Log ToLog(LogModel model)
+        {
+            Log ret;
+
+            if(model.LogType == LogType.INFO)
+            {
+                ret = new LogInfo();
+            }
+            else
+            {
+                ret = new LogError();
+            }
+
+            ret.Date = model.Date;
+            ret.Description = model.Description;
+            ret.Gamename = model.Gamename;
+            ret.Id = model.Id;
+            ret.Username = model.Username;
+
+            return ret;
         }
     }
 }

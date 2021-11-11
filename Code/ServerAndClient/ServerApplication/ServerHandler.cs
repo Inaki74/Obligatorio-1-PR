@@ -21,6 +21,7 @@ using Exceptions.ConnectionExceptions;
 using ServerApplicationInterfaces;
 using Exceptions;
 using System.Threading.Tasks;
+using Models;
 
 namespace ServerApplication
 {
@@ -37,11 +38,13 @@ namespace ServerApplication
         private static int MAX_SECONDS_WASTED = 5000;
 
         private readonly IConfigurationHandler _configurationHandler;
+        private readonly ILogGenerator _logsGenerator;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly Socket _serverSocket;
         
         private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
+        private Dictionary<string, string> _clientSelectedGames = new Dictionary<string, string>();
         
         private int _currentTaskId = 0;
         private bool _serverRunning;
@@ -58,6 +61,7 @@ namespace ServerApplication
             }
 
             _configurationHandler = new ConfigurationHandler();
+            _logsGenerator = new LogsGenerator();
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -217,18 +221,19 @@ namespace ServerApplication
             CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
             await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
 
+            string responseWithoutStatusCode = RemoveStatusCode(response.Response);
+            int statusCode = int.Parse(GetStatusCode(response.Response));
+
             if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
             {
                 await RecieveClientGameCoverAsync(vp);
             }
 
-            /*
-            if(response.Command == CommandConstants.SELECTGAME)
+            if(response.Command == CommandConstants.COMMAND_SELECT_GAME_CODE)
             {
-                string responseWithoutStatusCode = RemoveStatusCode(response.Response);
-                diccionario[username] = responseWithoutStatusCode;
+                //string responseWithoutStatusCode = RemoveStatusCode(response.Response);
+                //diccionario[username] = responseWithoutStatusCode;
             }
-            */
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
@@ -242,11 +247,10 @@ namespace ServerApplication
 
             if (response.Command == CommandConstants.COMMAND_LOGIN_CODE)
             {
-                string responseWithoutStatusCode = RemoveStatusCode(response.Response);
                 username = responseWithoutStatusCode;
             }
 
-            // LogModel log = logsGenerator.CreateLog(username, gamename, Response (statuscode), message); <- Logs generator se encarga de crear los logs
+            //LogModel log = _logsGenerator.CreateLog(username, gamename, statusCode, responseWithoutStatusCode);
             // logsManager.Log(log); <- Logs manager se encarga de enviar el log
 
             return new ProcessCommandPair(username, connected);
@@ -255,6 +259,13 @@ namespace ServerApplication
         {
             int statusCodeFixedSize = VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE;
             string message = response.Substring(statusCodeFixedSize, response.Length-statusCodeFixedSize);
+            return message;
+        }
+
+         private string GetStatusCode(string response)
+        {
+            int statusCodeFixedSize = VaporProtocolSpecification.STATUS_CODE_FIXED_SIZE;
+            string message = response.Substring(0, statusCodeFixedSize);
             return message;
         }
         

@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Database.Interface;
-using Domain;
+using ServerDomain;
 
 namespace Database
 {

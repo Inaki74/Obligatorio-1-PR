@@ -6,7 +6,7 @@ using Configuration.Interfaces;
 using DataAccess;
 using DataAccess.Interface;
 using Database.Interface;
-using Domain;
+using ServerDomain;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ServicesFactory
