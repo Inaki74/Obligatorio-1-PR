@@ -19,7 +19,11 @@ namespace DataAccess
             {
                 if(dictionary.ContainsKey(log.Username))
                 {
-                    dictionary[log.Username][log.Gamename].Add(log);
+                    Dictionary<string, List<Log>> dictionaryIn = new Dictionary<string, List<Log>>();
+                    dictionary.TryGetValue(log.Username, out dictionaryIn);
+                    Dictionary<string, List<Log>> oldDictionaryIn = dictionaryIn;
+                    dictionaryIn[log.Gamename].Add(log);
+                    dictionary.TryUpdate(log.Username, dictionaryIn, oldDictionaryIn);
                 }
                 else
                 {
@@ -36,7 +40,7 @@ namespace DataAccess
                         firstDictionary.Add(nameIfEmpty, firstList);
                     }
 
-                    dictionary.AddOrUpdate(log.Username, (str) => firstDictionary, (str,dict) => firstDictionary);
+                    dictionary.TryAdd(log.Username, firstDictionary);
                 }
                 
                 done = true;

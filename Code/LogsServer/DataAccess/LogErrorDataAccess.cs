@@ -8,7 +8,7 @@ namespace DataAccess
 {
     public class LogErrorDataAccess : ILogDataAccess<LogError>
     {
-        private const string NAME_IF_GAMENAME_EMPTY = "ErrorGameEmpty";
+        private const string NAME_IF_GAMENAME_EMPTY = "GameEmpty";
         private readonly IDatabase _database;
         public LogErrorDataAccess(IDatabase database)
         {
