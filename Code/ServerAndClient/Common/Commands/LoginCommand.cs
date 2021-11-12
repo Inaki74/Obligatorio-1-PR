@@ -6,12 +6,13 @@ using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicator;
+using LogCommunicator.Interfaces;
 
 namespace Common.Commands
 {
     public class LoginCommand : CommandBase, Interfaces.ICommand
     {
-
         public string Command => CommandConstants.COMMAND_LOGIN_CODE;
         
         public string ActionReq(byte[] payload)
@@ -25,16 +26,22 @@ namespace Common.Commands
 
             int statusCode = 0;
             string response = "";
+
+            string logMessage = "";
             
             if(userExisted)
             {
                 statusCode = StatusCodeConstants.OK;
+                logMessage = $"The User {user.Username} logged in to the system.";
             }
             else
             {
                 statusCode = StatusCodeConstants.INFO;
+                logMessage = $"The User {user.Username} was just created and logged in to the system.";
             }
             
+            SendLog(user.Username, -1, logMessage);
+
             response = user.Username;
 
             return statusCode.ToString() + response;

@@ -187,6 +187,7 @@ namespace ServerApplication
             finally
             {
                 SetStatusOfExecuting(false, taskId);
+                _clientSelectedGames.Remove(username);
             }
         }
 

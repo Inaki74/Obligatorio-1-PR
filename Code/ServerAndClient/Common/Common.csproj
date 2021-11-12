@@ -9,6 +9,8 @@
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
+    <ProjectReference Include="..\LogCommunicator\LogCommunicator.csproj" />
+    <ProjectReference Include="..\..\LogsServer\Models\Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
