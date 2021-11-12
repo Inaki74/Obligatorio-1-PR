@@ -7,7 +7,7 @@ namespace DataAccess
 {
     public class LogInfoDataAccess : ILogDataAccess<LogInfo>
     {
-        private const string NAME_IF_GAMENAME_EMPTY = "InfoGameEmpty";
+        private const string NAME_IF_GAMENAME_EMPTY = "GameEmpty";
         private readonly IDatabase _database;
         public LogInfoDataAccess(IDatabase database)
         {

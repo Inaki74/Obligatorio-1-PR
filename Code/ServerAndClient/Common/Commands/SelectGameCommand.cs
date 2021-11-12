@@ -27,7 +27,7 @@ namespace Common.Commands
             string idAsString = gameSelected.Id.ToString();
             int gameInputFixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
             
-            response = VaporProtocolHelper.FillNumber(idAsString.Length, gameInputFixedSize) + "a";
+            response = VaporProtocolHelper.FillNumber(idAsString.Length, gameInputFixedSize) + idAsString;
             statusCode = StatusCodeConstants.OK;
             
             return statusCode.ToString() + response;

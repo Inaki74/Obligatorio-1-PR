@@ -22,6 +22,8 @@ using ServerApplicationInterfaces;
 using Exceptions;
 using System.Threading.Tasks;
 using Models;
+using LogCommunicator;
+using LogCommunicator.Interfaces;
 
 namespace ServerApplication
 {
@@ -39,12 +41,13 @@ namespace ServerApplication
 
         private readonly IConfigurationHandler _configurationHandler;
         private readonly ILogGenerator _logsGenerator;
+        private readonly ILogSender _logSender;
         private readonly IPEndPoint _serverIpEndPoint;
         private readonly Socket _serverSocket;
         
         private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
-        private Dictionary<string, string> _clientSelectedGames = new Dictionary<string, string>();
+        private Dictionary<string, int> _clientSelectedGames = new Dictionary<string, int>();
         
         private int _currentTaskId = 0;
         private bool _serverRunning;
@@ -61,7 +64,8 @@ namespace ServerApplication
             }
 
             _configurationHandler = new ConfigurationHandler();
-            _logsGenerator = new LogsGenerator();
+            _logsGenerator = new LogGenerator();
+            _logSender = new LogSender();
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -166,14 +170,17 @@ namespace ServerApplication
             }
             catch (EndpointClosedSocketException ecsock)
             {
+                await SendConnectionErrorLog(username, ecsock.Message);
                 LogoutUserInException(username);
             }
             catch (EndpointClosedByServerSocketException ecserv)
             {
+                await SendConnectionErrorLog(username, ecserv.Message);
                 LogoutUserInException(username);
             }
             catch (SocketException e)
             {
+                await SendConnectionErrorLog(username, e.Message);
                 LogoutUserInException(username);
                 Console.WriteLine($"Something went wrong: {e.Message}");
             }
@@ -182,7 +189,12 @@ namespace ServerApplication
                 SetStatusOfExecuting(false, taskId);
             }
         }
-        
+
+        private async Task SendConnectionErrorLog(string username, string message)
+        {
+            LogModel log = _logsGenerator.CreateLog(username, -1, true, message);
+            await _logSender.SendLog(log);
+        }
 
         private string ExtractEncodedGame(string response)
         {
@@ -231,8 +243,9 @@ namespace ServerApplication
 
             if(response.Command == CommandConstants.COMMAND_SELECT_GAME_CODE)
             {
-                //string responseWithoutStatusCode = RemoveStatusCode(response.Response);
-                //diccionario[username] = responseWithoutStatusCode;
+                int fixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
+                string gameId = responseWithoutStatusCode.Substring(fixedSize, fixedSize - responseWithoutStatusCode.Length);
+                _clientSelectedGames[username] = int.Parse(gameId);
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
@@ -250,8 +263,18 @@ namespace ServerApplication
                 username = responseWithoutStatusCode;
             }
 
-            //LogModel log = _logsGenerator.CreateLog(username, gamename, statusCode, responseWithoutStatusCode);
-            // logsManager.Log(log); <- Logs manager se encarga de enviar el log
+            if(statusCode != StatusCodeConstants.INFO && statusCode != StatusCodeConstants.OK)
+            {
+                // send error log
+                int gameid = -1;
+                if(_clientSelectedGames.ContainsKey(username))
+                {
+                    gameid = _clientSelectedGames[username];
+                }
+
+                LogModel log = _logsGenerator.CreateLog(username, gameid, true, responseWithoutStatusCode);
+                await _logSender.SendLog(log);
+            }
 
             return new ProcessCommandPair(username, connected);
         }

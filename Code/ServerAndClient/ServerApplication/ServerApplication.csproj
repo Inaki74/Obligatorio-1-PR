@@ -7,6 +7,7 @@
     <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
     <ProjectReference Include="..\ConsoleMenusInterfaces\ConsoleMenusInterfaces.csproj" />
     <ProjectReference Include="..\..\LogsServer\Models\Models.csproj" />
+    <ProjectReference Include="..\LogCommunicator\LogCommunicator.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
