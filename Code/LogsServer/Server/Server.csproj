@@ -11,10 +11,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BusinessLogicInterfaces\BusinessLogicInterfaces.csproj" />
-      <ProjectReference Include="..\Domain\Domain.csproj" />
       <ProjectReference Include="..\RabbitMQService\RabbitMQService.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
       <ProjectReference Include="..\ServicesFactory\ServicesFactory.csproj" />
+      <ProjectReference Include="..\Domain\ServerDomain.csproj" />
     </ItemGroup>
 
 </Project>
