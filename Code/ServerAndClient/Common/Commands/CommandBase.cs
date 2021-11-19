@@ -12,10 +12,10 @@ namespace Common.Commands
     {
         protected readonly ILogGenerator _logsGenerator;
         protected readonly ILogSender _logsSender;
-        public CommandBase()
+        public CommandBase(ILogSender logSender)
         {
             _logsGenerator = new LogGenerator();
-            _logsSender = new LogSender(new ConfigurationHandler());
+            _logsSender = logSender;
         }
         protected virtual VaporStatusResponse ParseStatusResponse(byte[] payload)
         {

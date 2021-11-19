@@ -7,11 +7,16 @@ using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class PublishReviewCommand : CommandBase, Interfaces.ICommand
     {
+        public PublishReviewCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_PUBLISH_REVIEW_CODE;
 
         public string ActionReq(byte[] payload)

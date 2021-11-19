@@ -5,11 +5,16 @@ using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.HelperObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class CheckGameOwnerCommand : CommandBase, Interfaces.ICommand
     {
+        public CheckGameOwnerCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_CHECKOWNERSHIP_GAME_CODE;
         public string ActionReq(byte[] payload)
         {

@@ -231,7 +231,7 @@ namespace ServerApplication
 
         private async Task<ProcessCommandPair> ProcessCommandAsync(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, bool connected, string username)
         {
-            CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
+            CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket, _logSender);
             await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
 
             string responseWithoutStatusCode = RemoveStatusCode(response.Response);

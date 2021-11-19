@@ -9,6 +9,7 @@ using RabbitMQService.Interfaces;
 using RabbitMQService;
 using Configuration;
 using Configuration.Interfaces;
+using System;
 
 namespace Server
 {

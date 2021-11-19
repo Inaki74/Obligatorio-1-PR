@@ -13,6 +13,7 @@ namespace RabbitMQService
         
         public static IMQStream CreateStream(string hostName, IConfigurationHandler configurationHandler)
         {
+            Console.WriteLine(hostName);
             _factory = new ConnectionFactory{ DispatchConsumersAsync = true, HostName = hostName};
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();

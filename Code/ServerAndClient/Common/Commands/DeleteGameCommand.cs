@@ -11,11 +11,16 @@ using Common.FileSystemUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class DeleteGameCommand : CommandBase, Interfaces.ICommand
     {
+        public DeleteGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_DELETE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {

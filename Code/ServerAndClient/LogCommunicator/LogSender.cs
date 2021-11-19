@@ -24,14 +24,14 @@ namespace LogCommunicator
             
             if(log.LogType == LogType.INFO)
             {
-                await _streamControl.SendAsync(_configurationHandler.GetField(ConfigurationConstants.INFO_QUEUENAME_KEY), 
-                                               _configurationHandler.GetField(ConfigurationConstants.INFO_ROUTINGKEY_KEY), log);
+                await _streamControl.SendAsync<LogModel>(_configurationHandler.GetField(ConfigurationConstants.INFO_QUEUENAME_KEY), 
+                                               $"info.{log.Username}", log);
             }
 
             if(log.LogType == LogType.ERROR)
             {
-                await _streamControl.SendAsync(_configurationHandler.GetField(ConfigurationConstants.ERROR_QUEUENAME_KEY), 
-                                               _configurationHandler.GetField(ConfigurationConstants.ERROR_ROUTINGKEY_KEY), log);
+                await _streamControl.SendAsync<LogModel>(_configurationHandler.GetField(ConfigurationConstants.ERROR_QUEUENAME_KEY), 
+                                               $"error.{log.Username}", log);
             }
         }
     }

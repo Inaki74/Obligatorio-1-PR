@@ -9,11 +9,16 @@ using Common.Protocol.Interfaces;
 using Common.Protocol.NTOs;
 using Domain.HelperObjects;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class GetGameScoreCommand : CommandBase, ICommand
     {
+        public GetGameScoreCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_GET_GAME_SCORE_CODE;
         
         public string ActionReq(byte[] payload)

@@ -339,7 +339,7 @@ namespace ClientApplication
         {
             Task<VaporProcessedPacket> vaporProcessedPacket = _vaporProtocol.ReceiveCommandAsync();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket.Result);
+            return clientCommandHandler.ExecuteCommand(vaporProcessedPacket.Result, null);
         }
 
         private async Task SendCommandAsync<P>(string command, INetworkTransferObject<P> payload)

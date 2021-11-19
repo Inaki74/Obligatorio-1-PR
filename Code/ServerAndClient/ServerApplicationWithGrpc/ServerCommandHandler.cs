@@ -5,15 +5,16 @@ using Common.Interfaces;
 using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Exceptions.BusinessExceptions;
+using LogCommunicatorInterfaces;
 using ServerApplicationInterfaces;
 
 namespace ServerApplication
 {
     public class ServerCommandHandler :CommandHandler, IServerCommandHandler
     {
-        public CommandResponse ExecuteCommand(VaporProcessedPacket packet)
+        public CommandResponse ExecuteCommand(VaporProcessedPacket packet, ILogSender logSender)
         {
-            ICommand command = DecideCommand(packet.Command);
+            ICommand command = DecideCommand(packet.Command, logSender);
             
 
             string response = "";

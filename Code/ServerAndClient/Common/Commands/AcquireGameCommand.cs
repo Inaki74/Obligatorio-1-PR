@@ -7,11 +7,16 @@ using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class AcquireGameCommand : CommandBase, ICommand
     {
+        public AcquireGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_ACQUIRE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {

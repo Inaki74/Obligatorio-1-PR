@@ -5,11 +5,16 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class ExitCommand : CommandBase, ICommand
     {
+        public ExitCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_EXIT_CODE;
         
         public string ActionReq(byte[] payload)

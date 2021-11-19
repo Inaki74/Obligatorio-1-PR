@@ -5,11 +5,16 @@ using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class ModifyGameCommand : CommandBase, Interfaces.ICommand
     {
+        public ModifyGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_MODIFY_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
