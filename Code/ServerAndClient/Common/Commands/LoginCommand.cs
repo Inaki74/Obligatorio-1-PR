@@ -6,8 +6,6 @@ using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
-using LogCommunicator;
-using LogCommunicator.Interfaces;
 
 namespace Common.Commands
 {

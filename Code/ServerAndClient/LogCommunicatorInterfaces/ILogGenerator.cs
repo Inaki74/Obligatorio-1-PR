@@ -1,6 +1,7 @@
+using System;
 using Models;
 
-namespace LogCommunicator.Interfaces
+namespace LogCommunicatorInterfaces
 {
     public interface ILogGenerator
     {

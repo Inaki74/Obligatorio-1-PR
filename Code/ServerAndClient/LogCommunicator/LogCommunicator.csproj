@@ -5,6 +5,9 @@
     <ProjectReference Include="..\BusinessInterfaces\BusinessInterfaces.csproj" />
     <ProjectReference Include="..\Business\Business.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\LogCommunicatorInterfaces\LogCommunicatorInterfaces.csproj" />
+    <ProjectReference Include="..\..\LogsServer\RabbitMQService\RabbitMQService.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

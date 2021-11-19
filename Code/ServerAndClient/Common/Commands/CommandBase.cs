@@ -1,9 +1,10 @@
 using System;
 using System.Text;
 using Common.Protocol;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 using LogCommunicator;
 using Models;
+using Configuration;
 
 namespace Common.Commands
 {
@@ -14,7 +15,7 @@ namespace Common.Commands
         public CommandBase()
         {
             _logsGenerator = new LogGenerator();
-            _logsSender = new LogSender();
+            _logsSender = new LogSender(new ConfigurationHandler());
         }
         protected virtual VaporStatusResponse ParseStatusResponse(byte[] payload)
         {

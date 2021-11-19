@@ -1,7 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using Models;
 
-namespace LogCommunicator.Interfaces
+namespace LogCommunicatorInterfaces
 {
     public interface ILogSender
     {

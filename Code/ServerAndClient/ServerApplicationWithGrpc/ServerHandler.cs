@@ -23,7 +23,7 @@ using Exceptions;
 using System.Threading.Tasks;
 using Models;
 using LogCommunicator;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 
 namespace ServerApplication
 {
@@ -65,7 +65,7 @@ namespace ServerApplication
 
             _configurationHandler = new ConfigurationHandler();
             _logsGenerator = new LogGenerator();
-            _logSender = new LogSender();
+            _logSender = new LogSender(_configurationHandler);
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
