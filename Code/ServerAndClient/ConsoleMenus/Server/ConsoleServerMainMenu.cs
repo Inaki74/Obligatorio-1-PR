@@ -5,6 +5,7 @@ using ServerApplicationInterfaces;
 
 namespace ConsoleMenus.Server
 {
+    // Deprecated
     public class ConsoleServerMainMenu : ConsoleMenusBase, IConsoleMenu
     {
         private const string EXIT_OPTION = "1";

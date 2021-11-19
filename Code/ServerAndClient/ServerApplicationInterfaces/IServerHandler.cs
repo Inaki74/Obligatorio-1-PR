@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerApplicationInterfaces
@@ -7,9 +8,9 @@ namespace ServerApplicationInterfaces
     {
         static IServerHandler Instance { get; set; }
 
-        bool StartServer();
+        Task<bool> StartServerAsync();
 
-        void StartClientListeningTask();
+        Task StartClientListeningTaskAsync(CancellationToken stoppingToken);
 
         void StartCloseServerTask();
     }

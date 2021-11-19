@@ -4,6 +4,7 @@ using ServerApplicationInterfaces;
 
 namespace ConsoleMenus.Server
 {
+    // Deprecated makinola
     public class ConsoleStartServerMenu : ConsoleMenusBase, IConsoleMenu
     {
         public bool RequiresAnswer => false;
@@ -12,6 +13,7 @@ namespace ConsoleMenus.Server
 
         public bool Action(string answer)
         {
+            /*
             bool serverStarted = IServerHandler.Instance.StartServer();
 
             if(serverStarted)
@@ -22,7 +24,7 @@ namespace ConsoleMenus.Server
                 _nextMenu = this;
             }
             
-
+            */
             return false;
         }
 

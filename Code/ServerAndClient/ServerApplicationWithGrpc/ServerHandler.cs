@@ -78,7 +78,7 @@ namespace ServerApplication
             _serverSocket.Bind(_serverIpEndPoint);
         }
 
-        public bool StartServer()
+        public async Task<bool> StartServerAsync()
         {
             _serverSocket.Listen(100);
 
@@ -108,9 +108,9 @@ namespace ServerApplication
             await FakeTcpConnectionAsync().ConfigureAwait(false);
         }
 
-        public void StartClientListeningTask()
+        public async Task StartClientListeningTaskAsync(CancellationToken stoppingToken)
         {
-            Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false));
+            await Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
         }
 
         private async Task ListenForClientsAsync()
