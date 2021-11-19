@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
+    <ProjectReference Include="..\ServerApplicationInterfaces\ServerApplicationInterfaces.csproj" />
+    <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
+    <ProjectReference Include="..\ConsoleMenusInterfaces\ConsoleMenusInterfaces.csproj" />
+    <ProjectReference Include="..\..\LogsServer\Models\Models.csproj" />
+    <ProjectReference Include="..\LogCommunicator\LogCommunicator.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>
