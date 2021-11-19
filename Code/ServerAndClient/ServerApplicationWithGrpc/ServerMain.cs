@@ -15,7 +15,7 @@ namespace ServerApplication
 
             if (serverStarted)
             {
-                await IServerHandler.Instance.StartClientListeningTaskAsync();
+                await IServerHandler.Instance.StartClientListeningTaskAsync(stoppingToken);
             }
             
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerApplicationInterfaces
@@ -9,7 +10,7 @@ namespace ServerApplicationInterfaces
 
         Task<bool> StartServerAsync();
 
-        Task StartClientListeningTaskAsync();
+        Task StartClientListeningTaskAsync(CancellationToken stoppingToken);
 
         void StartCloseServerTask();
     }

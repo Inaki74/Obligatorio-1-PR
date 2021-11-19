@@ -108,9 +108,9 @@ namespace ServerApplication
             await FakeTcpConnectionAsync().ConfigureAwait(false);
         }
 
-        public async Task StartClientListeningTaskAsync()
+        public async Task StartClientListeningTaskAsync(CancellationToken stoppingToken)
         {
-            await ListenForClientsAsync().ConfigureAwait(false);
+            await Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
         }
 
         private async Task ListenForClientsAsync()
