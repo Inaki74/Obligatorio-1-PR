@@ -22,6 +22,10 @@ namespace DataAccess
                     Dictionary<string, List<Log>> dictionaryIn = new Dictionary<string, List<Log>>();
                     dictionary.TryGetValue(log.Username, out dictionaryIn);
                     Dictionary<string, List<Log>> oldDictionaryIn = dictionaryIn;
+
+                    log.Id = Database.Database.CURRENT_ID;
+                    Database.Database.CURRENT_ID++;
+
                     dictionaryIn[log.Gamename].Add(log);
                     dictionary.TryUpdate(log.Username, dictionaryIn, oldDictionaryIn);
                 }
@@ -29,6 +33,8 @@ namespace DataAccess
                 {
                     Dictionary<string, List<Log>> firstDictionary = new Dictionary<string, List<Log>>();
                     List<Log> firstList = new List<Log>();
+                    log.Id = Database.Database.CURRENT_ID;
+                    Database.Database.CURRENT_ID++;
                     firstList.Add(log);
 
                     if(String.IsNullOrEmpty(log.Gamename))
@@ -59,7 +65,7 @@ namespace DataAccess
 
             foreach(KeyValuePair<string, List<Log>> gameLogs in logs)
             {
-                finalList.Union(gameLogs.Value);
+                finalList = finalList.Union(gameLogs.Value).ToList();
             }
 
             return finalList;
@@ -70,7 +76,7 @@ namespace DataAccess
 
             foreach(KeyValuePair<string, Dictionary<string, List<Log>>> userLogs in logs)
             {
-                finalList.Union(GetLogsFromDictionary(userLogs.Value));
+                finalList = finalList.Union(GetLogsFromDictionary(userLogs.Value)).ToList();
             }
 
             return finalList;
@@ -82,7 +88,7 @@ namespace DataAccess
 
             foreach(KeyValuePair<string, Dictionary<string, List<Log>>> userLogs in logs)
             {
-                finalList.Union(GetLogsFromDictionary(userLogs.Value).Where(l => l.Gamename == gamename));
+                finalList = finalList.Union(GetLogsFromDictionary(userLogs.Value).Where(l => l.Gamename == gamename)).ToList();
             }
 
             return finalList;

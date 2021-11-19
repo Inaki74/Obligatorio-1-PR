@@ -26,7 +26,7 @@ namespace Server.Controllers
         public IActionResult Get()
         {
             List<LogModel> logs = _logLogic.Get();
-            return Ok();
+            return Ok(logs);
         }
     }
 }
