@@ -40,6 +40,6 @@ namespace Server
                 x => Task.Run(() => { _logLogic.Add(x); }, stoppingToken)
             );
         }
-        
+
     }
 }

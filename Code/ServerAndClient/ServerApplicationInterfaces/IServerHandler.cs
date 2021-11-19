@@ -7,9 +7,9 @@ namespace ServerApplicationInterfaces
     {
         static IServerHandler Instance { get; set; }
 
-        bool StartServer();
+        Task<bool> StartServerAsync();
 
-        void StartClientListeningTask();
+        Task StartClientListeningTaskAsync();
 
         void StartCloseServerTask();
     }

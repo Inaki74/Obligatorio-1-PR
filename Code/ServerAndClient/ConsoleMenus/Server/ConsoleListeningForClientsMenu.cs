@@ -4,6 +4,7 @@ using ServerApplicationInterfaces;
 
 namespace ConsoleMenus.Server
 {
+    // Deprecated
     public class ConsoleListeningForClientsMenu : ConsoleMenusBase, IConsoleMenu
     {
         public bool RequiresAnswer => false;
@@ -12,9 +13,9 @@ namespace ConsoleMenus.Server
 
         public bool Action(string answer)
         {
-            IServerHandler.Instance.StartClientListeningTask();
+            // IServerHandler.Instance.StartClientListeningTask();
             
-            _nextMenu = new ConsoleServerMainMenu();
+            // _nextMenu = new ConsoleServerMainMenu();
 
             return false;
         }
