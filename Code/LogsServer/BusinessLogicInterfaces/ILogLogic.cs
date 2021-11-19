@@ -9,6 +9,6 @@ namespace BusinessLogicInterfaces
     {
         bool Add(LogModel log);
 
-        List<Log> Get(string username="", string gamename="", DateTime? date=null);
+        List<LogModel> Get(string username="", string gamename="", DateTime? date=null);
     }
 }
