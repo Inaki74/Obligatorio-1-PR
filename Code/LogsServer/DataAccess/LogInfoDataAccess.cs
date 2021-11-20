@@ -43,6 +43,11 @@ namespace DataAccess
                 return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.InfoLogs, gamename);
             }
 
+            if(!_database.InfoLogs[username].ContainsKey(username))
+            {
+                return new List<Log>();
+            }
+
             return _database.InfoLogs[username][gamename];
         }
 
