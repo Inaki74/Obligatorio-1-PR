@@ -19,6 +19,6 @@ message AddGameRequest {
 
 // The response message containing the greetings.
 message GameReply {
-  int statusCode = 1;
+  int32 statusCode = 1;
   string message = 2;
 }

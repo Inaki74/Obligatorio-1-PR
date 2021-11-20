@@ -22,18 +22,24 @@ namespace WebAPI.Controllers
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
+            AppContext.SetSwitch(
+                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            AppContext.SetSwitch(
-                "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            // The port number(5001) must match the port of the gRPC server.
             using var channel = GrpcChannel.ForAddress("http://localhost:5002");
-            var client = new Greeter.GreeterClient(channel);
-            var reply = await client.SayHelloAsync(
-                new HelloRequest { Name = "GreeterClient" });
+            var client = new GameMessager.GameMessagerClient(channel);
+            var request = new AddGameRequest 
+                { 
+                    Gamename = "GreeterClient",
+                    Genre = "Shooter",
+                    Esrb = "M",
+                    Synopsis = "Ayayay",
+                    PathAFoto = "c/2/c/s"
+                };
+            var reply = await client.AddGameAsync(request);
 
             return Ok("Greeting: " + reply.Message);
         }
