@@ -30,6 +30,9 @@ namespace Common.Commands
             GameUserRelationQuery query = queryDummy.Decode(queryString);
             gameLogic.AcquireGame(query);
 
+            string logMessage = $"The user {query.Username} has acquired the game {gameLogic.GetGame(query.Gameid).Title}.";
+            SendLog(query.Username, query.Gameid, logMessage);
+
             statusCode = StatusCodeConstants.OK;
             response = "Game acquired succesfully";
 

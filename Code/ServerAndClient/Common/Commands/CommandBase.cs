@@ -30,7 +30,6 @@ namespace Common.Commands
 
         protected void SendLog(string username, int gameid, string message)
         {
-            // ESTO DEBERIA DE SER ASYNC?!?!?!
             _logsSender.SendLog(_logsGenerator.CreateLog(username, gameid, false, message));
         }
     }

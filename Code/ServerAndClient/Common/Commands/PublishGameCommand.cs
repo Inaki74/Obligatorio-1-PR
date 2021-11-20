@@ -34,6 +34,9 @@ namespace Common.Commands
             game.Id = id;
             gameNTO.Load(game);
             response = gameNTO.Encode();
+
+            string logMessage = $"The game {game.Title} has been published by {game.Owner.Username}.";
+            SendLog(game.Owner.Username, id, logMessage);
         
             statusCode = StatusCodeConstants.OK;
             
