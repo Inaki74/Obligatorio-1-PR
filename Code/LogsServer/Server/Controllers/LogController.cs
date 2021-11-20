@@ -23,9 +23,9 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(LogRequest request)
         {
-            List<LogModel> logs = _logLogic.Get();
+            List<LogModel> logs = _logLogic.Get(request.Username, request.Gamename, request.Date);
             return Ok(logs);
         }
     }
