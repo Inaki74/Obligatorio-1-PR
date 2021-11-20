@@ -29,6 +29,9 @@ namespace Common.Commands
             User user = userDummy.Decode(userString);
             
             userLogic.Logout(user);
+
+            string logMessage = $"The user {user.Username} has logged out of the system.";
+            SendLog(user.Username, -1, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Logged out.";
