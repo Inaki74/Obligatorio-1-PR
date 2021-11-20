@@ -26,7 +26,17 @@ namespace DataAccess
                     log.Id = Database.Database.CURRENT_ID;
                     Database.Database.CURRENT_ID++;
 
-                    dictionaryIn[log.Gamename].Add(log);
+                    if(!dictionaryIn.ContainsKey(log.Gamename))
+                    {
+                        List<Log> firstList = new List<Log>();
+                        firstList.Add(log);
+                        dictionaryIn.Add(log.Gamename, firstList);
+                    }
+                    else
+                    {
+                        dictionaryIn[log.Gamename].Add(log);
+                    }
+
                     dictionary.TryUpdate(log.Username, dictionaryIn, oldDictionaryIn);
                 }
                 else
