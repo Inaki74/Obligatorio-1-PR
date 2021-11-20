@@ -19,7 +19,6 @@ namespace ServerApplicationWithGrpc
         {
             services.AddGrpc();
             services.AddHostedService<ServerMain>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +34,7 @@ namespace ServerApplicationWithGrpc
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<GreeterService>();
+                //endpoints.MapGrpcService<GameMessagerService>();
 
                 endpoints.MapGet("/",
                     async context =>
