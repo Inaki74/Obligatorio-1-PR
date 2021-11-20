@@ -337,10 +337,8 @@ namespace ClientApplication
         }
         private VaporStatusResponse ExecuteCommand()
         {
-            Console.WriteLine("ayay? ...");
             Task<VaporProcessedPacket> vaporProcessedPacket = _vaporProtocol.ReceiveCommandAsync();
             IClientCommandHandler clientCommandHandler = new ClientCommandHandler();
-            Console.WriteLine("ayay!");
             return clientCommandHandler.ExecuteCommand(vaporProcessedPacket.Result, null);
         }
 
