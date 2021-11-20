@@ -27,6 +27,9 @@ namespace Common.Commands
             string gameString = Encoding.UTF8.GetString(payload);
             Game game = gameNTO.Decode(gameString);
             gameLogic.ModifyGame(game);
+
+            string logMessage = $"The game {game.Title} has been modified by its owner: {game.Owner.Username}";
+            SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Game modified!";

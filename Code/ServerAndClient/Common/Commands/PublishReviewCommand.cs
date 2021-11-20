@@ -33,17 +33,24 @@ namespace Common.Commands
             bool existed = reviewLogic.Exists(review);
             reviewLogic.AddReview(review);
 
+            string logMessage = "";
             if(!existed)
             {
                 statusCode = StatusCodeConstants.OK;
                 response = "Review published!";
+                logMessage =
+                    $"New Review published for game:{review.Game.Title} with score:{review.Score} by {review.ReviewPublisher}";
             }
             else
             {
                 statusCode = StatusCodeConstants.INFO;
                 response = "You already had a review for this game, it was replaced with the new one.";
+                logMessage =
+                    $"Review updated for game:{review.Game.Title} with new score:{review.Score} by {review.ReviewPublisher}";
             }
         
+            SendLog(review.ReviewPublisher.Username, review.Game.Id, logMessage);
+            
             return statusCode.ToString() + response;
         }
 
