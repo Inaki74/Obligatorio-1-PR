@@ -50,7 +50,6 @@ namespace RabbitMQService
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (s, e) =>
             {
-                Console.WriteLine($"ADDING");
                 var body = e.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
                 var item = JsonConvert.DeserializeObject<T>(message);

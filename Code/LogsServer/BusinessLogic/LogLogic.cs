@@ -20,8 +20,6 @@ namespace BusinessLogic
 
         public bool Add(LogModel log)
         {
-            Console.WriteLine($"ADDING: {log.Date}, {log.Description}, {log.Username}");
-
             if(log.LogType == LogType.INFO)
             {
                 return _infoDataAccess.Add(ToLog(log));
