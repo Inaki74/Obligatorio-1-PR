@@ -39,12 +39,12 @@ namespace DataAccess
 
         public List<Log> Get(string username, string gamename)
         {
-            if(string.IsNullOrEmpty(username) || !_database.ErrorLogs.ContainsKey(username))
+            if(string.IsNullOrEmpty(username))
             {
                 return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.ErrorLogs, gamename);
             }
 
-            if(!_database.ErrorLogs[username].ContainsKey(username))
+            if(!_database.ErrorLogs.ContainsKey(username) || !_database.ErrorLogs[username].ContainsKey(gamename))
             {
                 return new List<Log>();
             }

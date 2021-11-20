@@ -26,9 +26,21 @@ namespace Common.Commands
             
             string gameString = Encoding.UTF8.GetString(payload);
             Game game = gameNTO.Decode(gameString);
+            Game oldGame = gameLogic.GetGame(game.Id);
+
+            string logMessage = "";
+            if(oldGame.Title != game.Title)
+            {
+                logMessage = "The game " + game.Title + " has been modified by its owner: " + game.Owner.Username + ". The game's name changed from " + oldGame.Title + " to " + game.Title;
+            }
+            else
+            {
+                logMessage = "The game " + game.Title + " has been modified by its owner: " + game.Owner.Username;
+            }
+
             gameLogic.ModifyGame(game);
 
-            string logMessage = $"The game {game.Title} has been modified by its owner: {game.Owner.Username}";
+            
             SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
