@@ -231,11 +231,14 @@ namespace ServerApplication
 
         private async Task<ProcessCommandPair> ProcessCommandAsync(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, bool connected, string username)
         {
+            Console.WriteLine("Received command, executing");
             CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket, _logSender);
             await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
+            Console.WriteLine("Responded");
 
             string responseWithoutStatusCode = RemoveStatusCode(response.Response);
             int statusCode = int.Parse(GetStatusCode(response.Response));
+            Console.WriteLine(statusCode);
 
             if(response.Command == CommandConstants.COMMAND_PUBLISH_GAME_CODE || response.Command == CommandConstants.COMMAND_MODIFY_GAME_CODE)
             {
@@ -245,8 +248,15 @@ namespace ServerApplication
             if(response.Command == CommandConstants.COMMAND_SELECT_GAME_CODE)
             {
                 int fixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-                string gameId = responseWithoutStatusCode.Substring(fixedSize, fixedSize - responseWithoutStatusCode.Length);
-                _clientSelectedGames[username] = int.Parse(gameId);
+                string gameId = responseWithoutStatusCode.Substring(fixedSize, responseWithoutStatusCode.Length - fixedSize);
+                if (!_clientSelectedGames.ContainsKey(username))
+                {
+                    _clientSelectedGames.Add(username, int.Parse(gameId));
+                }
+                else
+                {
+                    _clientSelectedGames[username] = int.Parse(gameId);
+                }
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
@@ -264,7 +274,8 @@ namespace ServerApplication
                 username = responseWithoutStatusCode;
             }
 
-            if(statusCode != StatusCodeConstants.INFO && statusCode != StatusCodeConstants.OK)
+            if(statusCode == StatusCodeConstants.ERROR_CLIENT && statusCode == StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED &&
+              statusCode == StatusCodeConstants.ERROR_SERVER && statusCode == StatusCodeConstants.ERROR_STREAM)
             {
                 // send error log
                 int gameid = -1;

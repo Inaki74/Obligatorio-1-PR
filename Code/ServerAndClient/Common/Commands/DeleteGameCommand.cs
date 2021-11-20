@@ -33,16 +33,20 @@ namespace Common.Commands
             
             string gameString = Encoding.UTF8.GetString(payload);
             Game game = gameDummy.Decode(gameString);
+
+            Game gameInDB = gameLogic.GetGame(game.Id);
+            string gameownerUsername = gameInDB.Owner.Username;
+            int gameId = gameInDB.Id;
+            string logMessage = "The game " + gameInDB.Title + " has been deleted by its owner: " + gameownerUsername;
+            SendLog(gameownerUsername, gameId, logMessage);
+
             gameLogic.DeleteGame(game);
-            
+
             IConfigurationHandler configurationHandler = new ConfigurationHandler();
             IPathHandler pathHandler = new PathHandler();
             
             string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
             fileStreamHandler.Delete(path);
-
-            string logMessage = $"The game {game.Title} has been deleted by its owner: {game.Owner.Username}";
-            SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Game deleted successfully.";
