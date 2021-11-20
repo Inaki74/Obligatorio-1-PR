@@ -7,11 +7,16 @@ using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
 using Domain.HelperObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class ViewDetailsCommand : CommandBase, Interfaces.ICommand
     {
+        public ViewDetailsCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_VIEW_DETAILS_CODE;
         public string ActionReq(byte[] payload)
         {

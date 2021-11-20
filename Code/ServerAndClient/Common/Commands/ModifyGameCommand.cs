@@ -5,11 +5,16 @@ using BusinessInterfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class ModifyGameCommand : CommandBase, Interfaces.ICommand
     {
+        public ModifyGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_MODIFY_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
@@ -22,6 +27,9 @@ namespace Common.Commands
             string gameString = Encoding.UTF8.GetString(payload);
             Game game = gameNTO.Decode(gameString);
             gameLogic.ModifyGame(game);
+
+            string logMessage = $"The game {game.Title} has been modified by its owner: {game.Owner.Username}";
+            SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Game modified!";

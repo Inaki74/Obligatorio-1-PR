@@ -30,13 +30,12 @@ namespace RabbitMQService
 
                 _channel.ExchangeDeclare(exchange: exchangeName, ExchangeType.Topic);
                 _channel.QueueDeclare(queueName, autoDelete:false, exclusive:false);
-                _channel.QueueBind(queue: queueName, exchange: exchangeName, routingKey: routingKey);
 
                 var properties = _channel.CreateBasicProperties();
                 properties.Persistent = false;
 
                 var output = JsonConvert.SerializeObject(toSend);
-                _channel.BasicPublish(exchangeName, queueName, null, Encoding.UTF8.GetBytes(output));
+                _channel.BasicPublish(exchangeName, routingKey, null, Encoding.UTF8.GetBytes(output));
             });
         }
 

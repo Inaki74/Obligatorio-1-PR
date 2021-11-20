@@ -9,11 +9,16 @@ using Common.Protocol.NTOs;
 using Domain.HelperObjects;
 using Domain.BusinessObjects;
 using Exceptions.BusinessExceptions;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class SearchGamesCommand : CommandBase, ICommand
     {
+        public SearchGamesCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_SEARCH_GAMES_CODE;
         
         public string ActionReq(byte[] payload)

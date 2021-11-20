@@ -11,11 +11,16 @@ using Common.FileSystemUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class DeleteGameCommand : CommandBase, Interfaces.ICommand
     {
+        public DeleteGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_DELETE_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
@@ -35,6 +40,9 @@ namespace Common.Commands
             
             string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
             fileStreamHandler.Delete(path);
+
+            string logMessage = $"The game {game.Title} has been deleted by its owner: {game.Owner.Username}";
+            SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Game deleted successfully.";

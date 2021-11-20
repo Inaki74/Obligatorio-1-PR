@@ -23,7 +23,7 @@ using Exceptions;
 using System.Threading.Tasks;
 using Models;
 using LogCommunicator;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 
 namespace ServerApplication
 {
@@ -65,7 +65,7 @@ namespace ServerApplication
 
             _configurationHandler = new ConfigurationHandler();
             _logsGenerator = new LogGenerator();
-            _logSender = new LogSender();
+            _logSender = new LogSender(_configurationHandler);
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -231,7 +231,7 @@ namespace ServerApplication
 
         private async Task<ProcessCommandPair> ProcessCommandAsync(VaporProtocol vp,VaporProcessedPacket processedPacket , IServerCommandHandler serverCommandHandler, bool connected, string username)
         {
-            CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket);
+            CommandResponse response = serverCommandHandler.ExecuteCommand(processedPacket, _logSender);
             await vp.SendCommandAsync(ReqResHeader.RES, response.Command, response.Response);
 
             string responseWithoutStatusCode = RemoveStatusCode(response.Response);

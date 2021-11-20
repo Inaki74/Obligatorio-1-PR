@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
+      <ProjectReference Include="..\LogCommunicatorInterfaces\LogCommunicatorInterfaces.csproj" />
     </ItemGroup>
 
 </Project>

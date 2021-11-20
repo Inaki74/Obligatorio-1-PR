@@ -5,11 +5,16 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class ExitCommand : CommandBase, ICommand
     {
+        public ExitCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_EXIT_CODE;
         
         public string ActionReq(byte[] payload)
@@ -24,6 +29,9 @@ namespace Common.Commands
             User user = userDummy.Decode(userString);
             
             userLogic.Logout(user);
+
+            string logMessage = $"The user {user.Username} has logged out of the system.";
+            SendLog(user.Username, -1, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Logged out.";

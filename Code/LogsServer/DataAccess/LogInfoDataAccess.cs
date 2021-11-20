@@ -16,19 +16,36 @@ namespace DataAccess
 
         public bool Add(Log log)
         {
-            return LogDataAccessHelper.AddLogsToDictionary(_database.InfoLogs, NAME_IF_GAMENAME_EMPTY, log);
+            string gamename = NAME_IF_GAMENAME_EMPTY;
+
+            if(!string.IsNullOrEmpty(log.Gamename))
+            {
+                gamename = log.Gamename;
+            }
+
+            return LogDataAccessHelper.AddLogsToDictionary(_database.InfoLogs, gamename, log);
         }
 
         public List<Log> Get(string username)
         {
+            if(!_database.InfoLogs.ContainsKey(username))
+            {
+                return new List<Log>();
+            }
+
             return LogDataAccessHelper.GetLogsFromDictionary(_database.InfoLogs[username]);
         }
 
         public List<Log> Get(string username, string gamename)
         {
-            if(string.IsNullOrEmpty(username))
+            if(string.IsNullOrEmpty(username) || !_database.InfoLogs.ContainsKey(username))
             {
-                return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.ErrorLogs, gamename);
+                return LogDataAccessHelper.GetGameLogsFromConcurrentDictionary(_database.InfoLogs, gamename);
+            }
+
+            if(!_database.InfoLogs[username].ContainsKey(username))
+            {
+                return new List<Log>();
             }
 
             return _database.InfoLogs[username][gamename];

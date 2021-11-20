@@ -6,11 +6,16 @@ using Common.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class DownloadCoverCommand : CommandBase, ICommand
     {
+        public DownloadCoverCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_DOWNLOAD_COVER_CODE;
         public string ActionReq(byte[] payload)
         {

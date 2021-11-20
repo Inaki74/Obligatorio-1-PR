@@ -1,6 +1,6 @@
 using System;
 using Models;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 using Business;
 using BusinessInterfaces;
 

@@ -7,11 +7,16 @@ using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class PublishGameCommand : CommandBase, Interfaces.ICommand
     {
+        public PublishGameCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_PUBLISH_GAME_CODE;
 
         public string ActionReq(byte[] payload)
@@ -29,6 +34,9 @@ namespace Common.Commands
             game.Id = id;
             gameNTO.Load(game);
             response = gameNTO.Encode();
+
+            string logMessage = $"The game {game.Title} has been published by {game.Owner.Username}.";
+            SendLog(game.Owner.Username, id, logMessage);
         
             statusCode = StatusCodeConstants.OK;
             

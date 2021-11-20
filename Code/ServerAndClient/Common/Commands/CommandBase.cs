@@ -1,9 +1,10 @@
 using System;
 using System.Text;
 using Common.Protocol;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 using LogCommunicator;
 using Models;
+using Configuration;
 
 namespace Common.Commands
 {
@@ -11,10 +12,10 @@ namespace Common.Commands
     {
         protected readonly ILogGenerator _logsGenerator;
         protected readonly ILogSender _logsSender;
-        public CommandBase()
+        public CommandBase(ILogSender logSender)
         {
             _logsGenerator = new LogGenerator();
-            _logsSender = new LogSender();
+            _logsSender = logSender;
         }
         protected virtual VaporStatusResponse ParseStatusResponse(byte[] payload)
         {
@@ -29,7 +30,6 @@ namespace Common.Commands
 
         protected void SendLog(string username, int gameid, string message)
         {
-            // ESTO DEBERIA DE SER ASYNC?!?!?!
             _logsSender.SendLog(_logsGenerator.CreateLog(username, gameid, false, message));
         }
     }

@@ -20,6 +20,8 @@ namespace BusinessLogic
 
         public bool Add(LogModel log)
         {
+            Console.WriteLine($"ADDING: {log.Date}, {log.Description}, {log.Username}, {log.Gamename}");
+
             if(log.LogType == LogType.INFO)
             {
                 return _infoDataAccess.Add(ToLog(log));
@@ -28,17 +30,20 @@ namespace BusinessLogic
             return _errorDataAccess.Add(ToLog(log));
         }
 
-        public List<Log> Get(string username = "", string gamename = "", DateTime? date = null)
+        public List<LogModel> Get(string username = "", string gamename = "", DateTime? date = null)
         {
             List<Log> listToFilter = GetLogs(username, gamename);
+            List<LogModel> ret = new List<LogModel>();
 
             if(date != null)
             {
                 // desde
-                return listToFilter.Where(log => log.Date >= date).ToList();
+                listToFilter = listToFilter.Where(log => log.Date >= date).ToList();
             }
 
-            return listToFilter;
+            listToFilter.ForEach(l => ret.Add(new LogModel(l)));
+
+            return ret;
         }
 
         private List<Log> GetLogs(string username, string gamename)

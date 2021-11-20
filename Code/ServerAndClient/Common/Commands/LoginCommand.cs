@@ -6,13 +6,16 @@ using Common.NetworkUtilities.Interfaces;
 using Common.Protocol;
 using Common.Protocol.NTOs;
 using Domain.BusinessObjects;
-using LogCommunicator;
-using LogCommunicator.Interfaces;
+using LogCommunicatorInterfaces;
 
 namespace Common.Commands
 {
     public class LoginCommand : CommandBase, Interfaces.ICommand
     {
+        public LoginCommand(ILogSender logSender) : base(logSender)
+        {
+        }
+
         public string Command => CommandConstants.COMMAND_LOGIN_CODE;
         
         public string ActionReq(byte[] payload)
