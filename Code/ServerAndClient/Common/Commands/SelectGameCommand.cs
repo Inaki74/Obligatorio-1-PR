@@ -18,6 +18,7 @@ namespace Common.Commands
         public string Command => CommandConstants.COMMAND_SELECT_GAME_CODE;
         public string ActionReq(byte[] payload)
         {
+            Console.WriteLine("Init, select game");
             GameNetworkTransferObject gameDummy = new GameNetworkTransferObject();
             IGameLogic gameLogic = new GameLogic(); 
             
