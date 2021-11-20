@@ -248,8 +248,15 @@ namespace ServerApplication
             if(response.Command == CommandConstants.COMMAND_SELECT_GAME_CODE)
             {
                 int fixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-                string gameId = responseWithoutStatusCode.Substring(fixedSize, fixedSize - responseWithoutStatusCode.Length);
-                _clientSelectedGames[username] = int.Parse(gameId);
+                string gameId = responseWithoutStatusCode.Substring(fixedSize, responseWithoutStatusCode.Length - fixedSize);
+                if (!_clientSelectedGames.ContainsKey(username))
+                {
+                    _clientSelectedGames.Add(username, int.Parse(gameId));
+                }
+                else
+                {
+                    _clientSelectedGames[username] = int.Parse(gameId);
+                }
             }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
