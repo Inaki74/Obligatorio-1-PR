@@ -40,6 +40,9 @@ namespace Common.Commands
             
             string path = pathHandler.AppendPath(configurationHandler.GetPathFromAppSettings(),$"{game.Id}.png");
             fileStreamHandler.Delete(path);
+
+            string logMessage = $"The game {game.Title} has been deleted by its owner: {game.Owner.Username}";
+            SendLog(game.Owner.Username, game.Id, logMessage);
             
             statusCode = StatusCodeConstants.OK;
             response = "Game deleted successfully.";
