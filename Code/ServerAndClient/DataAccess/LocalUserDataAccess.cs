@@ -96,5 +96,11 @@ namespace DataAccess
                 throw new FindUserException(ioe.Message);
             }
         }
+
+        public bool Exist(User elem)
+        {
+            List<User> userList = InMemoryDatabase.Instance.Users.GetCopyOfInternalList();
+            return userList.Exists(u => u.Username == elem.Username || u.ID == elem.ID);
+        }
     }
 }

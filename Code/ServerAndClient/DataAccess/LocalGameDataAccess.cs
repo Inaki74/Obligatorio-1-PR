@@ -93,5 +93,10 @@ namespace DataAccess
             InMemoryDatabase.Instance.Games.Remove(oldGame);
             InMemoryDatabase.Instance.Games.Add(elem);
         }
+
+        public bool Exist(Game elem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
