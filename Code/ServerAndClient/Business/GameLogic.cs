@@ -132,6 +132,12 @@ namespace Business
             {
                 Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
                 User user = _userDataAccess.Get(query.Username);
+
+                if(user.ownedGames.Contains(realGame))
+                {
+                    throw new UserAlreadyAcquiredGame(realGame.Title);
+                }
+
                 user.ownedGames.Add(realGame);
                 _userDataAccess.Update(user);
             }
