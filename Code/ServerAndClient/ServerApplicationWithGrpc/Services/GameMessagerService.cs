@@ -18,6 +18,15 @@ namespace ServerApplicationWithGrpc
 
         public override Task<GameReply> AddGame(AddGameRequest request, ServerCallContext context)
         {
+            IGameLogic gameLogic = new GameLogic();
+
+            int id = gameLogic.AddGame(game);
+
+            string logMessage = $"The game {game.Title} has been published by {game.Owner.Username}.";
+            SendLog(game.Owner.Username, id, logMessage);
+
+             statusCode = StatusCodeConstants.OK;
+
             return Task.FromResult(new GameReply
             {
                 StatusCode = 20,
