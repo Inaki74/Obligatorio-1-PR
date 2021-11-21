@@ -111,7 +111,7 @@ namespace ServerApplication
 
         public async Task StartClientListeningTaskAsync(CancellationToken stoppingToken)
         {
-            await Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
+            Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
         }
 
         private async Task ListenForClientsAsync()
