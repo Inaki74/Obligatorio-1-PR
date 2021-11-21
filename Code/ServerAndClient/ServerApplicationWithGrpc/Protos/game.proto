@@ -7,6 +7,7 @@ package game;
 service GameMessager {
   rpc AddGame (AddGameRequest) returns (GameReply);
   rpc LinkUserGame (LinkUserGameRequest) returns (GameReply);
+  rpc UnlinkUserGame(UnlinkUserGameRequest) returns (GameReply);
 }
 
 // Request to add a game.
@@ -20,6 +21,12 @@ message AddGameRequest {
 
 // Request user acquire game.
 message LinkUserGameRequest {
+  int32 gameid = 1;
+  string username = 2;
+}
+
+// Request user unacquire game.
+message UnlinkUserGameRequest {
   int32 gameid = 1;
   string username = 2;
 }
