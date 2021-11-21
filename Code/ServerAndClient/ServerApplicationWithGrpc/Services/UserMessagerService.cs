@@ -97,9 +97,9 @@ namespace ServerApplicationWithGrpc
 
             try
             {
-                //string username = _userLogic.GetUsername(request.UserId);
-                //_userLogic.DeleteUser(request.UserId);
-                //logMessage = $"The user {username} has been deleted by ADMIN.";
+                string username = _userLogic.GetUser(request.UserId).Username;
+                _userLogic.DeleteUser(request.UserId);
+                logMessage = $"The user {username} has been deleted by ADMIN.";
                 _logSender.SendLog(_logGenerator.CreateLog("ADMIN", -1, false, logMessage));
             }
             catch(BusinessException e)
