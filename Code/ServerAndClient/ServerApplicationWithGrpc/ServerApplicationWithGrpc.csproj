@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
         <Protobuf Include="Protos\game.proto" GrpcServices="Server" />
     </ItemGroup>
 
@@ -21,6 +20,8 @@
     <ItemGroup>
       <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
       <ProjectReference Include="..\LogCommunicatorInterfaces\LogCommunicatorInterfaces.csproj" />
+      <ProjectReference Include="..\BusinessInterfaces\BusinessInterfaces.csproj" />
+      <ProjectReference Include="..\Business\Business.csproj" />
     </ItemGroup>
 
 </Project>

@@ -52,7 +52,7 @@ namespace ServerApplication
         private int _currentTaskId = 0;
         private bool _serverRunning;
 
-        public ServerHandler()
+        public ServerHandler(ILogSender logSender)
         {
             if(IServerHandler.Instance == null)
             {
@@ -65,7 +65,8 @@ namespace ServerApplication
 
             _configurationHandler = new ConfigurationHandler();
             _logsGenerator = new LogGenerator();
-            _logSender = new LogSender(_configurationHandler);
+            _logSender = logSender;
+            //_logSender = new LogSender(_configurationHandler);
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));

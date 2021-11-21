@@ -18,8 +18,13 @@ namespace DataAccess
                 return _currentId;
             }
         }
-        
 
+        public LocalUserDataAccess()
+        {
+            User admin = new User("ADMIN", 3007);
+            Add(admin);
+        }
+        
         public User Get(string id)
         {
             User dummyUser = GetCopy(id);
