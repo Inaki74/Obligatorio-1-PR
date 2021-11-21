@@ -6,9 +6,10 @@ package game;
 
 service GameMessager {
   rpc AddGame (AddGameRequest) returns (GameReply);
+  rpc LinkUserGame (LinkUserGameRequest) returns (GameReply);
 }
 
-// The request message containing the user's name.
+// Request to add a game.
 message AddGameRequest {
   string gamename = 1;
   string genre = 2;
@@ -17,7 +18,13 @@ message AddGameRequest {
   string pathAFoto = 5;
 }
 
-// The response message containing the greetings.
+// Request user acquire game.
+message LinkUserGameRequest {
+  string gamename = 1;
+  string username = 2;
+}
+
+// General reply scheme.
 message GameReply {
   int32 statusCode = 1;
   string message = 2;
