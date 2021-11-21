@@ -68,11 +68,10 @@ namespace ServerApplicationWithGrpc
 
             try
             {
-                int gameid = _gameLogic.GetGame(request.Gamename).Id;
-                GameUserRelationQuery query = new GameUserRelationQuery(request.Username, gameid);
+                GameUserRelationQuery query = new GameUserRelationQuery(request.Username, request.Gameid);
                 _gameLogic.AcquireGame(query);
-                logMessage = $"The user {request.Username} has acquired the game {request.Gamename}. Granted by ADMIN.";
-                _logSender.SendLog(_logGenerator.CreateLog(request.Username, gameid, false, logMessage));
+                logMessage = $"The user {request.Username} has acquired the game {_gameLogic.GetGame(request.Gameid).Title}. Granted by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog(request.Username, request.Gameid, false, logMessage));
             }
             catch(BusinessException e)
             {

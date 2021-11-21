@@ -20,7 +20,7 @@ message AddGameRequest {
 
 // Request user acquire game.
 message LinkUserGameRequest {
-  string gamename = 1;
+  int32 gameid = 1;
   string username = 2;
 }
 
