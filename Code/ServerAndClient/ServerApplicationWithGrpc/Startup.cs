@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LogCommunicator;
+using LogCommunicatorInterfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +21,7 @@ namespace ServerApplicationWithGrpc
         {
             services.AddGrpc();
             services.AddHostedService<ServerMain>();
-
+            services.AddSingleton<ILogSender, LogSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +36,7 @@ namespace ServerApplicationWithGrpc
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<GreeterService>();
+                endpoints.MapGrpcService<GameMessagerService>();
 
                 endpoints.MapGet("/",
                     async context =>

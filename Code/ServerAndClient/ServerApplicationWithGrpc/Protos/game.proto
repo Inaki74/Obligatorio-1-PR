@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "ServerApplicationWithGrpc";
+
+package game;
+
+service GameMessager {
+  rpc AddGame (AddGameRequest) returns (GameReply);
+}
+
+// The request message containing the user's name.
+message AddGameRequest {
+  string gamename = 1;
+  string genre = 2;
+  string esrb = 3;
+  string synopsis = 4;
+  string pathAFoto = 5;
+}
+
+// The response message containing the greetings.
+message GameReply {
+  int32 statusCode = 1;
+  string message = 2;
+}
