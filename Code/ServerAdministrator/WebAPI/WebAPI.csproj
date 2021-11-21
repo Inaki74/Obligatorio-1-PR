@@ -17,5 +17,8 @@
         <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
         <Protobuf Include="Protos\game.proto" GrpcServices="Client" />
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\ServerAndClient\Configuration\Configuration.csproj" />
+    </ItemGroup>
 
 </Project>

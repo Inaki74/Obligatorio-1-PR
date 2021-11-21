@@ -19,5 +19,8 @@ namespace Configuration
         public const string ERROR_ROUTINGKEY_KEY = "ErrorRoutingKey";
         public const string INFO_ROUTINGKEY_KEY = "InfoRoutingKey";
         public const string EXCHANGENAME_KEY = "ExchangeName";
+
+        //ServerAdministrator
+        public const string MAINSERVER_ADDRESS_KEY = "MainServerAddress";
     }
 }
