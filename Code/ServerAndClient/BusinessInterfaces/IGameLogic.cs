@@ -11,6 +11,7 @@ namespace BusinessInterfaces
 
         void ModifyGame(Game game);
         Game GetGame(int id);
+        Game GetGame(string title);
 
         List<Game> GetAllGames();
 

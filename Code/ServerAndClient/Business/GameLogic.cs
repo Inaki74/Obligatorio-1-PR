@@ -66,6 +66,11 @@ namespace Business
             return _gameDataAccess.GetCopyId(id);
         }
 
+        public Game GetGame(string title)
+        {
+            return _gameDataAccess.GetCopy(title);
+        }
+
         public List<Game> GetAllGames()
         {
             return _gameDataAccess.GetAll();
