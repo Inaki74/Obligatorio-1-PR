@@ -12,6 +12,6 @@ namespace Exceptions.BusinessExceptions
 
         private string _gameOwned = "";
 
-        public override string Message => $"User already owns this game: {_gameOwned}";
+        public override string Message => $"User already owns this game: {_gameOwned}!";
     }
 }

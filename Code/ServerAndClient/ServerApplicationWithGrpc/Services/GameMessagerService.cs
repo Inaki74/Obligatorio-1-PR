@@ -90,5 +90,35 @@ namespace ServerApplicationWithGrpc
                 Message = logMessage
             });
         }
+
+        public override Task<GameReply> UnlinkUserGame(UnlinkUserGameRequest request, ServerCallContext context)
+        {
+            string logMessage = "";
+            int statusCode = StatusCodeConstants.OK;
+
+            try
+            {
+                GameUserRelationQuery query = new GameUserRelationQuery(request.Username, request.Gameid);
+                _gameLogic.UnacquireGame(query);
+                logMessage = $"The user {request.Username} no longer owns {_gameLogic.GetGame(request.Gameid).Title}, removed by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog(request.Username, request.Gameid, false, logMessage));
+            }
+            catch(BusinessException e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                logMessage = e.Message;
+            }
+            catch(Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                logMessage = e.Message;
+            }
+
+            return Task.FromResult(new GameReply
+            {
+                StatusCode = statusCode,
+                Message = logMessage
+            });
+        }
     }
 }
