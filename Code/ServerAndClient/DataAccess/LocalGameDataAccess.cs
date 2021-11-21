@@ -34,9 +34,9 @@ namespace DataAccess
             }
         }
 
-        public Game Get(string id)
+        public Game Get(string title)
         {
-            Game dummyGame = GetCopy(id);
+            Game dummyGame = GetCopy(title);
             Game game = InMemoryDatabase.Instance.Games.Get(dummyGame);
             return game;
         }

@@ -6,6 +6,7 @@ using Business;
 using BusinessInterfaces;
 using Common.Protocol;
 using Domain.BusinessObjects;
+using Domain.HelperObjects;
 using Exceptions.BusinessExceptions;
 using Grpc.Core;
 using LogCommunicator;
@@ -53,6 +54,36 @@ namespace ServerApplicationWithGrpc
                 logMessage = e.Message;
             }
             
+            return Task.FromResult(new GameReply
+            {
+                StatusCode = statusCode,
+                Message = logMessage
+            });
+        }
+
+        public override Task<GameReply> LinkUserGame(LinkUserGameRequest request, ServerCallContext context)
+        {
+            string logMessage = "";
+            int statusCode = StatusCodeConstants.OK;
+
+            try
+            {
+                GameUserRelationQuery query = new GameUserRelationQuery(request.Username, request.Gameid);
+                _gameLogic.AcquireGame(query);
+                logMessage = $"The user {request.Username} has acquired the game {_gameLogic.GetGame(request.Gameid).Title}. Granted by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog(request.Username, request.Gameid, false, logMessage));
+            }
+            catch(BusinessException e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                logMessage = e.Message;
+            }
+            catch(Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                logMessage = e.Message;
+            }
+
             return Task.FromResult(new GameReply
             {
                 StatusCode = statusCode,
