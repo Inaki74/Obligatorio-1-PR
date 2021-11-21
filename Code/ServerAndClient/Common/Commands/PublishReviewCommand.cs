@@ -39,14 +39,14 @@ namespace Common.Commands
                 statusCode = StatusCodeConstants.OK;
                 response = "Review published!";
                 logMessage =
-                    $"New Review published for game:{review.Game.Title} with score:{review.Score} by {review.ReviewPublisher}";
+                    $"New Review published for game:{review.Game.Title} with score:{review.Score} by {review.ReviewPublisher.Username}";
             }
             else
             {
                 statusCode = StatusCodeConstants.INFO;
                 response = "You already had a review for this game, it was replaced with the new one.";
                 logMessage =
-                    $"Review updated for game:{review.Game.Title} with new score:{review.Score} by {review.ReviewPublisher}";
+                    $"Review updated for game:{review.Game.Title} with new score:{review.Score} by {review.ReviewPublisher.Username}";
             }
         
             SendLog(review.ReviewPublisher.Username, review.Game.Id, logMessage);

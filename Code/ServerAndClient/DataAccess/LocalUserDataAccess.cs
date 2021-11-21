@@ -22,7 +22,10 @@ namespace DataAccess
         public LocalUserDataAccess()
         {
             User admin = new User("ADMIN", 3007);
-            Add(admin);
+            if(!Exist(admin))
+            {
+                Add(admin);
+            }
         }
         
         public User Get(string id)

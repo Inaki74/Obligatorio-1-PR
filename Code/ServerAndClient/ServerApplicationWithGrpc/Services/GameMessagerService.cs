@@ -100,9 +100,9 @@ namespace ServerApplicationWithGrpc
 
             try
             {
-                _gameLogic.DeleteGame(game);
                 logMessage = $"The game {game.Title} has been deleted by ADMIN.";
                 _logSender.SendLog(_logGenerator.CreateLog("ADMIN", request.GameId, false, logMessage));
+                _gameLogic.DeleteGame(game);
             }
             catch(BusinessException e)
             {
