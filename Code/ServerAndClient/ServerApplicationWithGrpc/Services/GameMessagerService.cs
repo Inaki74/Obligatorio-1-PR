@@ -60,6 +60,67 @@ namespace ServerApplicationWithGrpc
                 Message = logMessage
             });
         }
+        
+        public override Task<GameReply> ModifyGame(ModifyGameRequest request, ServerCallContext context)
+        {
+            Game game = new Game(request.Gamename, request.Genre, request.Esrb, request.Synopsis, request.PathAFoto, request.GameId);
+            game.Owner = _gameLogic.GetGame(request.GameId).Owner;
+            string logMessage = "";
+            int statusCode = StatusCodeConstants.OK;
+
+            try
+            {
+                _gameLogic.ModifyGame(game);
+                logMessage = $"The game {game.Title} has been modified by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog("ADMIN", request.GameId, false, logMessage));
+            }
+            catch(BusinessException e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                logMessage = e.Message;
+            }
+            catch(Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                logMessage = e.Message;
+            }
+            
+            return Task.FromResult(new GameReply
+            {
+                StatusCode = statusCode,
+                Message = logMessage
+            });
+        }
+        
+        public override Task<GameReply> DeleteGame(DeleteGameRequest request, ServerCallContext context)
+        {
+            Game game = _gameLogic.GetGame(request.GameId);
+            string logMessage = "";
+            int statusCode = StatusCodeConstants.OK;
+
+            try
+            {
+                _gameLogic.DeleteGame(game);
+                logMessage = $"The game {game.Title} has been deleted by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog("ADMIN", request.GameId, false, logMessage));
+            }
+            catch(BusinessException e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                logMessage = e.Message;
+            }
+            catch(Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                logMessage = e.Message;
+            }
+            
+            return Task.FromResult(new GameReply
+            {
+                StatusCode = statusCode,
+                Message = logMessage
+            });
+        }
 
         public override Task<GameReply> LinkUserGame(LinkUserGameRequest request, ServerCallContext context)
         {
