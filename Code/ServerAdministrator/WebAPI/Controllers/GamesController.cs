@@ -42,6 +42,39 @@ namespace WebAPI.Controllers
 
             return Ok(reply);
         }
+        
+        [HttpPut("{gameid}")]
+        public async Task<IActionResult> PutGame(GameModel game, int gameid)
+        {
+            using var channel = GrpcChannel.ForAddress(_serverAddress);
+            var client = new GameMessager.GameMessagerClient(channel);
+            var request = new ModifyGameRequest 
+            {
+                Gamename = game.Gamename,
+                Genre = game.Genre,
+                Esrb = game.ESRB,
+                Synopsis = game.Synopsis,
+                PathAFoto = game.PathToImage,
+                GameId = gameid
+            };
+            var reply = await client.ModifyGameAsync(request);
+
+            return Ok(reply);
+        }
+        
+        [HttpDelete("{gameid}")]
+        public async Task<IActionResult> DeleteGame( int gameid)
+        {
+            using var channel = GrpcChannel.ForAddress(_serverAddress);
+            var client = new GameMessager.GameMessagerClient(channel);
+            var request = new DeleteGameRequest 
+            {
+                GameId = gameid,
+            };
+            var reply = await client.DeleteGameAsync(request);
+
+            return Ok(reply);
+        }
 
         [HttpPost("user-acquire/{gameid}")]
         public async Task<IActionResult> UserAcquireGame(UserGameLinkModel obj, int gameid)
