@@ -151,6 +151,34 @@ namespace Business
             }
         }
 
+        public void UnacquireGame(GameUserRelationQuery query)
+        {
+            Game dummyGame = new Game();
+            dummyGame.Id = query.Gameid;
+
+            try
+            {
+                Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
+                User user = _userDataAccess.Get(query.Username);
+
+                if(!user.ownedGames.Contains(realGame))
+                {
+                    throw new UserDidntAcquireGame(realGame.Title);
+                }
+
+                user.ownedGames.Remove(realGame);
+                _userDataAccess.Update(user);
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
+        }
+
         public bool CheckIsOwner(GameUserRelationQuery query)
         {
             Game game = _gameDataAccess.GetCopyId(query.Gameid);

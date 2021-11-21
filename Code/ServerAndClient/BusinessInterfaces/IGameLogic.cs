@@ -21,6 +21,7 @@ namespace BusinessInterfaces
         List<Game> SearchGames(GameSearchQuery query);
 
         void AcquireGame(GameUserRelationQuery query);
+        void UnacquireGame(GameUserRelationQuery query);
         
         bool CheckIsOwner(GameUserRelationQuery query);
 

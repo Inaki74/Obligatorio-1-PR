@@ -99,7 +99,7 @@ namespace ServerApplicationWithGrpc
             try
             {
                 GameUserRelationQuery query = new GameUserRelationQuery(request.Username, request.Gameid);
-                //_gameLogic.UnacquireGame(query);
+                _gameLogic.UnacquireGame(query);
                 logMessage = $"The user {request.Username} has been removed the game {_gameLogic.GetGame(request.Gameid).Title} by ADMIN.";
                 _logSender.SendLog(_logGenerator.CreateLog(request.Username, request.Gameid, false, logMessage));
             }
