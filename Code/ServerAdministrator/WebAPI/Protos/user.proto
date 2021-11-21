@@ -7,6 +7,7 @@ package user;
 service UserMessager {
   rpc AddUser (AddUserRequest) returns (UserReply);
   rpc ModifyUser (ModifyUserRequest) returns (UserReply);
+  rpc DeleteUser (DeleteUserRequest) returns (UserReply);
 }
 
 // Request to add user
@@ -18,6 +19,11 @@ message AddUserRequest {
 message ModifyUserRequest {
   int32 userId = 1;
   string username = 2;
+}
+
+// Request to delete user
+message DeleteUserRequest {
+  int32 userId = 1;
 }
 
 // General reply scheme.

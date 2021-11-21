@@ -90,5 +90,34 @@ namespace ServerApplicationWithGrpc
             });
         }
         
+        public override Task<UserReply> DeleteUser(DeleteUserRequest request, ServerCallContext context)
+        {
+            string logMessage = "";
+            int statusCode = StatusCodeConstants.OK;
+
+            try
+            {
+                string username = _userLogic.GetUser(request.UserId).Username;
+                _userLogic.DeleteUser(request.UserId);
+                logMessage = $"The user {username} has been deleted by ADMIN.";
+                _logSender.SendLog(_logGenerator.CreateLog("ADMIN", -1, false, logMessage));
+            }
+            catch(BusinessException e)
+            {
+                statusCode = StatusCodeConstants.ERROR_CLIENT;
+                logMessage = e.Message;
+            }
+            catch(Exception e)
+            {
+                statusCode = StatusCodeConstants.ERROR_SERVER;
+                logMessage = e.Message;
+            }
+            
+            return Task.FromResult(new UserReply()
+            {
+                StatusCode = statusCode,
+                Message = logMessage
+            });
+        }
     }
 }

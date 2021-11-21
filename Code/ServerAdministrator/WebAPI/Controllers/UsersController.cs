@@ -52,5 +52,19 @@ namespace WebAPI.Controllers
 
             return Ok(reply);
         }
+
+        [HttpDelete("{userid}")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            using var channel = GrpcChannel.ForAddress(_serverAddress);
+            var client = new UserMessager.UserMessagerClient(channel);
+            var request = new DeleteUserRequest() 
+            { 
+               UserId = userId
+            };
+            var reply = await client.DeleteUserAsync(request);
+
+            return Ok(reply);
+        }
     }
 }

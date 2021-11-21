@@ -12,6 +12,11 @@ namespace Business
     {
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
 
+        public User GetUser(int id)
+        {
+            return _userDataAccess.GetCopyId(id);
+        }
+
         public bool Login(User dummyUser)
         {
             string username = dummyUser.Username;
@@ -67,6 +72,13 @@ namespace Business
             if (!_userDataAccess.Exist(dummy)) { throw new UserDoesntExistException(); }
             
             _userDataAccess.Update(dummy);
+        }
+
+        public void DeleteUser(int id)
+        {
+            User userDummy = new User("", id);
+
+            _userDataAccess.Delete(userDummy);
         }
     }
 }

@@ -56,7 +56,19 @@ namespace DataAccess
 
         public User GetCopyId(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                User user = InMemoryDatabase.Instance.Users.GetCopyOfInternalList().First(u => u.ID == id);
+                return user;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException(ioe.Message);
+            }
         }
 
         public List<User> GetAll()
