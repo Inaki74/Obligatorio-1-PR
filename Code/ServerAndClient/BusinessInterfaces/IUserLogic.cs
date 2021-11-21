@@ -7,6 +7,8 @@ namespace BusinessInterfaces
     {
         bool Login(User user);
         void Logout(User user);
-        
+        int AddUser(string username);
+
+        void ModifyUser(string username, int id);
     }
 }

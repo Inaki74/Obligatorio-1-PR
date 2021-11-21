@@ -13,6 +13,7 @@ namespace DataAccess
         void Add(T elem);
         void Delete(T elem);
         void Update(T elem);
+        bool Exist(T elem);
 
     }
 }

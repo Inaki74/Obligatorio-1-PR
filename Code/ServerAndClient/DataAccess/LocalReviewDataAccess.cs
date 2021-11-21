@@ -78,5 +78,10 @@ namespace DataAccess
             InMemoryDatabase.Instance.Reviews.Remove(oldReview);
             InMemoryDatabase.Instance.Reviews.Add(elem);
         }
+
+        public bool Exist(Review elem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
