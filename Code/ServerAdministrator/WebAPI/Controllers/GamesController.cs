@@ -42,5 +42,20 @@ namespace WebAPI.Controllers
 
             return Ok(reply);
         }
+
+        [HttpPost("user-acquire/{gameid}")]
+        public async Task<IActionResult> PostGame(int gameid, [FromBody] string username)
+        {
+            using var channel = GrpcChannel.ForAddress(_serverAddress);
+            var client = new GameMessager.GameMessagerClient(channel);
+            var request = new LinkUserGameRequest 
+                { 
+                    Username = username,
+                    Gameid = gameid
+                };
+            var reply = await client.LinkUserGameAsync(request);
+
+            return Ok(reply);
+        }
     }
 }
