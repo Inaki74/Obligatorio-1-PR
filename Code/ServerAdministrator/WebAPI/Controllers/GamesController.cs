@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Grpc.Net.Client;
 using Configuration;
+using APIModel;
 
 namespace WebAPI.Controllers
 {
     [ApiController]
-    [Route("v1/api/weather")]
+    [Route("v1/api/games")]
     public class GamesController : ControllerBase
     {
         private readonly string _serverAddress;
@@ -24,22 +25,22 @@ namespace WebAPI.Controllers
             _serverAddress = new ConfigurationHandler().GetField(ConfigurationConstants.MAINSERVER_ADDRESS_KEY);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
+        [HttpPost]
+        public async Task<IActionResult> PostGame(GameModel game)
         {
             using var channel = GrpcChannel.ForAddress(_serverAddress);
             var client = new GameMessager.GameMessagerClient(channel);
             var request = new AddGameRequest 
                 { 
-                    Gamename = "GreeterClient",
-                    Genre = "Shooter",
-                    Esrb = "M",
-                    Synopsis = "Ayayay",
-                    PathAFoto = "c/2/c/s"
+                    Gamename = game.Gamename,
+                    Genre = game.Genre,
+                    Esrb = game.ESRB,
+                    Synopsis = game.Synopsis,
+                    PathAFoto = game.PathToImage
                 };
             var reply = await client.AddGameAsync(request);
 
-            return Ok("Greeting: " + reply.Message);
+            return Ok(reply);
         }
     }
 }

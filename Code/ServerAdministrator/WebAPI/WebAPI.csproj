@@ -19,6 +19,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\ServerAndClient\Configuration\Configuration.csproj" />
+      <ProjectReference Include="..\APIModel\APIModel.csproj" />
     </ItemGroup>
 
 </Project>
