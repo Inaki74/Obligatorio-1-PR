@@ -43,6 +43,8 @@ namespace BusinessLogic
 
             listToFilter.ForEach(l => ret.Add(new LogModel(l)));
 
+            ret = ret.OrderBy(l => l.Id).ToList();
+
             return ret;
         }
 
