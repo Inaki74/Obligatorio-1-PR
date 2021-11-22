@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\game.proto" GrpcServices="Server" />
+        <Protobuf Include="Protos\user.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Grpc.AspNetCore" Version="2.34.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="App.config" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ConsoleMenusFactory\ConsoleMenusFactory.csproj" />
+      <ProjectReference Include="..\LogCommunicatorInterfaces\LogCommunicatorInterfaces.csproj" />
+      <ProjectReference Include="..\BusinessInterfaces\BusinessInterfaces.csproj" />
+      <ProjectReference Include="..\Business\Business.csproj" />
+    </ItemGroup>
+
+</Project>

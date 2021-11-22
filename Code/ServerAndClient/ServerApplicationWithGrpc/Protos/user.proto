@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option csharp_namespace = "ServerApplicationWithGrpc";
+
+package user;
+
+service UserMessager {
+  rpc AddUser (AddUserRequest) returns (UserReply);
+  rpc ModifyUser (ModifyUserRequest) returns (UserReply);
+  rpc DeleteUser (DeleteUserRequest) returns (UserReply);
+}
+
+// Request to add user
+message AddUserRequest {
+  string username = 1;
+}
+
+// Request to modify user
+message ModifyUserRequest {
+  int32 userId = 1;
+  string username = 2;
+}
+
+// Request to delete user
+message DeleteUserRequest {
+  int32 userId = 1;
+}
+
+// General reply scheme.
+message UserReply {
+  int32 statusCode = 1;
+  string message = 2;
+}
