@@ -34,9 +34,9 @@ namespace DataAccess
             }
         }
 
-        public Game Get(string id)
+        public Game Get(string title)
         {
-            Game dummyGame = GetCopy(id);
+            Game dummyGame = GetCopy(title);
             Game game = InMemoryDatabase.Instance.Games.Get(dummyGame);
             return game;
         }
@@ -92,6 +92,11 @@ namespace DataAccess
             Game oldGame = GetCopyId(elem.Id);
             InMemoryDatabase.Instance.Games.Remove(oldGame);
             InMemoryDatabase.Instance.Games.Add(elem);
+        }
+
+        public bool Exist(Game elem)
+        {
+            throw new NotImplementedException();
         }
     }
 }

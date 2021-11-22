@@ -18,8 +18,16 @@ namespace DataAccess
                 return _currentId;
             }
         }
-        
 
+        public LocalUserDataAccess()
+        {
+            User admin = new User("ADMIN", 3007);
+            if(!Exist(admin))
+            {
+                Add(admin);
+            }
+        }
+        
         public User Get(string id)
         {
             User dummyUser = GetCopy(id);
@@ -51,7 +59,19 @@ namespace DataAccess
 
         public User GetCopyId(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                User user = InMemoryDatabase.Instance.Users.GetCopyOfInternalList().First(u => u.ID == id);
+                return user;
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindUserException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindUserException(ioe.Message);
+            }
         }
 
         public List<User> GetAll()
@@ -90,6 +110,12 @@ namespace DataAccess
             {
                 throw new FindUserException(ioe.Message);
             }
+        }
+
+        public bool Exist(User elem)
+        {
+            List<User> userList = InMemoryDatabase.Instance.Users.GetCopyOfInternalList();
+            return userList.Exists(u => u.Username == elem.Username || u.ID == elem.ID);
         }
     }
 }

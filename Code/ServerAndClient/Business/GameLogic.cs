@@ -66,6 +66,11 @@ namespace Business
             return _gameDataAccess.GetCopyId(id);
         }
 
+        public Game GetGame(string title)
+        {
+            return _gameDataAccess.GetCopy(title);
+        }
+
         public List<Game> GetAllGames()
         {
             return _gameDataAccess.GetAll();
@@ -127,7 +132,41 @@ namespace Business
             {
                 Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
                 User user = _userDataAccess.Get(query.Username);
+
+                if(user.ownedGames.Contains(realGame))
+                {
+                    throw new UserAlreadyAcquiredGame(realGame.Title);
+                }
+
                 user.ownedGames.Add(realGame);
+                _userDataAccess.Update(user);
+            }
+            catch(ArgumentNullException ane)
+            {
+                throw new FindGameException(ane.Message);
+            }
+            catch(InvalidOperationException ioe)
+            {
+                throw new FindGameException(ioe.Message);
+            }
+        }
+
+        public void UnacquireGame(GameUserRelationQuery query)
+        {
+            Game dummyGame = new Game();
+            dummyGame.Id = query.Gameid;
+
+            try
+            {
+                Game realGame = GetAllGames().First(g => g.Equals(dummyGame));
+                User user = _userDataAccess.Get(query.Username);
+
+                if(!user.ownedGames.Contains(realGame))
+                {
+                    throw new UserDidntAcquireGame(realGame.Title);
+                }
+
+                user.ownedGames.Remove(realGame);
                 _userDataAccess.Update(user);
             }
             catch(ArgumentNullException ane)

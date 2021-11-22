@@ -11,6 +11,7 @@ namespace BusinessInterfaces
 
         void ModifyGame(Game game);
         Game GetGame(int id);
+        Game GetGame(string title);
 
         List<Game> GetAllGames();
 
@@ -20,6 +21,7 @@ namespace BusinessInterfaces
         List<Game> SearchGames(GameSearchQuery query);
 
         void AcquireGame(GameUserRelationQuery query);
+        void UnacquireGame(GameUserRelationQuery query);
         
         bool CheckIsOwner(GameUserRelationQuery query);
 

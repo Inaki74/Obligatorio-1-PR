@@ -25,7 +25,7 @@ namespace Domain.BusinessObjects
         {
             User user = (User)obj;
 
-            return this.Username == user.Username;
+            return this.Username == user.Username || this.ID == user.ID;
         }
     }
 }

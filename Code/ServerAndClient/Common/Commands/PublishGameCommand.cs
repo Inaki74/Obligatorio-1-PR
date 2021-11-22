@@ -39,7 +39,7 @@ namespace Common.Commands
             SendLog(game.Owner.Username, id, logMessage);
         
             statusCode = StatusCodeConstants.OK;
-            
+
             return statusCode.ToString() + response;
         }
 

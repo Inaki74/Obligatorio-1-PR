@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option csharp_namespace = "ServerApplicationWithGrpc";
+
+package game;
+
+service GameMessager {
+  rpc AddGame (AddGameRequest) returns (GameReply);
+  rpc ModifyGame (ModifyGameRequest) returns (GameReply);
+  rpc DeleteGame (DeleteGameRequest) returns (GameReply);
+  rpc LinkUserGame (LinkUserGameRequest) returns (GameReply);
+  rpc UnlinkUserGame(UnlinkUserGameRequest) returns (GameReply);
+}
+
+// Request to add a game.
+message AddGameRequest {
+  string gamename = 1;
+  string genre = 2;
+  string esrb = 3;
+  string synopsis = 4;
+  string pathAFoto = 5;
+
+}
+
+// Request to modify a game
+message ModifyGameRequest {
+  string gamename = 1;
+  string genre = 2;
+  string esrb = 3;
+  string synopsis = 4;
+  string pathAFoto = 5;
+  int32 gameId = 6;
+}
+
+// Request to delete game
+message DeleteGameRequest {
+  int32 gameId = 1;
+}
+
+// Request user acquire game.
+message LinkUserGameRequest {
+  int32 gameid = 1;
+  string username = 2;
+}
+
+// Request user unacquire game.
+message UnlinkUserGameRequest {
+  int32 gameid = 1;
+  string username = 2;
+}
+
+// General reply scheme.
+message GameReply {
+  int32 statusCode = 1;
+  string message = 2;
+}

@@ -12,6 +12,11 @@ namespace Business
     {
         private IDataAccess<User> _userDataAccess = new LocalUserDataAccess();
 
+        public User GetUser(int id)
+        {
+            return _userDataAccess.GetCopyId(id);
+        }
+
         public bool Login(User dummyUser)
         {
             string username = dummyUser.Username;
@@ -48,11 +53,32 @@ namespace Business
             loggedUser.LoggedIn = false;
             _userDataAccess.Update(loggedUser);
         }
+        
 
-        private void AddUser(string username)
+        public int AddUser(string username)
         {
+            User dummy = new User(username,-1);
+            if (_userDataAccess.Exist(dummy)) { throw new UserAlreadyExistsException(); }
+            if (string.IsNullOrEmpty(username)) { throw new UserInvalidRequestException(); }
+            
             User newUser = new User(username, LocalUserDataAccess.CurrentId);
             _userDataAccess.Add(newUser);
+            return newUser.ID;
+        }
+
+        public void ModifyUser(string username, int id)
+        {
+            User dummy = new User(username, id);
+            if (!_userDataAccess.Exist(dummy)) { throw new UserDoesntExistException(); }
+            
+            _userDataAccess.Update(dummy);
+        }
+
+        public void DeleteUser(int id)
+        {
+            User userDummy = new User("", id);
+
+            _userDataAccess.Delete(userDummy);
         }
     }
 }

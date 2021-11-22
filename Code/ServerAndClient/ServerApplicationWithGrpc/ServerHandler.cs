@@ -47,12 +47,11 @@ namespace ServerApplication
         
         private List<Socket> _clientSockets = new List<Socket>();
         private List<ClientCommandExecutionStatus> _clientConnections = new List<ClientCommandExecutionStatus>();
-        private Dictionary<string, int> _clientSelectedGames = new Dictionary<string, int>();
         
         private int _currentTaskId = 0;
         private bool _serverRunning;
 
-        public ServerHandler()
+        public ServerHandler(ILogSender logSender)
         {
             if(IServerHandler.Instance == null)
             {
@@ -65,7 +64,8 @@ namespace ServerApplication
 
             _configurationHandler = new ConfigurationHandler();
             _logsGenerator = new LogGenerator();
-            _logSender = new LogSender(_configurationHandler);
+            _logSender = logSender;
+            //_logSender = new LogSender(_configurationHandler);
 
             string serverIp = _configurationHandler.GetField(ConfigurationConstants.SERVER_IP_KEY);
             int serverPort = int.Parse(_configurationHandler.GetField(ConfigurationConstants.SERVER_PORT_KEY));
@@ -110,7 +110,7 @@ namespace ServerApplication
 
         public async Task StartClientListeningTaskAsync(CancellationToken stoppingToken)
         {
-            await Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
+            Task.Run(async() => await ListenForClientsAsync().ConfigureAwait(false), stoppingToken);;
         }
 
         private async Task ListenForClientsAsync()
@@ -187,7 +187,6 @@ namespace ServerApplication
             finally
             {
                 SetStatusOfExecuting(false, taskId);
-                _clientSelectedGames.Remove(username);
             }
         }
 
@@ -244,20 +243,6 @@ namespace ServerApplication
             {
                 await RecieveClientGameCoverAsync(vp);
             }
-
-            if(response.Command == CommandConstants.COMMAND_SELECT_GAME_CODE)
-            {
-                int fixedSize = VaporProtocolSpecification.GAME_INPUTS_FIXED_SIZE;
-                string gameId = responseWithoutStatusCode.Substring(fixedSize, responseWithoutStatusCode.Length - fixedSize);
-                if (!_clientSelectedGames.ContainsKey(username))
-                {
-                    _clientSelectedGames.Add(username, int.Parse(gameId));
-                }
-                else
-                {
-                    _clientSelectedGames[username] = int.Parse(gameId);
-                }
-            }
                     
             if (response.Command == CommandConstants.COMMAND_DOWNLOAD_COVER_CODE)
             {
@@ -274,17 +259,9 @@ namespace ServerApplication
                 username = responseWithoutStatusCode;
             }
 
-            if(statusCode == StatusCodeConstants.ERROR_CLIENT && statusCode == StatusCodeConstants.ERROR_CLIENT_NOTAUTHORIZED &&
-              statusCode == StatusCodeConstants.ERROR_SERVER && statusCode == StatusCodeConstants.ERROR_STREAM)
+            if(statusCode == StatusCodeConstants.ERROR_SERVER && statusCode == StatusCodeConstants.ERROR_STREAM)
             {
-                // send error log
-                int gameid = -1;
-                if(_clientSelectedGames.ContainsKey(username))
-                {
-                    gameid = _clientSelectedGames[username];
-                }
-
-                LogModel log = _logsGenerator.CreateLog(username, gameid, true, responseWithoutStatusCode);
+                LogModel log = _logsGenerator.CreateLog(username, -1, true, responseWithoutStatusCode);
                 await _logSender.SendLog(log);
             }
 

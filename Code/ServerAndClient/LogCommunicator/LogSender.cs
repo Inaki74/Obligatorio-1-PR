@@ -13,9 +13,9 @@ namespace LogCommunicator
     {
         private readonly IConfigurationHandler _configurationHandler;
         private readonly IMQStream _streamControl;
-        public LogSender(IConfigurationHandler configurationHandler)
+        public LogSender()
         {
-            _configurationHandler = configurationHandler;
+            _configurationHandler = new ConfigurationHandler();
             _streamControl = RabbitFactory.CreateStream(_configurationHandler.GetField(ConfigurationConstants.HOSTNAME_KEY), _configurationHandler);
         }
         public async Task SendLog(LogModel log)

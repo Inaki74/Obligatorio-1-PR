@@ -14,7 +14,12 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     </ItemGroup>
     <ItemGroup>
-        <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\game.proto" GrpcServices="Client" />
+        <Protobuf Include="Protos\user.proto" GrpcServices="Client" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\ServerAndClient\Configuration\Configuration.csproj" />
+      <ProjectReference Include="..\APIModel\APIModel.csproj" />
     </ItemGroup>
 
 </Project>
