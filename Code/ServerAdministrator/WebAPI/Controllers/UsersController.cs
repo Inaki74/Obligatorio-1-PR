@@ -34,7 +34,7 @@ namespace WebAPI.Controllers
             };
             var reply = await client.AddUserAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
         
         [HttpPut("{userid}")]
@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
             };
             var reply = await client.ModifyUserAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
 
         [HttpDelete("{userid}")]
@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
             };
             var reply = await client.DeleteUserAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
     }
 }

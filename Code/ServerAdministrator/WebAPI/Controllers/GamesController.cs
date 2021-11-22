@@ -40,7 +40,7 @@ namespace WebAPI.Controllers
                 };
             var reply = await client.AddGameAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
         
         [HttpPut("{gameid}")]
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
             };
             var reply = await client.ModifyGameAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
         
         [HttpDelete("{gameid}")]
@@ -73,7 +73,7 @@ namespace WebAPI.Controllers
             };
             var reply = await client.DeleteGameAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
 
         [HttpPost("user-acquire/{gameid}")]
@@ -88,7 +88,7 @@ namespace WebAPI.Controllers
                 };
             var reply = await client.LinkUserGameAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
 
         [HttpDelete("user-acquire/{gameid}")]
@@ -103,7 +103,7 @@ namespace WebAPI.Controllers
                 };
             var reply = await client.UnlinkUserGameAsync(request);
 
-            return Ok(reply);
+            return ResultHelper.ClassifyResult(reply, reply.StatusCode, this);
         }
     }
 }
